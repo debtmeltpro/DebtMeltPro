@@ -4,10 +4,11 @@ import Link from 'next/link';
 import {
   TrendingDown, Home, Flame, CreditCard, GraduationCap,
   Shield, Zap, BarChart3, CheckCircle2, ArrowRight,
-  BookOpen, FolderOpen,
+  BookOpen, FolderOpen, Sparkles,
 } from 'lucide-react';
 import { AdSlotLeaderboard, AdSlotInArticle } from '@/components/molecules/AdSlot';
 import { TOOLS, CATEGORIES, SITE_URL, generateFaqSchema } from '@/lib/seo';
+import { getViralPrompts, getPromptCount } from '@/lib/prompts';
 import { BLOG_POSTS } from './blog/page';
 
 export const metadata: Metadata = {
@@ -155,6 +156,46 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── AI Finance Prompts ─────────────────────────────────── */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-purple-500" aria-hidden="true" />
+            <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white">
+              Viral AI Finance Prompts
+            </h2>
+          </div>
+          <Link href="/prompts" className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 transition-colors inline-flex items-center gap-1">
+            All {getPromptCount()} Prompts <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+        <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 max-w-2xl">
+          Copy-paste AI prompts for ChatGPT and Claude that turn AI into your personal financial advisor.
+          Budgeting, debt payoff, investing, and more — all free.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {getViralPrompts(3).map(prompt => (
+            <Link key={prompt.slug} href={`/prompts/${prompt.category}/${prompt.slug}`}
+              className="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-300">
+                  <Zap className="w-2.5 h-2.5" /> VIRAL
+                </span>
+                <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400">
+                  {prompt.aiModels[0]}
+                </span>
+              </div>
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                {prompt.title}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                {prompt.description}
+              </p>
+            </Link>
+          ))}
         </div>
       </section>
 

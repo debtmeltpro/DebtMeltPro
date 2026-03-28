@@ -24,6 +24,7 @@ const CATEGORY_LINKS = [
 ] as const;
 
 const COMPANY_LINKS = [
+  { href: '/prompts', label: 'AI Finance Prompts' },
   { href: '/about', label: 'About Us' },
   { href: '/contact', label: 'Contact' },
   { href: '/blog', label: 'Blog' },

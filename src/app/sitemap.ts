@@ -6,6 +6,7 @@
 
 import type { MetadataRoute } from 'next';
 import { TOOLS, CATEGORIES } from '@/lib/seo';
+import { PROMPT_CATEGORIES, getAllPromptPaths } from '@/lib/prompts';
 import { BLOG_POSTS } from './blog/page';
 
 const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://debtfreedom.app';
@@ -19,6 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/about`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE_URL}/contact`, lastModified: now, changeFrequency: 'yearly', priority: 0.5 },
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${SITE_URL}/prompts`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
   ];
 
   // Tool pages (highest priority after homepage)
@@ -52,5 +54,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/disclaimer`, lastModified: new Date('2024-01-15'), changeFrequency: 'yearly' as const, priority: 0.3 },
   ];
 
-  return [...corePages, ...toolPages, ...categoryPages, ...blogPages, ...legalPages];
+  // Prompt category pages
+  const promptCategoryPages: MetadataRoute.Sitemap = PROMPT_CATEGORIES.map(cat => ({
+    url: `${SITE_URL}/prompts/${cat.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+
+  // Individual prompt pages
+  const promptPages: MetadataRoute.Sitemap = getAllPromptPaths().map(p => ({
+    url: `${SITE_URL}/prompts/${p.category}/${p.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
+  return [...corePages, ...toolPages, ...categoryPages, ...promptCategoryPages, ...promptPages, ...blogPages, ...legalPages];
 }

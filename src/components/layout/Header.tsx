@@ -22,6 +22,7 @@ const NAV_LINKS = [
 ] as const;
 
 const SECONDARY_LINKS = [
+  { href: '/prompts', label: 'AI Prompts' },
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'About' },
 ] as const;
