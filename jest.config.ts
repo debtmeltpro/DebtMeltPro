@@ -11,6 +11,7 @@ const config: Config = {
       tsconfig: {
         jsx: 'react',
         strict: true,
+        esModuleInterop: true,
       },
     }],
   },
@@ -19,7 +20,7 @@ const config: Config = {
     'src/lib/validations/**/*.ts',
     '!src/**/*.d.ts',
   ],
-  coverageThresholds: {
+  coverageThreshold: {
     global: {
       branches: 70,
       functions: 80,
@@ -28,7 +29,6 @@ const config: Config = {
     },
   },
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
-  setupFilesAfterFramework: ['@testing-library/jest-dom'],
 };
 
 export default config;
