@@ -1,34 +1,27 @@
 'use client';
 
-// ============================================================
-// DebtFreedom — Cookie Consent Banner
-// GDPR/CCPA compliant. Stores consent in localStorage.
-// Required before loading Google Analytics or AdSense.
-// ============================================================
-
 import { useEffect, useState } from 'react';
 import { useAppStore } from '@/lib/store/app-store';
 import { Cookie, X } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-export function CookieConsent() {
+export function CookieConsent(): JSX.Element | null {
   const { cookieConsent, setCookieConsent } = useAppStore();
   const [visible, setVisible] = useState(false);
 
-  // Only show after hydration to prevent SSR mismatch
   useEffect(() => {
     if (cookieConsent === null) {
-      // Small delay for better UX — let page render first
       const timer = setTimeout(() => setVisible(true), 1500);
       return () => clearTimeout(timer);
     }
+    // explicit return for the else branch
+    return undefined;
   }, [cookieConsent]);
 
   const handleAccept = () => {
     setCookieConsent(true);
     setVisible(false);
-    // Signal analytics/ads to load
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new CustomEvent('cookieConsentGranted'));
     }
@@ -39,7 +32,9 @@ export function CookieConsent() {
     setVisible(false);
   };
 
-  if (!visible || cookieConsent !== null) return null;
+  if (!visible || cookieConsent !== null) {
+    return null;
+  }
 
   return (
     <div
@@ -75,7 +70,7 @@ export function CookieConsent() {
           data you enter is ever stored or transmitted. See our{' '}
           <Link
             href="/privacy-policy"
-            className="text-brand-600 dark:text-brand-400 underline underline-offset-2 hover:no-underline"
+            className="text-green-600 dark:text-green-400 underline underline-offset-2 hover:no-underline"
           >
             Privacy Policy
           </Link>{' '}
@@ -85,7 +80,7 @@ export function CookieConsent() {
         <div className="flex gap-2.5">
           <button
             onClick={handleAccept}
-            className="flex-1 px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2"
+            className="flex-1 px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
           >
             Accept All
           </button>
@@ -97,7 +92,7 @@ export function CookieConsent() {
           </button>
         </div>
 
-        <p className="mt-3 text-2xs text-slate-400 dark:text-slate-500 text-center">
+        <p className="mt-3 text-[10px] text-slate-400 dark:text-slate-500 text-center">
           By using this site you agree to our{' '}
           <Link href="/terms" className="underline hover:no-underline">Terms of Service</Link>.
           GDPR &amp; CCPA compliant.
