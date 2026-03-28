@@ -141,10 +141,10 @@ function StrategyPanel({ result, config, isBest, formatCurrency }: {
 }
 
 function ChartTooltip({ active, payload, label, formatCurrency }: {
-  active?: boolean | undefined; payload?: { name: string; value: number; color: string }[];
-  label?: number | undefined; formatCurrency: (n: number) => string;
+  active?: boolean; payload?: { name: string; value: number; color: string }[];
+  label?: number; formatCurrency: (n: number) => string;
 }) {
-  if (active !== true || !payload?.length) return null;
+  if (!active || !payload?.length) return null;
   return (
     <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 shadow-lg text-sm">
       <p className="font-semibold text-slate-700 dark:text-slate-300 mb-2">{formatDuration(label ?? 0)}</p>
@@ -185,11 +185,7 @@ export function DebtPayoffCalculator() {
 
   const results = useMemo(() => {
     if (debts.length === 0) return null;
-    // Strip optional 'type' — Zod infers it as T|undefined which conflicts with
-    // exactOptionalPropertyTypes on DebtAccount (optional = absent, not undefined)
-    const cleanDebts = debts.map(({ id, name, balance, interestRate, minimumPayment }) =>
-      ({ id, name, balance, interestRate, minimumPayment }));
-    const parsed = debtPayoffInputSchema.safeParse({ debts: cleanDebts, extraMonthlyPayment: extraPayment, strategy: activeStrategy });
+    const parsed = debtPayoffInputSchema.safeParse({ debts, extraMonthlyPayment: extraPayment, strategy: activeStrategy });
     if (!parsed.success) { setValidationError(parsed.error.errors[0]?.message ?? 'Check inputs'); return null; }
     setValidationError(null);
     try { return calculateDebtPayoff(parsed.data); } catch { setValidationError('Calculation error'); return null; }
