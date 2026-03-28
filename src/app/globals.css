@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DebtFreedom — Global CSS Design Tokens
+   Uses CSS custom properties for consistent theming across
+   light/dark modes without JavaScript flicker.
+   ============================================================ */
+
+@layer base {
+  :root {
+    /* Radius scale */
+    --radius: 0.625rem;
+
+    /* Brand colors (HSL for opacity manipulation) */
+    --brand-h: 142;
+    --brand-s: 72%;
+    --brand-l: 45%;
+
+    /* Surface system */
+    --surface-bg: 248 250 252;        /* slate-50 */
+    --surface-card: 255 255 255;      /* white */
+    --surface-border: 226 232 240;    /* slate-200 */
+    --surface-muted: 241 245 249;     /* slate-100 */
+    --text-primary: 15 23 42;         /* slate-900 */
+    --text-secondary: 71 85 105;      /* slate-500 */
+    --text-muted: 148 163 184;        /* slate-400 */
+
+    /* AdSense-safe ad slot dimensions (prevent CLS) */
+    --ad-leaderboard-h: 90px;
+    --ad-rectangle-h: 250px;
+    --ad-skyscraper-h: 600px;
+  }
+
+  .dark {
+    --surface-bg: 15 23 42;           /* slate-900 */
+    --surface-card: 30 41 59;         /* slate-800 */
+    --surface-border: 51 65 85;       /* slate-700 */
+    --surface-muted: 30 41 59;        /* slate-800 */
+    --text-primary: 248 250 252;      /* slate-50 */
+    --text-secondary: 148 163 184;    /* slate-400 */
+    --text-muted: 100 116 139;        /* slate-500 */
+  }
+
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Account for sticky header */
+  }
+
+  /* Base typography */
+  body {
+    @apply text-base leading-relaxed;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Focus visible for keyboard navigation */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-500 rounded-sm;
+  }
+
+  /* Remove focus outline for mouse users */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/* ─── Component Classes ─────────────────────────────────────── */
+
+@layer components {
+  /* Card system */
+  .card {
+    @apply bg-white dark:bg-surface-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-card;
+  }
+
+  .card-hover {
+    @apply transition-shadow duration-200 hover:shadow-card-hover;
+  }
+
+  /* Input system — financial precision styling */
+  .input-financial {
+    @apply w-full px-4 py-2.5 rounded-lg border border-slate-200 dark:border-slate-700
+           bg-white dark:bg-surface-800 text-slate-900 dark:text-slate-100
+           font-mono text-right tabular-nums
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
+           transition-colors duration-150;
+  }
+
+  /* Gradient text for hero sections */
+  .gradient-text {
+    @apply bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent;
+  }
+
+  /* Result metric card */
+  .metric-card {
+    @apply card p-5 flex flex-col gap-1;
+  }
+
+  .metric-value {
+    @apply text-2xl font-bold font-display tabular-nums;
+  }
+
+  .metric-label {
+    @apply text-sm text-slate-500 dark:text-slate-400;
+  }
+
+  /* Strategy tab */
+  .strategy-tab {
+    @apply px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150
+           border border-transparent cursor-pointer;
+  }
+
+  .strategy-tab-active {
+    @apply bg-brand-500 text-white shadow-sm;
+  }
+
+  .strategy-tab-inactive {
+    @apply bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400
+           hover:bg-slate-200 dark:hover:bg-slate-700;
+  }
+}
+
+/* ─── Ad Slot Stability (CLS Prevention) ────────────────────── */
+
+@layer utilities {
+  /* Reserve exact space before AdSense loads to prevent CLS */
+  .ad-slot {
+    display: block;
+    min-height: var(--ad-rectangle-h);
+    background-color: rgb(var(--surface-muted));
+    border-radius: var(--radius);
+    overflow: hidden;
+    contain: layout size;
+  }
+
+  .ad-slot-leaderboard {
+    min-height: var(--ad-leaderboard-h);
+    width: 100%;
+  }
+
+  .ad-slot-rectangle {
+    min-height: var(--ad-rectangle-h);
+    min-width: 300px;
+  }
+
+  /* Chart container — always has explicit height to prevent layout shift */
+  .chart-container {
+    @apply w-full;
+    min-height: 300px;
+    contain: layout;
+  }
+
+  /* Tabular numbers for financial data */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
