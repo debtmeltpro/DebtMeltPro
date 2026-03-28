@@ -1,10 +1,3 @@
-// ============================================================
-// DebtFreedom — Math Engine Tests
-// Compatible with Jest + ts-jest + @jest/globals
-// ============================================================
-
-import { describe, it, expect } from '@jest/globals';
-
 import {
   calculateDebtPayoff,
   formatPayoffDuration,
@@ -22,14 +15,8 @@ import {
   calculateCreditCardPayoff,
 } from '@/lib/math-engine/credit-card';
 
-import {
-  calculateMortgage,
-} from '@/lib/math-engine/mortgage';
-
-import {
-  calculateStudentLoanRefinance,
-} from '@/lib/math-engine/student-loan';
-
+import { calculateMortgage } from '@/lib/math-engine/mortgage';
+import { calculateStudentLoanRefinance } from '@/lib/math-engine/student-loan';
 import {
   formatCurrency,
   formatCurrencyExact,
@@ -316,38 +303,58 @@ describe('Student Loan Refinance Calculator', () => {
 // ─── Formatting Utility Tests ─────────────────────────────────
 
 describe('Formatting Utilities', () => {
-  it('formatCurrency', () => {
-    expect(formatCurrency(12500.75)).toBe('$12,501');
-    expect(formatCurrency(0)).toBe('$0');
-    expect(formatCurrency(NaN)).toBe('$0');
+  describe('formatCurrency', () => {
+    it('formats whole dollars', () => {
+      expect(formatCurrency(12500.75)).toBe('$12,501');
+    });
+    it('handles zero', () => {
+      expect(formatCurrency(0)).toBe('$0');
+    });
+    it('handles NaN', () => {
+      expect(formatCurrency(NaN)).toBe('$0');
+    });
+    it('handles negative', () => {
+      expect(formatCurrency(-500)).toBe('-$500');
+    });
   });
 
-  it('formatCurrencyExact', () => {
-    expect(formatCurrencyExact(12500.75)).toBe('$12,500.75');
-    expect(formatCurrencyExact(NaN)).toBe('$0.00');
+  describe('formatCurrencyExact', () => {
+    it('shows cents', () => {
+      expect(formatCurrencyExact(12500.75)).toBe('$12,500.75');
+    });
+    it('handles NaN', () => {
+      expect(formatCurrencyExact(NaN)).toBe('$0.00');
+    });
   });
 
-  it('formatPercent', () => {
-    expect(formatPercent(0.065)).toBe('6.5%');
-    expect(formatPercent(NaN)).toBe('0.0%');
+  describe('formatPercent', () => {
+    it('formats decimal to percent', () => {
+      expect(formatPercent(0.065)).toBe('6.5%');
+    });
+    it('handles NaN', () => {
+      expect(formatPercent(NaN)).toBe('0.0%');
+    });
+    it('handles zero', () => {
+      expect(formatPercent(0)).toBe('0.0%');
+    });
   });
 
-  it('formatDuration', () => {
-    expect(formatDuration(0)).toBe('0 mo');
-    expect(formatDuration(5)).toBe('5 mo');
-    expect(formatDuration(12)).toBe('1 yr');
-    expect(formatDuration(14)).toBe('1 yr 2 mo');
+  describe('formatDuration', () => {
+    it('handles zero', () => { expect(formatDuration(0)).toBe('0 mo'); });
+    it('handles months', () => { expect(formatDuration(5)).toBe('5 mo'); });
+    it('handles exact years', () => { expect(formatDuration(12)).toBe('1 yr'); });
+    it('handles years + months', () => { expect(formatDuration(14)).toBe('1 yr 2 mo'); });
   });
 
-  it('formatCurrencyShort', () => {
-    expect(formatCurrencyShort(1500000)).toBe('$1.5M');
-    expect(formatCurrencyShort(25000)).toBe('$25K');
-    expect(formatCurrencyShort(500)).toBe('$500');
+  describe('formatCurrencyShort', () => {
+    it('formats millions', () => { expect(formatCurrencyShort(1500000)).toBe('$1.5M'); });
+    it('formats thousands', () => { expect(formatCurrencyShort(25000)).toBe('$25K'); });
+    it('formats small numbers', () => { expect(formatCurrencyShort(500)).toBe('$500'); });
   });
 
-  it('clamp', () => {
-    expect(clamp(5, 0, 10)).toBe(5);
-    expect(clamp(-1, 0, 10)).toBe(0);
-    expect(clamp(15, 0, 10)).toBe(10);
+  describe('clamp', () => {
+    it('keeps value in range', () => { expect(clamp(5, 0, 10)).toBe(5); });
+    it('clamps low', () => { expect(clamp(-1, 0, 10)).toBe(0); });
+    it('clamps high', () => { expect(clamp(15, 0, 10)).toBe(10); });
   });
 });

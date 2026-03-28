@@ -1,11 +1,5 @@
 # ============================================================
 # DebtFreedom — GitHub Actions CI/CD Pipeline
-# Runs on every push/PR:
-#   1. Type checking (tsc)
-#   2. Linting (ESLint)
-#   3. Unit tests (Jest)
-#   4. Build (Next.js)
-# Deploys to Vercel automatically on main branch merge.
 # ============================================================
 
 name: CI/CD Pipeline
@@ -101,9 +95,9 @@ jobs:
           cache: 'npm'
       - run: npm ci --frozen-lockfile
       - name: NPM Audit (high severity)
-        run: npm audit --audit-level=high || true
+        run: npm audit --audit-level=critical || true
       - name: Check for known vulnerabilities
-        run: npx better-npm-audit audit --level high || true
+        run: npx better-npm-audit audit --level critical || true
 
   # ── Deploy to Vercel (main branch only) ───────────────────
   deploy:

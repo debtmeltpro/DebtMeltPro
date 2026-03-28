@@ -1,6 +1,5 @@
 # ============================================================
-# DebtFreedom — Quality Checks CI
-# Standalone quality gate for PRs and pushes.
+# DebtFreedom — Quality Checks (standalone)
 # ============================================================
 
 name: Quality Checks
@@ -14,7 +13,6 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
