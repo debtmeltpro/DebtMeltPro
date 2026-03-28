@@ -1,17 +1,18 @@
 // ============================================================
 // DebtFreedom — Root Layout
-// SEO: Global metadata, Open Graph, Twitter Cards.
-// Schema: SoftwareApplication JSON-LD for Google Rich Snippets.
-// Legal: Cookie consent integration.
+// SEO: Global metadata, Open Graph, Twitter Cards, JSON-LD.
+// Analytics: GA4 integration (consent-gated).
 // Performance: Font optimization via next/font.
 // ============================================================
 
 import type { Metadata, Viewport } from 'next';
+import { Suspense } from 'react';
 import { Inter, Playfair_Display } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CookieConsent } from '@/components/layout/CookieConsent';
+import { GoogleAnalytics } from '@/components/seo/GoogleAnalytics';
 import './globals.css';
 
 // ─── Font Configuration ────────────────────────────────────────
@@ -122,7 +123,20 @@ const organizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer service',
-    email: `hello@debtfreedom.app`,
+    email: 'hello@debtfreedom.app',
+  },
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_NAME,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  publisher: {
+    '@type': 'Organization',
+    name: SITE_NAME,
+    url: SITE_URL,
   },
 };
 
@@ -146,7 +160,6 @@ const softwareApplicationSchema = {
     'Credit Card Payoff Optimizer',
     'Student Loan Refinance Estimator',
   ],
-  screenshot: `${SITE_URL}/screenshot.png`,
 };
 
 // ─── Root Layout ──────────────────────────────────────────────
@@ -159,15 +172,20 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
       <head>
-        {/* DNS prefetch for Google Fonts & AdSense performance */}
+        {/* DNS prefetch for performance */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         {/* JSON-LD Schemas */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
         <script
           type="application/ld+json"
@@ -192,6 +210,11 @@ export default function RootLayout({
 
           <Footer />
           <CookieConsent />
+
+          {/* Google Analytics (consent-gated) */}
+          <Suspense fallback={null}>
+            <GoogleAnalytics />
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>

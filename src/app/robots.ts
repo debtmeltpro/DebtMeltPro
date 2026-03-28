@@ -1,6 +1,7 @@
 // ============================================================
 // DebtFreedom — robots.txt
 // Instructs search crawlers on indexing policy.
+// Allows all public pages, blocks API and build artifacts.
 // ============================================================
 
 import type { MetadataRoute } from 'next';
@@ -14,6 +15,10 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: ['/api/', '/_next/', '/static/'],
+      },
+      {
+        userAgent: 'GPTBot',
+        disallow: '/',
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,

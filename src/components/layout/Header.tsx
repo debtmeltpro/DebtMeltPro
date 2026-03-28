@@ -2,7 +2,7 @@
 
 // ============================================================
 // DebtFreedom — Site Header
-// Sticky header with tool navigation, dark mode toggle.
+// Sticky header with tool navigation, blog, about, dark mode.
 // Fully accessible (ARIA labels, keyboard nav, skip link).
 // ============================================================
 
@@ -21,11 +21,16 @@ const NAV_LINKS = [
   { href: '/tools/student-loan', label: 'Student Loans', shortLabel: 'Loans' },
 ] as const;
 
+const SECONDARY_LINKS = [
+  { href: '/blog', label: 'Blog' },
+  { href: '/about', label: 'About' },
+] as const;
+
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -83,6 +88,25 @@ export function Header() {
                 {label}
               </Link>
             ))}
+
+            {/* Separator */}
+            <div className="w-px h-5 bg-slate-200 dark:bg-slate-700 mx-1" aria-hidden="true" />
+
+            {SECONDARY_LINKS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  'px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150',
+                  pathname?.startsWith(href)
+                    ? 'bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-400'
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200'
+                )}
+                aria-current={pathname?.startsWith(href) ? 'page' : undefined}
+              >
+                {label}
+              </Link>
+            ))}
           </nav>
 
           {/* Actions */}
@@ -125,6 +149,9 @@ export function Header() {
           className="lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-surface-900"
         >
           <nav className="px-4 py-3 flex flex-col gap-1" aria-label="Mobile navigation">
+            <p className="px-4 py-1 text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+              Calculators
+            </p>
             {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
@@ -136,6 +163,23 @@ export function Header() {
                     : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
                 )}
                 aria-current={pathname === href ? 'page' : undefined}
+              >
+                {label}
+              </Link>
+            ))}
+
+            <div className="h-px bg-slate-100 dark:bg-slate-800 my-2" />
+
+            {SECONDARY_LINKS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  'px-4 py-3 rounded-lg text-sm font-medium transition-colors',
+                  pathname?.startsWith(href)
+                    ? 'bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-400'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                )}
               >
                 {label}
               </Link>
