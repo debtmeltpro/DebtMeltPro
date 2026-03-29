@@ -1,50 +1,43 @@
-// ============================================================
-// DebtMeltPro — Maintenance Mode Middleware
-// MAINTENANCE ON  karna ho to: MAINTENANCE_MODE = true
-// MAINTENANCE OFF karna ho to: MAINTENANCE_MODE = false
-// Phir git push karo — automatically deploy hoga
-// ============================================================
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// ⚡ SIRF YE LINE CHANGE KARO ⚡
-const MAINTENANCE_MODE = true; // true = ON, false = OFF
+// ============================================================
+// DebtMeltPro — Maintenance Mode
+// ON  karna: MAINTENANCE_MODE = true  → git push
+// OFF karna: MAINTENANCE_MODE = false → git push
+// ============================================================
 
-// Ye pages maintenance mein bhi accessible rahenge
-const BYPASS_PATHS = [
-  '/_next',
+const MAINTENANCE_MODE = true;
+
+const ALLOWED_PATHS = [
+  '/maintenance',
   '/favicon.ico',
   '/robots.txt',
   '/sitemap.xml',
-  '/maintenance',
-  '/api/health',
 ];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Bypass paths skip karo
-  const shouldBypass = BYPASS_PATHS.some((path) =>
-    pathname.startsWith(path)
-  );
-
-  if (shouldBypass) {
+  // Static files allow karo
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/static') ||
+    ALLOWED_PATHS.includes(pathname)
+  ) {
     return NextResponse.next();
   }
 
-  // Maintenance mode ON hai aur user maintenance page pe nahi hai
-  if (MAINTENANCE_MODE && pathname !== '/maintenance') {
-    return NextResponse.rewrite(
-      new URL('/maintenance', request.url)
-    );
+  // Maintenance mode ON hai to sab ko maintenance page bhejo
+  if (MAINTENANCE_MODE) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/maintenance';
+    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
