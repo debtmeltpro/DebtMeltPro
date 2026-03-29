@@ -1,9 +1,17 @@
+// ============================================================
+// DebtMeltPro — Maintenance Mode Middleware
+// MAINTENANCE ON  karna ho to: MAINTENANCE_MODE = true
+// MAINTENANCE OFF karna ho to: MAINTENANCE_MODE = false
+// Phir git push karo — automatically deploy hoga
+// ============================================================
+
 import { NextResponse } from 'next/server';
-//import type { NextRequest } from 'next/request';
+import type { NextRequest } from 'next/server';
 
-// ⚡ SET TO true TO LOCK THE SITE
-const MAINTENANCE_MODE = true; 
+// ⚡ SIRF YE LINE CHANGE KARO ⚡
+const MAINTENANCE_MODE = true; // true = ON, false = OFF
 
+// Ye pages maintenance mein bhi accessible rahenge
 const BYPASS_PATHS = [
   '/_next',
   '/favicon.ico',
@@ -16,19 +24,27 @@ const BYPASS_PATHS = [
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const shouldBypass = BYPASS_PATHS.some((path) => pathname.startsWith(path));
-  if (shouldBypass) return NextResponse.next();
+  // Bypass paths skip karo
+  const shouldBypass = BYPASS_PATHS.some((path) =>
+    pathname.startsWith(path)
+  );
 
-  if (MAINTENANCE_MODE) {
-    // This "rewrites" every request to the maintenance page content
-    if (pathname !== '/maintenance') {
-      return NextResponse.rewrite(new URL('/maintenance', request.url));
-    }
+  if (shouldBypass) {
+    return NextResponse.next();
+  }
+
+  // Maintenance mode ON hai aur user maintenance page pe nahi hai
+  if (MAINTENANCE_MODE && pathname !== '/maintenance') {
+    return NextResponse.rewrite(
+      new URL('/maintenance', request.url)
+    );
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico).*)',
+  ],
 };
