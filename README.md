@@ -1,4 +1,4 @@
-# DebtFreedom — Production-Ready Financial Platform
+# DebtMeltPro — Production-Ready Financial Platform
 
 > **Stack:** Next.js 14 · TypeScript (Strict) · Tailwind CSS · Recharts · Framer Motion · Zustand · Zod
 

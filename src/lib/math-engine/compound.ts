@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Compound Interest & FIRE Math Engine v2
+// DebtMeltPro — Compound Interest & FIRE Math Engine v2
 // ────────────────────────────────────────────────────────
 // NEW in v2:
 //   • Monte Carlo simulation (probability of reaching FIRE)

@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // DebtFreedom Brand Palette
+        // DebtMeltPro Brand Palette
         brand: {
           50:  '#f0fdf4',
           100: '#dcfce7',

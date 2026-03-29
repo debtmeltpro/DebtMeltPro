@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Student Loan Refinance Estimator v2
+// DebtMeltPro — Student Loan Refinance Estimator v2
 // ──────────────────────────────────────────────────
 // NEW in v2:
 //   • Income-Driven Repayment (IDR) plan comparison

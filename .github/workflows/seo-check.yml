@@ -1,5 +1,5 @@
 # ============================================================
-# DebtFreedom — SEO Validation Check
+# DebtMeltPro — SEO Validation Check
 # Runs on every push/PR to catch SEO issues before deploy:
 #   1. Builds the site
 #   2. Validates sitemap generates correctly

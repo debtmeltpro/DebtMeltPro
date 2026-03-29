@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Breadcrumb Navigation
+// DebtMeltPro — Breadcrumb Navigation
 // SEO: Generates BreadcrumbList schema markup.
 // UI: Clean accessible breadcrumb trail on every page.
 // ============================================================

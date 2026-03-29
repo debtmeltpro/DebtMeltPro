@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Site Footer
+// DebtMeltPro — Site Footer
 // Comprehensive internal linking for SEO.
 // Legal disclaimer (required for AdSense finance category).
 // Links to all pages including about, contact, disclaimer.
@@ -52,7 +52,7 @@ export function Footer() {
                 <TrendingDown className="w-3.5 h-3.5 text-white" aria-hidden="true" />
               </div>
               <span className="font-display font-bold text-lg text-white">
-                Debt<span className="text-brand-400">Freedom</span>
+                Debt<span className="text-brand-400">MeltPro</span>
               </span>
             </div>
             <p className="text-sm leading-relaxed mb-4 max-w-lg">
@@ -63,7 +63,7 @@ export function Footer() {
             {/* Legal Disclaimer */}
             <div className="rounded-lg border border-amber-800/40 bg-amber-950/30 px-4 py-3 text-xs text-amber-300/80 leading-relaxed">
               <strong className="font-semibold text-amber-300">Financial Disclaimer: </strong>
-              DebtFreedom provides educational financial calculators for informational purposes only.
+              DebtMeltPro provides educational financial calculators for informational purposes only.
               All calculations are estimates and do not constitute financial, tax, or legal advice.
               Consult a licensed financial advisor before making any financial decisions.
               <Link href="/disclaimer" className="underline ml-1 hover:no-underline">
@@ -123,7 +123,7 @@ export function Footer() {
       <div className="border-t border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-slate-500">
-            © {year} DebtFreedom. All rights reserved. Not financial advice.
+            © {year} DebtMeltPro. All rights reserved. Not financial advice.
           </p>
           <div className="flex items-center gap-4 flex-wrap justify-center">
             {LEGAL_LINKS.map(({ href, label }) => (
@@ -136,12 +136,22 @@ export function Footer() {
               </Link>
             ))}
             <a
-              href="https://www.consumer.ftc.gov/features/feature-0038-on-guard-online"
+              href="https://consumer.ftc.gov/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-slate-500 hover:text-slate-300 transition-colors inline-flex items-center gap-1"
             >
               FTC Guidelines
+              <ExternalLink className="w-3 h-3" aria-hidden="true" />
+            </a>
+            <a
+              href="https://rbi.org.in/"
+              target="_blank"
+              rel="noopener noreferrer nofollow"
+              className="text-xs text-slate-500 hover:text-slate-300 transition-colors inline-flex items-center gap-1"
+
+            >
+              RBI Financial Awareness
               <ExternalLink className="w-3 h-3" aria-hidden="true" />
             </a>
           </div>

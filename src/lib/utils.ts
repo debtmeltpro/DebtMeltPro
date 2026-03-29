@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Utility Functions
+// DebtMeltPro — Utility Functions
 // Central utility barrel — keeps components lean.
 // ============================================================
 

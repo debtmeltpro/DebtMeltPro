@@ -38,8 +38,8 @@ export default function PromptPage({ params }: Props) {
     description: prompt.description,
     datePublished: `${prompt.dateAdded}T00:00:00Z`,
     dateModified: `${prompt.dateUpdated}T00:00:00Z`,
-    author: { '@type': 'Organization', name: 'DebtFreedom', url: SITE_URL },
-    publisher: { '@type': 'Organization', name: 'DebtFreedom', url: SITE_URL },
+    author: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
     mainEntityOfPage: `${SITE_URL}/prompts/${params.category}/${params.slug}`,
   };
 

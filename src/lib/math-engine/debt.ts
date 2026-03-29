@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Debt Payoff Math Engine v2
+// DebtMeltPro — Debt Payoff Math Engine v2
 // ────────────────────────────────────────
 // NEW in v2:
 //   • Debt-to-income ratio (DTI) & affordability analysis

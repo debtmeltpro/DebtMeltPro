@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Blog Post Registry
+// DebtMeltPro — Blog Post Registry
 // Single source of truth for all blog posts.
 // Imported by: sitemap.ts, homepage, blog/page.tsx
 //

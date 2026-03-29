@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Zod Validation Schemas
+// DebtMeltPro — Zod Validation Schemas
 // All user inputs are validated BEFORE reaching the math engine.
 // This prevents NaN errors, injection attacks, and ReDoS vectors.
 // ============================================================

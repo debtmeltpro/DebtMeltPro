@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Math Engine Index v2
+// DebtMeltPro — Math Engine Index v2
 // ──────────────────────────────────
 // Central export point for all financial calculators.
 // NEW in v2:

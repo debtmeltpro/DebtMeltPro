@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// DebtFreedom — Site Header
+// DebtMeltPro — Site Header
 // Sticky header with tool navigation, blog, about, dark mode.
 // Fully accessible (ARIA labels, keyboard nav, skip link).
 // ============================================================
@@ -62,13 +62,13 @@ export function Header() {
           <Link
             href="/"
             className="flex items-center gap-2.5 shrink-0 group"
-            aria-label="DebtFreedom — Home"
+            aria-label="DebtMeltPro — Home"
           >
             <div className="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center group-hover:bg-brand-600 transition-colors">
               <TrendingDown className="w-4 h-4 text-white" aria-hidden="true" />
             </div>
             <span className="font-display font-bold text-xl text-slate-900 dark:text-white">
-              Debt<span className="text-brand-500">Freedom</span>
+              Debt<span className="text-brand-500">MeltPro</span>
             </span>
           </Link>
 

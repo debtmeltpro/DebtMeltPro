@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Credit Card Payoff Optimizer v2
+// DebtMeltPro — Credit Card Payoff Optimizer v2
 // ────────────────────────────────────────────
 // NEW in v2:
 //   • Balance transfer analysis (intro APR periods)

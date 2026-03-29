@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — robots.txt
+// DebtMeltPro — robots.txt
 // Instructs search crawlers on indexing policy.
 // Allows all public pages, blocks API and build artifacts.
 // ============================================================

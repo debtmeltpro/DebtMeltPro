@@ -5,10 +5,10 @@ import { generateWebPageSchema, SITE_URL, TOOLS } from '@/lib/seo';
 import { Shield, Zap, BarChart3, Lock, Users, Heart } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About DebtFreedom — Free Financial Calculators You Can Trust',
+  title: 'About DebtMeltPro — Free Financial Calculators You Can Trust',
   description:
-    'DebtFreedom provides free, privacy-first financial calculators for debt payoff, mortgage analysis, FIRE planning, and more. Learn about our mission to make financial tools accessible to everyone.',
-  keywords: ['about debtfreedom', 'free financial calculators', 'financial tools', 'debt payoff tools'],
+    'DebtMeltPro provides free, privacy-first financial calculators for debt payoff, mortgage analysis, FIRE planning, and more. Learn about our mission to make financial tools accessible to everyone.',
+  keywords: ['about DebtMeltPro', 'free financial calculators', 'financial tools', 'debt payoff tools'],
   alternates: { canonical: `${SITE_URL}/about` },
 };
 
@@ -41,13 +41,13 @@ const VALUES = [
   {
     icon: Heart,
     title: 'Community Driven',
-    description: 'DebtFreedom is sustained through non-intrusive advertising. We reinvest revenue into building more tools and keeping existing calculators up to date.',
+    description: 'DebtMeltPro is sustained through non-intrusive advertising. We reinvest revenue into building more tools and keeping existing calculators up to date.',
   },
 ] as const;
 
 export default function AboutPage() {
   const schema = generateWebPageSchema({
-    title: 'About DebtFreedom',
+    title: 'About DebtMeltPro',
     description: 'Learn about our mission to provide free, privacy-first financial calculators.',
     url: `${SITE_URL}/about`,
   });
@@ -65,7 +65,7 @@ export default function AboutPage() {
         {/* Hero */}
         <div className="text-center mb-12">
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-4">
-            About DebtFreedom
+            About DebtMeltPro
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
             We believe everyone deserves access to professional-grade financial tools —
@@ -80,7 +80,7 @@ export default function AboutPage() {
               Our Mission
             </h2>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-              DebtFreedom was created with a simple goal: give people the tools to make informed
+              DebtMeltPro was created with a simple goal: give people the tools to make informed
               financial decisions. Too many financial calculators online are either oversimplified,
               hidden behind paywalls, or designed to collect your data and sell you products.
             </p>
@@ -152,7 +152,7 @@ export default function AboutPage() {
               Important Disclaimer
             </h2>
             <p className="text-sm text-amber-800 dark:text-amber-300 leading-relaxed">
-              DebtFreedom provides educational financial calculators for informational purposes only.
+              DebtMeltPro provides educational financial calculators for informational purposes only.
               We are not certified financial planners, tax advisors, or legal professionals. Our tools
               produce mathematical estimates based on the inputs you provide. Always consult a
               qualified professional before making financial decisions. Read our full{' '}

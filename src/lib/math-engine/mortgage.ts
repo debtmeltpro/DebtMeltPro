@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Mortgage & Rent vs. Buy Math Engine v2
+// DebtMeltPro — Mortgage & Rent vs. Buy Math Engine v2
 // ────────────────────────────────────────────────────
 // NEW in v2:
 //   • PMI calculation (auto-removed at 78% LTV)

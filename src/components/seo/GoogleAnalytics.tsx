@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// DebtFreedom — Google Analytics (GA4) Integration
+// DebtMeltPro — Google Analytics (GA4) Integration
 // Only loads after cookie consent is granted (GDPR compliant).
 // Tracks page views automatically via Next.js router events.
 // ============================================================

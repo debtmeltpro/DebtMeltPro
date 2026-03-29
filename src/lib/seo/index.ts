@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Reusable SEO Utility System
+// DebtMeltPro — Reusable SEO Utility System
 // Every tool/blog/category page uses these helpers to ensure
 // consistent metadata, schema markup, and internal linking.
 // ============================================================
@@ -7,7 +7,7 @@
 import type { Metadata } from 'next';
 
 export const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://debtmeltpro.com';
-export const SITE_NAME = 'DebtFreedom';
+export const SITE_NAME = 'DebtMeltPro';
 
 // ─── Tool Registry (single source of truth) ──────────────────
 

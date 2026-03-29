@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Global Type Definitions
+// DebtMeltPro — Global Type Definitions
 // All financial entities are typed with strict precision.
 // ============================================================
 

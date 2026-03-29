@@ -27,13 +27,13 @@ export const metadata: Metadata = {
     title: 'Free AI Finance Prompts — Copy-Paste Templates for ChatGPT & Claude',
     description: `${getPromptCount()} expert finance prompts for budgeting, debt, investing, credit, real estate & taxes.`,
     url: `${SITE_URL}/prompts`,
-    siteName: 'DebtFreedom',
+    siteName: 'DebtMeltPro',
   },
 };
 
 const FAQ_DATA = [
   { q: 'What are AI finance prompts?', a: 'AI finance prompts are pre-written instructions you paste into AI tools like ChatGPT, Claude, or Gemini to get personalized financial analysis, budgets, debt payoff plans, and investment strategies. They turn general AI into a specialized financial advisor.' },
-  { q: 'Are these prompts free to use?', a: 'Yes, every prompt on DebtFreedom is completely free. Copy them, customize them with your numbers, and use them as many times as you want. No account or sign-up required.' },
+  { q: 'Are these prompts free to use?', a: 'Yes, every prompt on DebtMeltPro is completely free. Copy them, customize them with your numbers, and use them as many times as you want. No account or sign-up required.' },
   { q: 'Which AI model works best for finance prompts?', a: 'ChatGPT (GPT-4) and Claude both excel at financial analysis. ChatGPT is better for creative scenarios and negotiation scripts. Claude is better for detailed calculations and step-by-step plans. Gemini works well for basic budgeting and tax questions.' },
   { q: 'Can AI replace a financial advisor?', a: 'No. AI prompts are for education and planning, not professional advice. They help you understand concepts, explore scenarios, and prepare questions for your actual financial advisor. Always verify important decisions with a licensed professional.' },
 ];
@@ -52,7 +52,7 @@ export default function PromptsPage() {
     name: 'Free AI Finance Prompts',
     description: `${getPromptCount()} free finance prompts for ChatGPT, Claude, and Gemini.`,
     url: `${SITE_URL}/prompts`,
-    publisher: { '@type': 'Organization', name: 'DebtFreedom', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
     numberOfItems: getPromptCount(),
   };
 

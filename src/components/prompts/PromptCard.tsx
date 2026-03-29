@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// DebtFreedom — Prompt Card Component
+// DebtMeltPro — Prompt Card Component
 // Interactive card with one-click copy, difficulty badges,
 // AI model compatibility tags, and viral indicator.
 // ============================================================

@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Related Tools Component
+// DebtMeltPro — Related Tools Component
 // Internal linking section shown at the bottom of every tool.
 // Improves crawlability, session duration, and topic authority.
 // ============================================================

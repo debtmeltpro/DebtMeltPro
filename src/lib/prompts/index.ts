@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Reusable Prompt Utility System
+// DebtMeltPro — Reusable Prompt Utility System
 // Every prompt page uses these helpers to ensure consistent
 // metadata, schema markup, internal linking, and SEO.
 //
@@ -12,7 +12,7 @@
 import type { Metadata } from 'next';
 
 const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://debtmeltpro.com';
-const SITE_NAME = 'DebtFreedom';
+const SITE_NAME = 'DebtMeltPro';
 
 // ─── Prompt Category Registry ────────────────────────────────
 
@@ -118,7 +118,7 @@ export interface PromptDef {
   exampleOutput: string;     // sample AI response snippet
   useCases: string[];        // who benefits
   tips: string[];            // pro tips for better results
-  relatedToolSlug?: string;  // links to DebtFreedom calculator
+  relatedToolSlug?: string;  // links to DebtMeltPro calculator
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   aiModels: string[];        // which AI models work best
   isViral: boolean;          // featured/trending flag

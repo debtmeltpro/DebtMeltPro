@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
       title: category.metaTitle,
       description: category.metaDescription,
       url: `${SITE_URL}/category/${category.slug}`,
-      siteName: 'DebtFreedom',
+      siteName: 'DebtMeltPro',
     },
   };
 }

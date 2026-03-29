@@ -4,10 +4,10 @@ import { generateWebPageSchema, SITE_URL } from '@/lib/seo';
 import { Mail, MessageSquare, AlertTriangle, Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Us — DebtFreedom',
+  title: 'Contact Us — DebtMeltPro',
   description:
-    'Get in touch with the DebtFreedom team. Report bugs, suggest new tools, or ask questions about our free financial calculators.',
-  keywords: ['contact debtfreedom', 'financial calculator support'],
+    'Get in touch with the DebtMeltPro team. Report bugs, suggest new tools, or ask questions about our free financial calculators.',
+  keywords: ['contact DebtMeltPro', 'financial calculator support'],
   alternates: { canonical: `${SITE_URL}/contact` },
 };
 
@@ -34,8 +34,8 @@ const CONTACT_METHODS = [
 
 export default function ContactPage() {
   const schema = generateWebPageSchema({
-    title: 'Contact DebtFreedom',
-    description: 'Get in touch with the DebtFreedom team.',
+    title: 'Contact DebtMeltPro',
+    description: 'Get in touch with the DebtMeltPro team.',
     url: `${SITE_URL}/contact`,
   });
 
@@ -94,7 +94,7 @@ export default function ContactPage() {
         </div>
 
         <p className="mt-8 text-xs text-slate-400 text-center leading-relaxed">
-          DebtFreedom does not provide financial advice via email or any other channel.
+          DebtMeltPro does not provide financial advice via email or any other channel.
           For personalized financial guidance, please consult a certified financial planner.
         </p>
       </div>

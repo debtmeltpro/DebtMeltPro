@@ -1,7 +1,7 @@
 'use client';
 
 // ============================================================
-// DebtFreedom — useCurrency Hook
+// DebtMeltPro — useCurrency Hook
 // Detects user's currency from:
 //   1. IP geolocation API (most accurate)
 //   2. Browser navigator.language fallback

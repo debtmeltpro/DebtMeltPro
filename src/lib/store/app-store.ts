@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Global Zustand Store
+// DebtMeltPro — Global Zustand Store
 // Persists user preferences, cookie consent, and last-used tool
 // across navigation without server round-trips.
 // ============================================================
@@ -17,7 +17,7 @@ export const useAppStore = create<AppStore>()(
       setLastTool: (tool: string) => set({ lastTool: tool }),
     }),
     {
-      name: 'debtfreedom-preferences',
+      name: 'DebtMeltPro-preferences',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         cookieConsent: state.cookieConsent,

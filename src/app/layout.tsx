@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Root Layout
+// DebtMeltPro — Root Layout
 // SEO: Global metadata, Open Graph, Twitter Cards, JSON-LD.
 // Analytics: GA4 integration (consent-gated).
 // Performance: Font optimization via next/font.
@@ -32,7 +32,7 @@ const playfair = Playfair_Display({
 
 // ─── Site Constants ────────────────────────────────────────────
 const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://debtmeltpro.com';
-const SITE_NAME = 'DebtFreedom';
+const SITE_NAME = 'DebtMeltPro';
 const SITE_DESCRIPTION =
   'Free financial calculators: Debt payoff (snowball & avalanche), mortgage rent vs. buy, compound interest FIRE calculator, credit card optimizer, and student loan refinance estimator.';
 

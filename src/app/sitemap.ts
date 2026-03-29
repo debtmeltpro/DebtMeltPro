@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Dynamic Sitemap
+// DebtMeltPro — Dynamic Sitemap
 // Includes all tools, categories, blog posts, and legal pages.
 // Auto-generates at build time for optimal SEO indexing.
 // ============================================================

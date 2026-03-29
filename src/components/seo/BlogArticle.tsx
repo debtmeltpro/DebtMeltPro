@@ -1,5 +1,5 @@
 // ============================================================
-// DebtFreedom — Blog Article Layout Template
+// DebtMeltPro — Blog Article Layout Template
 // Reusable wrapper for all blog posts ensuring consistent
 // SEO structure: breadcrumbs, schema, ads, related tools.
 // ============================================================
@@ -35,8 +35,8 @@ export function BlogArticle({
     headline: title,
     datePublished: `${date}T00:00:00Z`,
     dateModified: `${date}T00:00:00Z`,
-    author: { '@type': 'Organization', name: 'DebtFreedom', url: SITE_URL },
-    publisher: { '@type': 'Organization', name: 'DebtFreedom', url: SITE_URL },
+    author: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
+    publisher: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
     mainEntityOfPage: `${SITE_URL}/blog/${slug}`,
   };
 

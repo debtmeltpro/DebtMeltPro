@@ -2,16 +2,16 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'DebtFreedom Privacy Policy — GDPR and CCPA compliant. We explain what data we collect, how it\'s used, and your rights.',
+  description: 'DebtMeltPro Privacy Policy — GDPR and CCPA compliant. We explain what data we collect, how it\'s used, and your rights.',
   robots: { index: true, follow: false },
 };
 
 const SECTIONS = [
   {
     title: '1. Information We Collect',
-    content: `**Information You Do Not Provide:** DebtFreedom calculators operate entirely within your browser. No financial data you enter (balances, rates, income, debt amounts) is ever transmitted to our servers, stored in databases, or shared with any third party. All calculations occur locally on your device.
+    content: `**Information You Do Not Provide:** DebtMeltPro calculators operate entirely within your browser. No financial data you enter (balances, rates, income, debt amounts) is ever transmitted to our servers, stored in databases, or shared with any third party. All calculations occur locally on your device.
 
-**Automatically Collected Information:** When you visit DebtFreedom, we automatically collect:
+**Automatically Collected Information:** When you visit DebtMeltPro, we automatically collect:
 - Browser type and version, operating system
 - Pages viewed, time spent, referring URLs
 - IP address (anonymized where legally required)
@@ -92,11 +92,11 @@ To exercise any of these rights, contact us at privacy@debtmeltpro.com. We respo
   },
   {
     title: '8. Children\'s Privacy',
-    content: `DebtFreedom is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected data from a child, contact us immediately at privacy@debtmeltpro.com.`,
+    content: `DebtMeltPro is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected data from a child, contact us immediately at privacy@debtmeltpro.com.`,
   },
   {
     title: '9. Changes to This Policy',
-    content: `We may update this Privacy Policy periodically. We will notify you of material changes by updating the "Last Updated" date below and, where appropriate, posting a notice on our site. Continued use of DebtFreedom after changes constitutes acceptance of the updated policy.`,
+    content: `We may update this Privacy Policy periodically. We will notify you of material changes by updating the "Last Updated" date below and, where appropriate, posting a notice on our site. Continued use of DebtMeltPro after changes constitutes acceptance of the updated policy.`,
   },
   {
     title: '10. Contact Us',
@@ -118,7 +118,7 @@ export default function PrivacyPolicyPage() {
       <div className="card p-6 mb-8 border-l-4 border-l-brand-500">
         <h2 className="font-semibold text-slate-900 dark:text-white mb-2">Our Core Privacy Commitment</h2>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          DebtFreedom is a privacy-first financial tool. The numbers you enter into our calculators
+          DebtMeltPro is a privacy-first financial tool. The numbers you enter into our calculators
           — your debts, income, balances, and personal financial data — <strong>never leave your
           browser</strong>. No financial data is stored on our servers. This is by design, not policy.
         </p>

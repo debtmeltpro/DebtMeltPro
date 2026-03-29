@@ -6,7 +6,7 @@ import { SITE_URL } from '@/lib/seo';
 import { ArrowRight, Calendar } from 'lucide-react';
 import { BLOG_POSTS } from '@/lib/blog';
 export const metadata: Metadata = {
-  title: 'Financial Education Blog — DebtFreedom',
+  title: 'Financial Education Blog — DebtMeltPro',
   description:
     'Expert guides on debt management, investing, home buying, and student loans. Free financial education to help you make smarter money decisions.',
   keywords: ['financial education', 'debt management tips', 'investment guides', 'home buying guide', 'student loan advice'],
