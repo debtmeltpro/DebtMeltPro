@@ -71,7 +71,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="font-semibold text-lg text-slate-900 dark:text-white mb-3">11. Contact</h2>
-          <p>For questions about these Terms: legal@debtfreedom.app</p>
+          <p>For questions about these Terms: legal@debtmeltpro.com</p>
         </section>
       </div>
     </div>

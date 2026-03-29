@@ -11,7 +11,7 @@
 
 import type { Metadata } from 'next';
 
-const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://debtfreedom.app';
+const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://debtmeltpro.com';
 const SITE_NAME = 'DebtFreedom';
 
 // ─── Prompt Category Registry ────────────────────────────────

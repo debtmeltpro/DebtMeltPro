@@ -30,7 +30,7 @@ export default function DisclaimerPage() {
           </h2>
           <p className="text-sm text-red-800 dark:text-red-300 leading-relaxed">
             The tools, calculators, estimates, projections, and content provided on DebtFreedom
-            (debtfreedom.app) are for <strong>educational and informational purposes only</strong>.
+            (debtmeltpro.com) are for <strong>educational and informational purposes only</strong>.
             Nothing on this website constitutes financial, investment, tax, accounting, or legal advice.
             You should always consult with a qualified, licensed professional before making any
             financial decisions.

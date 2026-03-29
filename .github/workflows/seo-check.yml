@@ -39,7 +39,7 @@ jobs:
       - name: Build Next.js
         run: npm run build
         env:
-          NEXT_PUBLIC_SITE_URL: https://debtfreedom.app
+          NEXT_PUBLIC_SITE_URL: https://debtmeltpro.com
 
       - name: Validate sitemap generation
         run: |
@@ -69,15 +69,15 @@ jobs:
 
           # Check critical pages are in sitemap
           CRITICAL_PAGES=(
-            "https://debtfreedom.app"
-            "https://debtfreedom.app/tools/debt-payoff"
-            "https://debtfreedom.app/tools/mortgage-calculator"
-            "https://debtfreedom.app/tools/compound-interest"
-            "https://debtfreedom.app/tools/credit-card-payoff"
-            "https://debtfreedom.app/tools/student-loan"
-            "https://debtfreedom.app/about"
-            "https://debtfreedom.app/blog"
-            "https://debtfreedom.app/prompts"
+            "https://debtmeltpro.com"
+            "https://debtmeltpro.com/tools/debt-payoff"
+            "https://debtmeltpro.com/tools/mortgage-calculator"
+            "https://debtmeltpro.com/tools/compound-interest"
+            "https://debtmeltpro.com/tools/credit-card-payoff"
+            "https://debtmeltpro.com/tools/student-loan"
+            "https://debtmeltpro.com/about"
+            "https://debtmeltpro.com/blog"
+            "https://debtmeltpro.com/prompts"
           )
 
           MISSING=0

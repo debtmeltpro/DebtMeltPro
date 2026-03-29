@@ -80,7 +80,7 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment:
       name: production
-      url: https://debtfreedom.app
+      url: https://debtmeltpro.com
     steps:
       - uses: actions/checkout@v4
       - uses: amondnet/vercel-action@v25
@@ -100,8 +100,8 @@ jobs:
       - uses: treosh/lighthouse-ci-action@v11
         with:
           urls: |
-            https://debtfreedom.app
-            https://debtfreedom.app/tools/debt-payoff
+            https://debtmeltpro.com
+            https://debtmeltpro.com/tools/debt-payoff
           budgetPath: ./lighthouse-budget.json
           uploadArtifacts: true
           temporaryPublicStorage: true

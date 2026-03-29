@@ -16,19 +16,19 @@ const CONTACT_METHODS = [
     icon: Mail,
     title: 'General Inquiries',
     description: 'Questions about our tools, partnership opportunities, or feedback.',
-    email: 'hello@debtfreedom.app',
+    email: 'hello@debtmeltpro.com',
   },
   {
     icon: AlertTriangle,
     title: 'Bug Reports',
     description: 'Found a calculation error or technical issue? Let us know.',
-    email: 'bugs@debtfreedom.app',
+    email: 'bugs@debtmeltpro.com',
   },
   {
     icon: MessageSquare,
     title: 'Feature Requests',
     description: 'Have an idea for a new calculator or improvement?',
-    email: 'features@debtfreedom.app',
+    email: 'features@debtmeltpro.com',
   },
 ] as const;
 
