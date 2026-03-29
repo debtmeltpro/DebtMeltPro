@@ -59,7 +59,7 @@ export default function HomePage() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 text-sm font-medium mb-6">
             <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
-            100% Free · No Sign-Up Required
+            100% Free · No Sign-Up Required!
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight mb-6">
             Take Control of Your{' '}
