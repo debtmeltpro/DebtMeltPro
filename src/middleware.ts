@@ -7,7 +7,7 @@ import type { NextRequest } from 'next/server';
 // OFF karna: MAINTENANCE_MODE = false → git push
 // ============================================================
 
-const MAINTENANCE_MODE = true;
+const MAINTENANCE_MODE = false;
 
 const ALLOWED_PATHS = [
   '/maintenance',
