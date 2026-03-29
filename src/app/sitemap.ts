@@ -9,7 +9,7 @@ import { TOOLS, CATEGORIES } from '@/lib/seo';
 import { PROMPT_CATEGORIES, getAllPromptPaths } from '@/lib/prompts';
 import { BLOG_POSTS } from '@/lib/blog';
 
-const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://debtfreedom.app';
+const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://debtfreedom.app';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

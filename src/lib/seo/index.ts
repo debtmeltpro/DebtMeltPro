@@ -6,7 +6,7 @@
 
 import type { Metadata } from 'next';
 
-export const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] ?? 'https://debtfreedom.app';
+export const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://debtfreedom.app';
 export const SITE_NAME = 'DebtFreedom';
 
 // ─── Tool Registry (single source of truth) ──────────────────
