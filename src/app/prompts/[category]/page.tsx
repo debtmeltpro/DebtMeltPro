@@ -8,7 +8,7 @@ import {
   PROMPT_CATEGORIES, getPromptsByCategory, getCategory,
   generatePromptCategoryMetadata,
 } from '@/lib/prompts';
-import { SITE_URL, generateFaqSchema } from '@/lib/seo';
+import {  generateFaqSchema } from '@/lib/seo';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface Props {

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowRight, TrendingDown, Home, Flame, CreditCard, GraduationCap } from 'lucide-react';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
-import { CATEGORIES, TOOLS, SITE_URL, generateBreadcrumbSchema } from '@/lib/seo';
+import { CATEGORIES, TOOLS, SITE_URL} from '@/lib/seo';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 
 const ICON_MAP: Record<string, React.ElementType> = {

@@ -4,7 +4,7 @@ import { DebtPayoffCalculator } from './DebtPayoffCalculator';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
-import { generateToolMetadata, generateFaqSchema, generateToolSchema, SITE_URL } from '@/lib/seo';
+import { generateToolMetadata, generateFaqSchema, generateToolSchema } from '@/lib/seo';
 
 export const metadata: Metadata = generateToolMetadata('debt-payoff');
 

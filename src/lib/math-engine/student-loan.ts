@@ -253,7 +253,7 @@ export const compareIDRPlans = (
     };
 
     let firstPayment = 0;
-    const yearlyPayments: number[] = [];
+    //const yearlyPayments: number[] = [];
 
     for (let month = 1; month <= forgivenessMonth; month++) {
       // Recalculate payment annually

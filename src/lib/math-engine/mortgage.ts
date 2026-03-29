@@ -59,7 +59,7 @@ export const calculateMortgage = (input: MortgageInput): MortgageResult => {
 
   const monthlyInterestYear1 = round2(loanAmount * (mortgageRatePercent / 100) / 12);
   const annualTaxBenefit = round2(monthlyInterestYear1 * 12 * (marginalTaxRatePercent / 100));
-  const monthlyTaxBenefit = round2(annualTaxBenefit / 12);
+  void round2(annualTaxBenefit / 12);
 
   const yearlyComparison: YearlyMortgageSnapshot[] = [];
   let cumulativeBuyingCost = downPayment;
