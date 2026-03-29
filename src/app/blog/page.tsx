@@ -1,9 +1,10 @@
+
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { SITE_URL } from '@/lib/seo';
 import { ArrowRight, Calendar } from 'lucide-react';
-
+import { BLOG_POSTS } from '@/lib/blog';
 export const metadata: Metadata = {
   title: 'Financial Education Blog — DebtFreedom',
   description:
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 // Blog post registry — add new posts here
+/*
 export const BLOG_POSTS = [
   {
     slug: 'snowball-vs-avalanche-debt-payoff',
@@ -65,7 +67,7 @@ export const BLOG_POSTS = [
     keywords: ['refinance student loans', 'federal vs private loans', 'student loan refinancing'],
   },
 ];
-
+*/
 export default function BlogPage() {
   return (
     <>

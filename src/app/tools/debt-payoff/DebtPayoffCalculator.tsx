@@ -6,6 +6,7 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
+
 import { Plus, Trash2, TrendingDown, Trophy, Clock, DollarSign, AlertCircle } from 'lucide-react';
 
 import { calculateDebtPayoff, getBestStrategy, formatDuration } from '@/lib/math-engine';
@@ -337,7 +338,8 @@ export function DebtPayoffCalculator() {
                       tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
                     <YAxis tickFormatter={(v) => `${currencySymbol}${(v/1000).toFixed(0)}k`}
                       tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} width={60} />
-                    <Tooltip content={(props) => <ChartTooltip {...props} formatCurrency={formatCurrency} />} />
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    <Tooltip content={(props: any) => <ChartTooltip {...props} formatCurrency={formatCurrency} />} />
                     <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
                     <Area type="monotone" dataKey="Snowball"  stroke="#3b82f6" strokeWidth={2}   fill="url(#snowballGrad)"  dot={false} />
                     <Area type="monotone" dataKey="Avalanche" stroke="#22c55e" strokeWidth={2.5} fill="url(#avalancheGrad)" dot={false} />

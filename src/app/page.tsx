@@ -9,7 +9,7 @@ import {
 import { AdSlotLeaderboard, AdSlotInArticle } from '@/components/molecules/AdSlot';
 import { TOOLS, CATEGORIES, SITE_URL, generateFaqSchema } from '@/lib/seo';
 import { getViralPrompts, getPromptCount } from '@/lib/prompts';
-import { BLOG_POSTS } from './blog/page';
+import { BLOG_POSTS } from '@/lib/blog';
 
 export const metadata: Metadata = {
   title: 'Free Financial Calculators — Debt Payoff, Mortgage, FIRE, Credit Cards',

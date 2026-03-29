@@ -274,9 +274,9 @@ describe('Student Loan Refinance Calculator', () => {
       loanBalance: 30000,
       currentRatePercent: 6.8,
       currentTermMonths: 120,
-      currentMonthsRemaining: 96,
+      currentMonthsRemaining: 120,
       newRatePercent: 4.5,
-      newTermMonths: 96,
+      newTermMonths: 120,
       refinanceFeePercent: 0,
     });
 
