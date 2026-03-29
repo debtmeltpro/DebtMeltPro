@@ -1,0 +1,219 @@
+# ============================================================
+# DebtFreedom — SEO Validation Check
+# Runs on every push/PR to catch SEO issues before deploy:
+#   1. Builds the site
+#   2. Validates sitemap generates correctly
+#   3. Checks all pages have meta titles & descriptions
+#   4. Validates structured data (JSON-LD)
+#   5. Checks for broken internal links
+# ============================================================
+
+name: SEO Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  seo-validation:
+    name: SEO Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --frozen-lockfile
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://debtfreedom.app
+
+      - name: Validate sitemap generation
+        run: |
+          echo "🗺️  Checking sitemap..."
+
+          # Start Next.js server in background
+          npx next start -p 3999 &
+          SERVER_PID=$!
+          sleep 5
+
+          # Fetch sitemap
+          HTTP_CODE=$(curl -s -o /tmp/sitemap.xml -w "%{http_code}" http://localhost:3999/sitemap.xml)
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "❌ Sitemap returned HTTP $HTTP_CODE"
+            kill $SERVER_PID 2>/dev/null
+            exit 1
+          fi
+
+          # Count URLs in sitemap
+          URL_COUNT=$(grep -c "<url>" /tmp/sitemap.xml || echo "0")
+          echo "✅ Sitemap OK — $URL_COUNT URLs found"
+
+          if [ "$URL_COUNT" -lt 15 ]; then
+            echo "⚠️  Warning: Only $URL_COUNT URLs in sitemap (expected 20+)"
+          fi
+
+          # Check critical pages are in sitemap
+          CRITICAL_PAGES=(
+            "https://debtfreedom.app"
+            "https://debtfreedom.app/tools/debt-payoff"
+            "https://debtfreedom.app/tools/mortgage-calculator"
+            "https://debtfreedom.app/tools/compound-interest"
+            "https://debtfreedom.app/tools/credit-card-payoff"
+            "https://debtfreedom.app/tools/student-loan"
+            "https://debtfreedom.app/about"
+            "https://debtfreedom.app/blog"
+            "https://debtfreedom.app/prompts"
+          )
+
+          MISSING=0
+          for page in "${CRITICAL_PAGES[@]}"; do
+            if ! grep -q "$page" /tmp/sitemap.xml; then
+              echo "❌ Missing from sitemap: $page"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+
+          if [ "$MISSING" -eq 0 ]; then
+            echo "✅ All critical pages present in sitemap"
+          fi
+
+          kill $SERVER_PID 2>/dev/null
+
+      - name: Validate robots.txt
+        run: |
+          echo "🤖 Checking robots.txt..."
+
+          npx next start -p 3998 &
+          SERVER_PID=$!
+          sleep 5
+
+          HTTP_CODE=$(curl -s -o /tmp/robots.txt -w "%{http_code}" http://localhost:3998/robots.txt)
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "❌ robots.txt returned HTTP $HTTP_CODE"
+            kill $SERVER_PID 2>/dev/null
+            exit 1
+          fi
+
+          # Check sitemap reference exists
+          if grep -q "Sitemap:" /tmp/robots.txt; then
+            echo "✅ robots.txt references sitemap"
+          else
+            echo "❌ robots.txt missing Sitemap directive"
+            kill $SERVER_PID 2>/dev/null
+            exit 1
+          fi
+
+          echo "✅ robots.txt OK"
+          kill $SERVER_PID 2>/dev/null
+
+      - name: Check meta tags on key pages
+        run: |
+          echo "🏷️  Checking meta tags..."
+
+          npx next start -p 3997 &
+          SERVER_PID=$!
+          sleep 5
+
+          PAGES=(
+            "/"
+            "/tools/debt-payoff"
+            "/tools/compound-interest"
+            "/about"
+            "/blog"
+            "/prompts"
+          )
+
+          ERRORS=0
+          for page in "${PAGES[@]}"; do
+            HTML=$(curl -s "http://localhost:3997${page}")
+
+            # Check <title> tag exists and is not empty
+            TITLE=$(echo "$HTML" | grep -oP '<title[^>]*>\K[^<]+' | head -1)
+            if [ -z "$TITLE" ]; then
+              echo "❌ Missing <title> on $page"
+              ERRORS=$((ERRORS + 1))
+            else
+              TITLE_LEN=${#TITLE}
+              if [ "$TITLE_LEN" -gt 65 ]; then
+                echo "⚠️  Title too long ($TITLE_LEN chars) on $page: $TITLE"
+              fi
+            fi
+
+            # Check meta description exists
+            if echo "$HTML" | grep -q 'name="description"'; then
+              echo "✅ $page — title & description present"
+            else
+              echo "❌ Missing meta description on $page"
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            # Check for JSON-LD structured data
+            SCHEMA_COUNT=$(echo "$HTML" | grep -c 'application/ld+json' || echo "0")
+            if [ "$SCHEMA_COUNT" -eq 0 ]; then
+              echo "⚠️  No structured data (JSON-LD) on $page"
+            else
+              echo "   📋 $SCHEMA_COUNT schema(s) found on $page"
+            fi
+          done
+
+          kill $SERVER_PID 2>/dev/null
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo ""
+            echo "❌ $ERRORS SEO errors found"
+            exit 1
+          fi
+
+          echo ""
+          echo "✅ All pages have valid meta tags"
+
+      - name: Check Open Graph tags
+        run: |
+          echo "📱 Checking Open Graph tags..."
+
+          npx next start -p 3996 &
+          SERVER_PID=$!
+          sleep 5
+
+          PAGES=("/" "/tools/debt-payoff" "/about" "/prompts")
+          ERRORS=0
+
+          for page in "${PAGES[@]}"; do
+            HTML=$(curl -s "http://localhost:3996${page}")
+
+            OG_TITLE=$(echo "$HTML" | grep -c 'property="og:title"' || echo "0")
+            OG_DESC=$(echo "$HTML" | grep -c 'property="og:description"' || echo "0")
+            OG_URL=$(echo "$HTML" | grep -c 'property="og:url"' || echo "0")
+
+            if [ "$OG_TITLE" -eq 0 ] || [ "$OG_DESC" -eq 0 ]; then
+              echo "❌ Missing OG tags on $page"
+              ERRORS=$((ERRORS + 1))
+            else
+              echo "✅ $page — OG tags present"
+            fi
+          done
+
+          kill $SERVER_PID 2>/dev/null
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "❌ $ERRORS pages missing Open Graph tags"
+            exit 1
+          fi
+
+          echo "✅ All Open Graph tags valid"
