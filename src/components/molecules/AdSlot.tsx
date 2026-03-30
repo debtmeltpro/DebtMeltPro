@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppStore } from '@/lib/store/app-store';
 import { cn } from '@/lib/utils';
 
@@ -37,17 +37,34 @@ export function AdSlot({ adSlot, variant = 'rectangle', className, showLabel = t
   const { cookieConsent } = useAppStore();
   const [, setAdsLoaded] = useState(false);
   const dims = SLOT_DIMENSIONS[variant];
+  const adRef = useRef<HTMLModElement | null>(null);
+  const pushedRef = useRef(false);
 
   useEffect(() => {
     if (cookieConsent !== true || !adSlot) return;
     const initAds = () => {
       try {
+        const adEl = adRef.current;
+        if (!adEl || pushedRef.current) return;
+
+        // AdSense marks initialized nodes with this attribute. Avoid duplicate push.
+        const status = adEl.getAttribute('data-adsbygoogle-status');
+        if (status === 'done') {
+          pushedRef.current = true;
+          return;
+        }
+
         if (typeof window !== 'undefined' && 'adsbygoogle' in window) {
           // @ts-expect-error adsbygoogle injected by Google
           (window.adsbygoogle = window.adsbygoogle ?? []).push({});
+          pushedRef.current = true;
           setAdsLoaded(true);
         }
-      } catch (err) { console.warn('[AdSlot] AdSense push failed:', err); }
+      } catch (err) {
+        if (process.env.NODE_ENV !== 'production') {
+          console.warn('[AdSlot] AdSense push failed:', err);
+        }
+      }
     };
     if (!document.getElementById('adsense-script')) {
       const script = document.createElement('script');
@@ -78,11 +95,15 @@ export function AdSlot({ adSlot, variant = 'rectangle', className, showLabel = t
       {showLabel && <p className="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-wide font-medium">Advertisement</p>}
       <div style={{ minWidth: Math.min(dims.width, 320), minHeight: dims.height, contain: 'layout size' }}>
         {cookieConsent === true ? (
-          <ins className="adsbygoogle" style={{ display: 'block' }}
+          <ins
+            ref={adRef}
+            className="adsbygoogle"
+            style={{ display: 'block' }}
             data-ad-client={process.env['NEXT_PUBLIC_ADSENSE_ID']}
             data-ad-slot={adSlot}
             data-ad-format={variant === 'in-article' ? 'fluid' : 'auto'}
-            data-full-width-responsive="true" />
+            data-full-width-responsive="true"
+          />
         ) : <AdPlaceholder variant={variant} />}
       </div>
     </div>

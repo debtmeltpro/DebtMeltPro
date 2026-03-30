@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { generateWebPageSchema, SITE_URL } from '@/lib/seo';
-import { Mail, MessageSquare, AlertTriangle, Clock } from 'lucide-react';
+import { Mail, Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Contact Us — DebtMeltPro',
@@ -16,8 +16,9 @@ const CONTACT_METHODS = [
     icon: Mail,
     title: 'General Inquiries',
     description: 'Questions about our tools, partnership opportunities, or feedback.',
-    email: 'hello@debtmeltpro.com',
+    email: 'support@debtmeltpro.com',
   },
+  /*
   {
     icon: AlertTriangle,
     title: 'Bug Reports',
@@ -29,7 +30,7 @@ const CONTACT_METHODS = [
     title: 'Feature Requests',
     description: 'Have an idea for a new calculator or improvement?',
     email: 'features@debtmeltpro.com',
-  },
+  }, */
 ] as const;
 
 export default function ContactPage() {

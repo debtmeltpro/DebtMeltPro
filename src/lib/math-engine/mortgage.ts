@@ -110,7 +110,21 @@ export const calculateMortgage = (input: MortgageInput): MortgageResult => {
     }
   }
 
-  const finalYear = yearlyComparison[yearlyComparison.length - 1]!;
+ // const finalYear = yearlyComparison[yearlyComparison.length - 1]!;
+  const finalYear = yearlyComparison[yearlyComparison.length - 1];
+  if (!finalYear) {
+    return {
+      monthlyPayment: totalMonthlyBuyingCost,
+      totalMortgageCost: 0,
+      totalRentCost: 0,
+      buyingNetWorth: 0,
+      rentingNetWorth: 0,
+      breakEvenYears: yearsToAnalyze + 1,
+      recommendation: 'neutral',
+      opportunityCostOfDownPayment: 0,
+      yearlyComparison: [],
+    };
+  }
   const buyingNetWorth = finalYear.buyingEquity;
   const rentingNetWorth = finalYear.rentingPortfolioValue;
 

@@ -2,8 +2,8 @@
 // DebtMeltPro — Maintenance Mode Middleware
 //
 // HOW TO USE
-//   Enable:  Set NEXT_PUBLIC_MAINTENANCE_MODE=true in Vercel env vars
-//   Disable: Set NEXT_PUBLIC_MAINTENANCE_MODE=false (or delete it)
+//   Enable:  Set MAINTENANCE_MODE=true in Vercel env vars
+//   Disable: Set MAINTENANCE_MODE=false (or delete it)
 //
 // All traffic gets redirected to /maintenance except:
 //   - The maintenance page itself
@@ -30,8 +30,11 @@ const EXCLUDED_PATHS = [
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Check if maintenance mode is enabled
-  const isMaintenanceMode = process.env['NEXT_PUBLIC_MAINTENANCE_MODE'] === 'true';
+  // Check if maintenance mode is enabled.
+  // Keep legacy fallback for older env files using NEXT_PUBLIC_MAINTENANCE_MODE.
+  const isMaintenanceMode =
+    process.env['MAINTENANCE_MODE'] === 'true' ||
+    process.env['NEXT_PUBLIC_MAINTENANCE_MODE'] === 'true';
 
   if (!isMaintenanceMode) {
     // If maintenance mode is OFF but user visits /maintenance, redirect to home
@@ -53,14 +56,26 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Redirect everything else to maintenance page
-  const maintenanceUrl = new URL('/maintenance', request.url);
-  return NextResponse.rewrite(maintenanceUrl);
+  // Return temporary outage semantics for SEO-safe maintenance handling.
+  return new NextResponse('Service temporarily unavailable', {
+    status: 503,
+    headers: {
+      'cache-control': 'no-store',
+      'content-type': 'text/plain; charset=utf-8',
+      'retry-after': '600',
+      'x-robots-tag': 'noindex, nofollow',
+    },
+  });
 }
 
 export const config = {
   matcher: [
-    // Match all paths except static files
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    /*
+     * Skip Edge middleware entirely for paths that never need redirect / maintenance logic.
+     * Cuts Vercel Edge invocations (and latency) on static, API, and public assets.
+     *
+     * Keep in sync with EXCLUDED_PATHS + extension allowlist in middleware().
+     */
+    '/((?!api/|_next/static|_next/image|favicon\\.ico|robots\\.txt|sitemap\\.xml|og-image\\.png|logo\\.png|.*\\.(?:ico|png|jpg|jpeg|svg|gif|webp|avif|css|js|mjs|map|json|txt|xml|woff|woff2|ttf|otf|webmanifest)$).*)',
   ],
 };

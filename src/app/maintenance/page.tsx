@@ -14,15 +14,11 @@ export const metadata: Metadata = {
 
 export default function MaintenancePage() {
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-        <style dangerouslySetInnerHTML={{ __html: `
+    <>
+      <style
+        // NOTE: This page is intentionally self-contained to load fast during incidents.
+        // It must NOT render <html>/<head>/<body> in the App Router.
+        dangerouslySetInnerHTML={{ __html: `
           * { margin: 0; padding: 0; box-sizing: border-box; }
 
           :root {
@@ -40,7 +36,7 @@ export default function MaintenancePage() {
           }
 
           body {
-            font-family: 'DM Sans', -apple-system, sans-serif;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
@@ -138,7 +134,7 @@ export default function MaintenancePage() {
           }
 
           .logo-text {
-            font-family: 'DM Sans', sans-serif;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             font-weight: 700;
             font-size: 22px;
             color: var(--text-primary);
@@ -186,7 +182,7 @@ export default function MaintenancePage() {
 
           /* Typography */
           h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: Georgia, "Times New Roman", Times, serif;
             font-size: 40px;
             font-weight: 700;
             line-height: 1.2;
@@ -372,77 +368,90 @@ export default function MaintenancePage() {
             .status-info { flex-direction: column; gap: 12px; }
           }
         `}} />
-      </head>
-      <body>
-        {/* Background effects */}
-        <div className="bg-grid" />
-        <div className="bg-glow-1" />
-        <div className="bg-glow-2" />
+      {/* Background effects */}
+      <div className="bg-grid" />
+      <div className="bg-glow-1" />
+      <div className="bg-glow-2" />
 
-        <div className="container">
-          {/* Logo */}
-          <div className="logo">
-            <div className="logo-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                <polyline points="17 6 23 6 23 12" />
-              </svg>
-            </div>
-            <div className="logo-text">
-              Debt<span>MeltPro</span>
-            </div>
+      <div className="container">
+        {/* Logo */}
+        <div className="logo">
+          <div className="logo-icon">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+              <polyline points="17 6 23 6 23 12" />
+            </svg>
           </div>
-
-          {/* Wrench icon */}
-          <div className="icon-wrap">
-            <div className="wrench-circle">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-              </svg>
-            </div>
+          <div className="logo-text">
+            Debt<span>MeltPro</span>
           </div>
-
-          {/* Heading */}
-          <h1>We&apos;re Making Things <em>Even Better</em></h1>
-
-          <p className="subtitle">
-            Our financial calculators are being upgraded with powerful new features.
-            We&apos;ll be back online shortly — your data is safe and sound.
-          </p>
-
-          {/* Status card */}
-          <div className="status-card">
-            <div className="status-row">
-              <div className="status-dot" />
-              <span className="status-label">Maintenance in Progress</span>
-            </div>
-            <div className="progress-bar-bg">
-              <div className="progress-bar" />
-            </div>
-            <div className="status-info">
-              <div className="status-info-item">
-                <div className="label">Status</div>
-                <div className="value">Upgrading</div>
-              </div>
-              <div className="status-info-item">
-                <div className="label">Expected</div>
-                <div className="value">~30 min</div>
-              </div>
-              <div className="status-info-item">
-                <div className="label">Data</div>
-                <div className="value">Safe ✓</div>
-              </div>
-            </div>
-          </div>
-         
-          
         </div>
 
-        {/* Footer */}
-        <div className="footer">
-          © {new Date().getFullYear()} DebtMeltPro. All calculators will be restored after maintenance.
+        {/* Wrench icon */}
+        <div className="icon-wrap">
+          <div className="wrench-circle">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+            </svg>
+          </div>
         </div>
-      </body>
-    </html>
+
+        {/* Heading */}
+        <h1>
+          We&apos;re Making Things <em>Even Better</em>
+        </h1>
+
+        <p className="subtitle">
+          Our financial calculators are being upgraded with powerful new features. We&apos;ll be back online shortly —
+          your data is safe and sound.
+        </p>
+
+        {/* Status card */}
+        <div className="status-card">
+          <div className="status-row">
+            <div className="status-dot" />
+            <span className="status-label">Maintenance in Progress</span>
+          </div>
+          <div className="progress-bar-bg">
+            <div className="progress-bar" />
+          </div>
+          <div className="status-info">
+            <div className="status-info-item">
+              <div className="label">Status</div>
+              <div className="value">Upgrading</div>
+            </div>
+            <div className="status-info-item">
+              <div className="label">Expected</div>
+              <div className="value">~30 min</div>
+            </div>
+            <div className="status-info-item">
+              <div className="label">Data</div>
+              <div className="value">Safe ✓</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="footer">
+        © {new Date().getFullYear()} DebtMeltPro. All calculators will be restored after maintenance.
+      </div>
+    </>
   );
 }

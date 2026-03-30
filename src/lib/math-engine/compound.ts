@@ -291,8 +291,12 @@ export const calculateMilestones = (
   for (let month = 1; month <= MAX_MONTHS && targetIdx < sortedTargets.length; month++) {
     balance = round2(balance * (1 + monthlyRate) + monthlyContribution);
 
-    while (targetIdx < sortedTargets.length && balance >= sortedTargets[targetIdx]!) {
-      const target = sortedTargets[targetIdx]!;
+    //while (targetIdx < sortedTargets.length && balance >= sortedTargets[targetIdx]!) {
+     // const target = sortedTargets[targetIdx]!;
+    while (targetIdx < sortedTargets.length) {
+      const target = sortedTargets[targetIdx];
+      if (target === undefined || balance < target) break;
+
       const dateProj = new Date();
       dateProj.setMonth(dateProj.getMonth() + month);
 
@@ -311,7 +315,9 @@ export const calculateMilestones = (
 
   // Add unreachable milestones
   for (let i = targetIdx; i < sortedTargets.length; i++) {
-    const target = sortedTargets[i]!;
+   // const target = sortedTargets[i]!;
+    const target = sortedTargets[i];
+    if (target === undefined) continue;   
     results.push({
       label: target >= 1_000_000
         ? `$${(target / 1_000_000).toFixed(target % 1_000_000 === 0 ? 0 : 1)}M`

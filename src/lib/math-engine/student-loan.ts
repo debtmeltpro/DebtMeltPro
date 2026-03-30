@@ -142,6 +142,18 @@ export interface MultiLoanOverview {
 }
 
 export const analyzeMultipleLoans = (loans: LoanDetail[]): MultiLoanOverview => {
+  if (loans.length === 0) {
+    const payoffDate = new Date();
+    return {
+      totalBalance: 0,
+      weightedAverageRate: 0,
+      totalMonthlyPayment: 0,
+      totalInterestRemaining: 0,
+      costliestLoan: { id: 'n/a', name: 'N/A', totalInterest: 0 },
+      interestByLoan: [],
+      latestPayoffDate: payoffDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' }),
+    };
+  }  
   const totalBalance = round2(loans.reduce((s, l) => s + l.balance, 0));
   const weightedAverageRate = round2(
     loans.reduce((s, l) => s + l.interestRate * (l.balance / totalBalance), 0),
@@ -162,7 +174,11 @@ export const analyzeMultipleLoans = (loans: LoanDetail[]): MultiLoanOverview => 
       ? (l.totalInterest / totalInterestRemaining) * 100 : 0),
   }));
 
-  const costliest = [...enriched].sort((a, b) => b.totalInterest - a.totalInterest)[0]!;
+ // const costliest = [...enriched].sort((a, b) => b.totalInterest - a.totalInterest)[0]!;
+  const costliest = enriched.reduce(
+    (best, cur) => (cur.totalInterest > best.totalInterest ? cur : best),
+    enriched[0] ?? { id: 'n/a', name: 'N/A', totalInterest: 0, percentOfTotal: 0 },
+  );
 
   const maxRemaining = Math.max(...loans.map((l) => l.remainingMonths));
   const payoffDate = new Date();
@@ -321,7 +337,12 @@ export const compareIDRPlans = (
     simulateIDR('ICR', 20, 25),
   ];
 
-  const bestPlan = [...plans].sort((a, b) => a.totalCostWithTax - b.totalCostWithTax)[0]!;
+  //const bestPlan = [...plans].sort((a, b) => a.totalCostWithTax - b.totalCostWithTax)[0]!;
+  const firstPlan = plans[0];
+  const bestPlan = (firstPlan
+    ? plans.slice(1).reduce((best, cur) => (cur.totalCostWithTax < best.totalCostWithTax ? cur : best), firstPlan)
+    : simulateIDR('SAVE', isGradLoans ? 10 : 5, isGradLoans ? 25 : 20));
+ 
 
   return {
     plans,

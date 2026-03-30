@@ -192,7 +192,11 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
         />
       </head>
-      <body className="font-body bg-surface-50 dark:bg-surface-950 text-slate-900 dark:text-slate-100 antialiased">
+{/*      <body className="font-body bg-surface-50 dark:bg-surface-950 text-slate-900 dark:text-slate-100 antialiased">*/}
+      <body
+        suppressHydrationWarning
+        className="font-body bg-surface-50 dark:bg-surface-950 text-slate-900 dark:text-slate-100 antialiased"
+         >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {/* Skip navigation for accessibility */}
           <a
