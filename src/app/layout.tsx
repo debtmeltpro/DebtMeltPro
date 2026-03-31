@@ -123,7 +123,7 @@ const organizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer service',
-    email: 'hello@debtmeltpro.com',
+    email: 'support@debtmeltpro.com',
   },
 };
 

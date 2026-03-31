@@ -73,7 +73,7 @@ These services have their own privacy policies independent of ours.`,
 - Right to opt-out of the sale of personal information
 - Right to equal service and price (non-discrimination)
 
-To exercise any of these rights, contact us at privacy@debtmeltpro.com. We respond within 30 days.
+To exercise any of these rights, contact us at support@debtmeltpro.com. We respond within 30 days.
 
 **Note:** Because our calculators do not collect or store any financial data you enter, we have minimal personal data to provide or delete in most cases.`,
   },
@@ -92,7 +92,7 @@ To exercise any of these rights, contact us at privacy@debtmeltpro.com. We respo
   },
   {
     title: '8. Children\'s Privacy',
-    content: `DebtMeltPro is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected data from a child, contact us immediately at privacy@debtmeltpro.com.`,
+    content: `DebtMeltPro is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected data from a child, contact us immediately at support@debtmeltpro.com.`,
   },
   {
     title: '9. Changes to This Policy',
@@ -102,7 +102,7 @@ To exercise any of these rights, contact us at privacy@debtmeltpro.com. We respo
     title: '10. Contact Us',
     content: `For privacy inquiries, data requests, or to exercise your rights:
 
-Email: privacy@debtmeltpro.com
+Email: support@debtmeltpro.com
 Response time: Within 30 days of receiving your request.`,
   },
 ];
