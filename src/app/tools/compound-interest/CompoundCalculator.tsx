@@ -1,16 +1,20 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid,
-  Tooltip, Legend, ResponsiveContainer, ReferenceLine,
-} from 'recharts';
 import { calculateCompound, ruleOf72, realReturn } from '@/lib/math-engine';
 import { compoundInputSchema } from '@/lib/validations/schemas';
 import { Flame, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCurrency, createCurrencyFormatters } from '@/hooks/useCurrency';
+
+const CompoundGrowthChart = dynamic(() => import('./CompoundGrowthChart'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[300px] rounded-lg bg-slate-50 dark:bg-slate-900/50 animate-pulse" aria-hidden="true" />
+  ),
+});
 
 const DEFAULT = {
   initialAmount: 25000,
@@ -57,6 +61,12 @@ export function CompoundCalculator() {
   const [inputs, setInputs] = useState(DEFAULT);
   const update = <K extends keyof typeof DEFAULT>(k: K, v: typeof DEFAULT[K]) =>
     setInputs((p) => ({ ...p, [k]: v }));
+  const [chartsReady, setChartsReady] = useState(false);
+
+  useEffect(() => {
+    // Defer heavy chart bundle (recharts) until after first paint.
+    setChartsReady(true);
+  }, []);
 
   const currencyInfo = useCurrency();
   const { formatCurrency, formatCurrencyShort } = createCurrencyFormatters(currencyInfo);
@@ -247,42 +257,18 @@ export function CompoundCalculator() {
                 Wealth Growth Over Time
               </h3>
               <div style={{ minHeight: 300 }}>
-                <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={results.yearlyData} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
-                    <defs>
-                      <linearGradient id="balanceGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#f97316" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#f97316" stopOpacity={0} />
-                      </linearGradient>
-                      <linearGradient id="contribGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%"  stopColor="#94a3b8" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#94a3b8" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
-                    <XAxis dataKey="year" tickFormatter={(v) => `Yr ${v}`}
-                      tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-                    <YAxis tickFormatter={formatCurrencyShort}
-                      tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} width={70} />
-                    <Tooltip
-                      formatter={(v: number) => formatCurrency(v)}
-                      labelFormatter={(l) => `Year ${l}`}
-                      contentStyle={{ borderRadius: 10, border: '1px solid #e2e8f0' }}
-                    />
-                    <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                    {results.yearsToFire !== null && results.yearsToFire <= inputs.years && (
-                      <ReferenceLine x={Math.round(results.yearsToFire)} stroke="#f97316"
-                        strokeDasharray="4 4"
-                        label={{ value: '🔥 FIRE', position: 'top', fontSize: 10, fill: '#f97316' }} />
-                    )}
-                    <Area type="monotone" dataKey="contributions" name="Your Contributions"
-                      stroke="#94a3b8" strokeWidth={1.5} fill="url(#contribGrad)" dot={false} />
-                    <Area type="monotone"
-                      dataKey={inputs.adjustForInflation ? 'balanceReal' : 'balance'}
-                      name={inputs.adjustForInflation ? 'Balance (Real $)' : 'Balance'}
-                      stroke="#f97316" strokeWidth={2.5} fill="url(#balanceGrad)" dot={false} />
-                  </AreaChart>
-                </ResponsiveContainer>
+                {chartsReady ? (
+                  <CompoundGrowthChart
+                    yearlyData={results.yearlyData}
+                    showFireMarker={results.yearsToFire !== null && results.yearsToFire <= inputs.years}
+                    fireYear={results.yearsToFire !== null ? Math.round(results.yearsToFire) : null}
+                    adjustForInflation={inputs.adjustForInflation}
+                    formatCurrency={formatCurrency}
+                    formatCurrencyShort={formatCurrencyShort}
+                  />
+                ) : (
+                  <div className="w-full h-[300px] rounded-lg bg-slate-50 dark:bg-slate-900/50" aria-hidden="true" />
+                )}
               </div>
             </div>
           </motion.div>
