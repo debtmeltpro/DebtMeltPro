@@ -63,7 +63,7 @@ export function middleware(request: NextRequest) {
       'cache-control': 'no-store',
       'content-type': 'text/plain; charset=utf-8',
       'retry-after': '600',
-      'x-robots-tag': 'noindex, nofollow',
+      'X-Robots-Tag': 'noindex, nofollow',
     },
   });
 }
