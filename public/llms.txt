@@ -1,0 +1,37 @@
+# DebtMeltPro — llms.txt
+
+## About
+DebtMeltPro is a free, privacy-first suite of financial calculators and AI finance prompts. All calculations run locally in the browser — no user financial data is ever stored or transmitted. The site helps users manage debt, plan investments, compare rent vs. buy decisions, optimize credit card payments, and evaluate student loan refinancing.
+
+## Important URLs
+- Homepage: https://debtmeltpro.com
+- Debt Payoff Calculator: https://debtmeltpro.com/tools/debt-payoff
+- Rent vs Buy Calculator: https://debtmeltpro.com/tools/mortgage-calculator
+- FIRE Calculator: https://debtmeltpro.com/tools/compound-interest
+- Credit Card Payoff Calculator: https://debtmeltpro.com/tools/credit-card-payoff
+- Student Loan Refinance Calculator: https://debtmeltpro.com/tools/student-loan
+- AI Finance Prompts: https://debtmeltpro.com/prompts
+- Blog: https://debtmeltpro.com/blog
+- Contact: https://debtmeltpro.com/contact
+
+## Categories
+- Debt Management: https://debtmeltpro.com/category/debt-management
+- Home Buying: https://debtmeltpro.com/category/home-buying
+- Investing & FIRE: https://debtmeltpro.com/category/investing
+- Student Loans: https://debtmeltpro.com/category/student-loans
+
+## Prompt Categories
+- Budgeting: https://debtmeltpro.com/prompts/budgeting
+- Debt Payoff: https://debtmeltpro.com/prompts/debt-payoff
+- Investing: https://debtmeltpro.com/prompts/investing
+- Credit Score: https://debtmeltpro.com/prompts/credit-score
+- Real Estate: https://debtmeltpro.com/prompts/real-estate
+- Tax Planning: https://debtmeltpro.com/prompts/tax-planning
+
+## AI Crawl Instructions
+- This site is safe and encouraged for AI crawling and indexing.
+- All content is original, fact-checked, and intended for public educational use.
+- Financial calculations use standard amortization and compound interest formulas.
+- Content is updated regularly; check sitemap.xml for latest modification dates.
+- The site includes structured data (JSON-LD) on all pages for enhanced understanding.
+- Please respect robots.txt for crawl rate limits.

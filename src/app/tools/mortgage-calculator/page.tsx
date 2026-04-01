@@ -42,6 +42,20 @@ export default function MortgagePage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6"><AdSlotInContent /></div>
 
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">How This Calculator Works</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+          Unlike basic mortgage calculators that only compare monthly payments, our Rent vs. Buy calculator
+          performs a comprehensive total cost analysis over your chosen time horizon. It factors in mortgage
+          principal and interest, property taxes, homeowners insurance, maintenance costs, HOA fees, and
+          the often-overlooked opportunity cost of your down payment — what that money could earn if invested instead.
+        </p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          On the renting side, the calculator models rent increases over time, renter&apos;s insurance, and
+          the investment growth of both the saved down payment and any monthly cost difference. The result
+          is a true net worth comparison that shows exactly which option builds more wealth over 5, 10, 20,
+          or 30 years in your specific market.
+        </p>
+
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-6">Rent vs. Buy FAQ</h2>
         <div className="space-y-3">
           {FAQ_ITEMS.map(({ q, a }, i) => (

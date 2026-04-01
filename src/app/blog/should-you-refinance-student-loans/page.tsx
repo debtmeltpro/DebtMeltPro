@@ -5,7 +5,7 @@ import { SITE_URL } from '@/lib/seo';
 import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Should You Refinance Your Student Loans? A Complete Decision Framework',
+  title: 'Refinance Student Loans: Complete Decision Framework',
   description: 'When refinancing saves you money, when it puts you at risk, and the federal loan protections you should never give up. A balanced guide for borrowers.',
   keywords: ['refinance student loans', 'federal vs private loans', 'student loan refinancing', 'PSLF', 'income driven repayment'],
   alternates: { canonical: `${SITE_URL}/blog/should-you-refinance-student-loans` },
@@ -22,7 +22,7 @@ export default function RefinanceStudentLoansPage() {
   return (
     <BlogArticle
       slug="should-you-refinance-student-loans"
-      title="Should You Refinance Your Student Loans? A Complete Decision Framework"
+      title="Refinance Student Loans: Complete Decision Framework"
       category="Student Loans"
       categorySlug="student-loans"
       date="2024-05-20"
@@ -93,6 +93,33 @@ export default function RefinanceStudentLoansPage() {
         instead. Applying extra payments to your highest-rate federal loan can achieve similar
         interest savings while preserving all federal benefits.
       </p>
+
+      <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4">
+        Related Guides
+      </h2>
+      <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+        If you have multiple debts beyond student loans, the{' '}
+        <Link href="/blog/snowball-vs-avalanche-debt-payoff" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          snowball vs. avalanche comparison
+        </Link>{' '}
+        will help you prioritize. Watch out for the{' '}
+        <Link href="/blog/minimum-payment-trap-credit-cards" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          minimum payment trap on credit cards
+        </Link>{' '}
+        while managing student loan payments. Use our{' '}
+        <Link href="/prompts/debt-payoff/debt-snowball-action-plan" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          AI debt snowball action plan
+        </Link>{' '}
+        to generate a complete payoff schedule, or explore the{' '}
+        <Link href="/category/student-loans" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          full student loan toolkit
+        </Link>{' '}
+        and our{' '}
+        <Link href="/blog/fire-number-explained" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          FIRE number calculator guide
+        </Link>{' '}
+        for long-term financial planning.
+      </p>      
     </BlogArticle>
   );
 }

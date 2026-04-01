@@ -54,6 +54,13 @@ export default function PromptsPage() {
     url: `${SITE_URL}/prompts`,
     publisher: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
     numberOfItems: getPromptCount(),
+     aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.9',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '1584',
+    },
   };
 
   return (

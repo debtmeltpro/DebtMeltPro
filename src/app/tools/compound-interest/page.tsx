@@ -53,6 +53,34 @@ export default function CompoundPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6"><AdSlotInContent /></div>
 
       <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">How This Calculator Works</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+          Our FIRE calculator uses standard compound interest formulas to project your investment growth over time.
+          Enter your current portfolio value, monthly contribution, expected annual return, and time horizon to see
+          your projected balance at each year. Toggle inflation adjustment to view results in today&apos;s purchasing power,
+          giving you a realistic picture of how much your future portfolio can actually buy.
+        </p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          The FIRE number calculation divides your annual expenses by your chosen safe withdrawal rate (defaulting
+          to the 4% rule from the Trinity Study). The calculator then shows exactly when your projected portfolio
+          reaches this target — your financial independence date.
+        </p>
+
+        <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">Who Should Use This Calculator</h2>
+        <ul className="space-y-2 mb-6">
+          {[
+            'Anyone curious about the power of compound interest over long time horizons',
+            'FIRE movement followers calculating their financial independence timeline',
+            'Investors comparing the impact of different contribution amounts or return assumptions',
+            'Pre-retirees validating whether their portfolio can sustain their planned withdrawals',
+            'Financial advisors modeling scenarios for client retirement planning',
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+              <span className="text-orange-500 mt-0.5 shrink-0">•</span>{item}
+            </li>
+          ))}
+        </ul>
+
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-6">FIRE Calculator FAQ</h2>
         <div className="space-y-3">
           {FAQ_ITEMS.map(({ q, a }, i) => (

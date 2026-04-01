@@ -78,6 +78,19 @@ export default function StudentLoanPage() {
           </ul>
         </div>
 
+        <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">How This Calculator Works</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+          Enter your current student loan balance, interest rate, remaining term, and the refinanced rate
+          you have been offered. The calculator computes your monthly payment under both scenarios using
+          standard amortization formulas, then shows you the exact monthly savings, total interest saved
+          over the life of the loan, and how long it takes to break even on any refinancing fees.
+        </p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          The tool also provides a clear recommendation based on your numbers — factoring in the magnitude
+          of savings relative to the risks and costs of refinancing. For federal loan holders, a prominent
+          warning reminds you of the protections you would permanently lose by refinancing to a private lender.
+        </p>
+
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-6">Student Loan Refinance FAQ</h2>
         <div className="space-y-3">
           {FAQ_ITEMS.map(({ q, a }, i) => (

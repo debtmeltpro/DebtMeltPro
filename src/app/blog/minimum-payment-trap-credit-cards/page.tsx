@@ -7,7 +7,7 @@ import { ArrowRight } from 'lucide-react';
 const SLUG = 'minimum-payment-trap-credit-cards';
 
 export const metadata: Metadata = {
-  title: 'The Minimum Payment Trap: How Credit Card Companies Keep You in Debt',
+  title: 'Minimum Payment Trap: How Credit Cards Keep You in Debt',
   description: 'Discover why paying only the minimum on your credit card costs you thousands in interest and learn the simple fix that cuts your payoff time in half.',
   keywords: ['minimum payment trap', 'credit card interest', 'credit card debt help', 'how credit cards work', 'pay off credit card fast'],
   alternates: { canonical: `${SITE_URL}/blog/${SLUG}` },
@@ -24,7 +24,7 @@ export default function MinimumPaymentTrapPage() {
   return (
     <BlogArticle
       slug={SLUG}
-      title="The Minimum Payment Trap: How Credit Card Companies Keep You in Debt"
+      title="Minimum Payment Trap: How Credit Cards Keep You in Debt"
       category="Debt Management"
       categorySlug="debt-management"
       date="2024-06-10"
@@ -92,6 +92,29 @@ export default function MinimumPaymentTrapPage() {
         to compare the snowball, avalanche, and hybrid methods. Even a small extra payment applied
         strategically can save thousands in interest and years of repayment.
       </p>
+
+      <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4">
+        Additional Resources
+      </h2>
+      <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+        Compare the{' '}
+        <Link href="/blog/snowball-vs-avalanche-debt-payoff" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          snowball vs. avalanche debt payoff methods
+        </Link>{' '}
+        to find the best strategy for your situation. If you are wondering whether to invest or pay off debt, our{' '}
+        <Link href="/blog/fire-number-explained" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          FIRE number guide
+        </Link>{' '}
+        helps you understand the math behind financial independence. Try our{' '}
+        <Link href="/prompts/credit-score/credit-score-90-day-boost" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          90-day credit score boost prompt
+        </Link>{' '}
+        to improve your credit while paying down debt, or explore the{' '}
+        <Link href="/category/debt-management" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          full debt management toolkit
+        </Link>.
+      </p>
+
     </BlogArticle>
   );
 }

@@ -5,7 +5,7 @@ import { SITE_URL } from '@/lib/seo';
 import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'The Hidden Costs of Homeownership: Why the Rent vs Buy Decision Is Not What You Think',
+  title: 'Rent vs Buy: True Cost of Homeownership Revealed',
   description: 'Most rent vs buy calculators miss the opportunity cost of your down payment. Learn the complete framework for making this critical financial decision.',
   keywords: ['rent vs buy', 'true cost homeownership', 'opportunity cost down payment', 'should I buy a house', 'renting vs buying'],
   alternates: { canonical: `${SITE_URL}/blog/rent-vs-buy-true-cost` },
@@ -22,7 +22,7 @@ export default function RentVsBuyPage() {
   return (
     <BlogArticle
       slug="rent-vs-buy-true-cost"
-      title="The Hidden Costs of Homeownership: Why the Rent vs Buy Decision Is Not What You Think"
+      title="Rent vs Buy: True Cost of Homeownership Revealed"
       category="Home Buying"
       categorySlug="home-buying"
       date="2024-05-28"
@@ -88,6 +88,34 @@ export default function RentVsBuyPage() {
         lower than the all-in cost of buying. Renting also provides flexibility and eliminates the
         risk of home value decline — a real consideration in volatile markets.
       </p>
+
+
+      <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4">
+        Related Guides
+      </h2>
+      <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+        If you are carrying debt while saving for a down payment, learn which{' '}
+        <Link href="/blog/snowball-vs-avalanche-debt-payoff" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          debt payoff strategy saves the most money
+        </Link>.
+        Planning for early retirement? Our{' '}
+        <Link href="/blog/fire-number-explained" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          FIRE number guide
+        </Link>{' '}
+        explains how to calculate the portfolio size needed for financial independence.
+        For student loan borrowers weighing homeownership, check our{' '}
+        <Link href="/blog/should-you-refinance-student-loans" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          student loan refinancing decision framework
+        </Link>.
+        Try the{' '}
+        <Link href="/prompts/real-estate/rent-vs-buy-decision-framework" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          AI rent vs. buy decision prompt
+        </Link>{' '}
+        for a personalized analysis, or explore{' '}
+        <Link href="/category/home-buying" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          all home buying tools
+        </Link>.
+      </p>      
     </BlogArticle>
   );
 }

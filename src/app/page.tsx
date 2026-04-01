@@ -228,6 +228,44 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── Why DebtMeltPro ─────────────────────────────────────── */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-6">
+          Why Thousands Trust DebtMeltPro
+        </h2>
+        <div className="text-slate-600 dark:text-slate-400 leading-relaxed space-y-4 text-sm">
+          <p>
+            DebtMeltPro provides a complete suite of free financial calculators designed to help you
+            make smarter money decisions. Unlike most online tools that require sign-ups, email
+            addresses, or personal data collection, every DebtMeltPro calculator runs entirely in your
+            browser. Your financial data never leaves your device — no servers, no databases, no
+            tracking of sensitive information.
+          </p>
+          <p>
+            Our <Link href="/tools/debt-payoff" className="text-green-600 dark:text-green-400 underline hover:no-underline">Debt Payoff Calculator</Link> compares
+            the snowball, avalanche, and hybrid payoff strategies side-by-side so you can see exactly
+            how much interest each method saves. The <Link href="/tools/mortgage-calculator" className="text-green-600 dark:text-green-400 underline hover:no-underline">Rent vs. Buy Calculator</Link> goes
+            beyond a simple mortgage payment comparison to include property taxes, maintenance,
+            insurance, and the opportunity cost of your down payment. Our <Link href="/tools/compound-interest" className="text-green-600 dark:text-green-400 underline hover:no-underline">FIRE Calculator</Link> projects
+            compound investment growth with inflation adjustment, helping you determine when your
+            portfolio can sustain your lifestyle indefinitely.
+          </p>
+          <p>
+            For credit card holders caught in the minimum payment cycle, the <Link href="/tools/credit-card-payoff" className="text-green-600 dark:text-green-400 underline hover:no-underline">Credit Card Payoff Calculator</Link> reveals
+            how much interest you are really paying and how fixing your payment amount can cut years
+            off your payoff timeline. Student loan borrowers can use the <Link href="/tools/student-loan" className="text-green-600 dark:text-green-400 underline hover:no-underline">Refinance Calculator</Link> to
+            compare current terms against refinanced options, including break-even analysis and
+            warnings about losing federal loan protections.
+          </p>
+          <p>
+            Beyond calculators, our <Link href="/prompts" className="text-green-600 dark:text-green-400 underline hover:no-underline">AI Finance Prompts</Link> library
+            offers copy-paste templates for ChatGPT, Claude, and Gemini that turn AI into your
+            personal financial analyst — covering budgeting, debt strategies, investing, credit
+            optimization, real estate decisions, and tax planning.
+          </p>
+        </div>
+      </section>
+
       {/* ── FAQ Section ───────────────────────────────────────── */}
       <section className="bg-slate-50 dark:bg-slate-900/50 border-t border-slate-100 dark:border-slate-800 py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

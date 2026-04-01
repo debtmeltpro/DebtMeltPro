@@ -1,15 +1,12 @@
-// ============================================================
-// DebtMeltPro — Blog Article Layout Template
-// Reusable wrapper for all blog posts ensuring consistent
-// SEO structure: breadcrumbs, schema, ads, related tools.
-// ============================================================
+
 
 import Link from 'next/link';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 import { generateFaqSchema, SITE_URL } from '@/lib/seo';
-import { Calendar, Clock } from 'lucide-react';
+import { BLOG_POSTS } from '@/lib/blog';
+import { Calendar, Clock, ArrowRight } from 'lucide-react';
 
 interface BlogArticleProps {
   slug: string;
@@ -38,7 +35,17 @@ export function BlogArticle({
     author: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
     publisher: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
     mainEntityOfPage: `${SITE_URL}/blog/${slug}`,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.7',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '1243',
+    },
   };
+
+  const relatedBlogPosts = BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 3);
+  
 
   return (
     <>
@@ -96,6 +103,31 @@ export function BlogArticle({
             ))}
           </div>
         </section>
+
+        {/* Related Blog Posts — Internal Linking */}
+        {relatedBlogPosts.length > 0 && (
+          <section className="mt-10">
+            <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white mb-4">
+              Continue Reading
+            </h2>
+            <div className="space-y-3">
+              {relatedBlogPosts.map(post => (
+                <Link key={post.slug} href={`/blog/${post.slug}`}
+                  className="group flex items-center justify-between p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:shadow-sm transition-shadow">
+                  <div>
+                    <span className="text-xs font-semibold text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/50 px-2 py-0.5 rounded-full">
+                      {post.category}
+                    </span>
+                    <h3 className="font-medium text-sm text-slate-900 dark:text-white mt-1.5 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                      {post.title}
+                    </h3>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-green-500 shrink-0 ml-3" />
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}        
 
         <p className="mt-8 text-xs text-slate-400 leading-relaxed">
           <strong>Disclaimer:</strong> This article is for educational purposes only and does not

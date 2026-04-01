@@ -49,10 +49,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Legal pages (low priority)
   const legalPages: MetadataRoute.Sitemap = [
-    { url: `${SITE_URL}/privacy-policy`, lastModified: new Date('2024-01-15'), changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: `${SITE_URL}/terms`, lastModified: new Date('2024-01-15'), changeFrequency: 'yearly' as const, priority: 0.3 },
-    { url: `${SITE_URL}/disclaimer`, lastModified: new Date('2024-01-15'), changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: `${SITE_URL}/privacy-policy`, lastModified: now, changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: `${SITE_URL}/terms`, lastModified: now, changeFrequency: 'yearly' as const, priority: 0.3 },
+    { url: `${SITE_URL}/disclaimer`, lastModified: now, changeFrequency: 'yearly' as const, priority: 0.3 },
   ];
+
 
   // Prompt category pages
   const promptCategoryPages: MetadataRoute.Sitemap = PROMPT_CATEGORIES.map(cat => ({

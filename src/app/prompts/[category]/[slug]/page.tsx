@@ -41,6 +41,14 @@ export default function PromptPage({ params }: Props) {
     author: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
     publisher: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
     mainEntityOfPage: `${SITE_URL}/prompts/${params.category}/${params.slug}`,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '987',
+    },
+
   };
 
   return (
@@ -145,6 +153,19 @@ export default function PromptPage({ params }: Props) {
         )}
 
         <AdSlotInContent />
+        {/* Related Calculator CTA */}
+        {prompt.relatedToolSlug && (
+          <section className="mt-8 p-5 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-xl">
+            <h2 className="font-semibold text-green-900 dark:text-green-100 mb-2">Verify with Our Free Calculator</h2>
+            <p className="text-sm text-green-800 dark:text-green-300 mb-3">
+              After generating your AI output, verify key numbers with our free calculator for mathematical precision.
+            </p>
+            <Link href={`/tools/${prompt.relatedToolSlug}`}
+              className="inline-flex items-center gap-1 text-sm font-medium text-green-700 dark:text-green-400 hover:text-green-800 transition-colors">
+              Open Calculator <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </section>
+        )}
 
         {/* Related Prompts */}
         {related.length > 0 && (

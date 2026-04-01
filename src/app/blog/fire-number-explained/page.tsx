@@ -5,7 +5,7 @@ import { SITE_URL } from '@/lib/seo';
 import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'What Is a FIRE Number? How to Calculate Your Path to Financial Independence',
+  title: 'FIRE Number Explained: Calculate Financial Independence',
   description: 'Learn how to calculate the exact portfolio size you need to retire early, understand the 4% rule, and create a realistic timeline to financial independence.',
   keywords: ['FIRE number', 'financial independence', '4 percent rule', 'retire early', 'FIRE movement', 'how much to retire'],
   alternates: { canonical: `${SITE_URL}/blog/fire-number-explained` },
@@ -22,7 +22,7 @@ export default function FireNumberPage() {
   return (
     <BlogArticle
       slug="fire-number-explained"
-      title="What Is a FIRE Number? How to Calculate Your Path to Financial Independence"
+      title="FIRE Number Explained: Calculate Financial Independence"
       category="Investing"
       categorySlug="investing"
       date="2024-06-05"
@@ -85,6 +85,28 @@ export default function FireNumberPage() {
         benefit — lower target plus more money to invest — is why frugality is central to the FIRE
         approach. But earning more and investing the difference works too; the best path combines both.
       </p>
+
+      <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4">
+        Further Reading
+      </h2>
+      <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+        While building your investment portfolio, ensure high-interest debt is not eroding your returns. Read our{' '}
+        <Link href="/blog/snowball-vs-avalanche-debt-payoff" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          snowball vs. avalanche comparison
+        </Link>{' '}
+        to optimize your debt payoff strategy. If you are deciding between investing and paying down a mortgage, our{' '}
+        <Link href="/blog/rent-vs-buy-true-cost" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          rent vs. buy analysis
+        </Link>{' '}
+        provides clarity on the true cost of homeownership. Use our{' '}
+        <Link href="/prompts/investing/fire-number-roadmap" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          AI FIRE roadmap prompt
+        </Link>{' '}
+        to generate a personalized retirement plan, or explore{' '}
+        <Link href="/category/investing" className="text-green-600 dark:text-green-400 underline hover:no-underline">
+          all investing tools
+        </Link>.
+      </p>      
     </BlogArticle>
   );
 }

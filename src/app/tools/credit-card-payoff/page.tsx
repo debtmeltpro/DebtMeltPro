@@ -67,6 +67,19 @@ export default function CreditCardPage() {
           </div>
         </div>
 
+        <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">How This Calculator Works</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+          Enter your credit card balance, APR (annual percentage rate), and current minimum payment percentage.
+          The calculator instantly shows you two scenarios: paying only the declining minimum versus making a
+          fixed monthly payment. You can see exactly how many years you shave off and how much interest you
+          save by committing to a fixed or increased payment amount each month.
+        </p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          The math uses standard monthly amortization with declining balance calculations. As your balance
+          decreases, more of each payment goes to principal rather than interest — this acceleration effect
+          is why fixed payments are dramatically more effective than declining minimums.
+        </p>
+
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-6">Credit Card Payoff FAQ</h2>
         <div className="space-y-3">
           {FAQ_ITEMS.map(({ q, a }, i) => (

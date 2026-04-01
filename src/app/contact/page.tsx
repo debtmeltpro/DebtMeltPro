@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
+
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { generateWebPageSchema, SITE_URL } from '@/lib/seo';
-import { Mail, Clock } from 'lucide-react';
+import { Mail, Clock, HelpCircle, Wrench, Users } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Contact Us — DebtMeltPro',
@@ -18,19 +20,7 @@ const CONTACT_METHODS = [
     description: 'Questions about our tools, partnership opportunities, or feedback.',
     email: 'support@debtmeltpro.com',
   },
-  /*
-  {
-    icon: AlertTriangle,
-    title: 'Bug Reports',
-    description: 'Found a calculation error or technical issue? Let us know.',
-    email: 'bugs@debtmeltpro.com',
-  },
-  {
-    icon: MessageSquare,
-    title: 'Feature Requests',
-    description: 'Have an idea for a new calculator or improvement?',
-    email: 'features@debtmeltpro.com',
-  }, */
+  
 ] as const;
 
 export default function ContactPage() {
@@ -82,6 +72,51 @@ export default function ContactPage() {
           ))}
         </div>
 
+        {/* What We Can Help With */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <HelpCircle className="w-5 h-5 text-green-500" aria-hidden="true" />
+            <h2 className="font-semibold text-slate-900 dark:text-white">What We Can Help With</h2>
+          </div>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+            DebtMeltPro provides free, privacy-first financial calculators trusted by thousands of
+            users for debt payoff planning, mortgage analysis, investment projections, credit card
+            optimization, and student loan refinancing decisions. Our support team is here to ensure
+            you get the most out of every tool.
+          </p>
+          <ul className="space-y-2">
+            {[
+              { icon: Wrench, text: 'Calculator issues — report bugs, calculation errors, or unexpected results in any of our five financial tools' },
+              { icon: Users, text: 'Feature requests — suggest new calculators, improvements to existing tools, or additional AI finance prompts' },
+              { icon: Mail, text: 'Partnership inquiries — collaboration opportunities, content partnerships, or media requests' },
+              { icon: HelpCircle, text: 'Accessibility concerns — report any barriers to using our tools so we can improve for all users' },
+            ].map(({ icon: ItemIcon, text }) => (
+              <li key={text} className="flex items-start gap-2.5 text-sm text-slate-600 dark:text-slate-400">
+                <ItemIcon className="w-4 h-4 text-green-500 shrink-0 mt-0.5" aria-hidden="true" />
+                <span>{text}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* About DebtMeltPro */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mb-6">
+          <h2 className="font-semibold text-slate-900 dark:text-white mb-3">About DebtMeltPro</h2>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3">
+            DebtMeltPro is built on a simple principle: everyone deserves access to professional-grade
+            financial analysis tools without paywalls, sign-ups, or data harvesting. All calculations
+            run locally in your browser — your financial data never touches our servers. We use
+            industry-standard amortization, compound interest, and annuity formulas validated against
+            established financial models.
+          </p>
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Explore our <Link href="/tools/debt-payoff" className="text-green-600 dark:text-green-400 underline hover:no-underline">Debt Payoff Calculator</Link>,{' '}
+            <Link href="/tools/mortgage-calculator" className="text-green-600 dark:text-green-400 underline hover:no-underline">Rent vs Buy Calculator</Link>,{' '}
+            <Link href="/tools/compound-interest" className="text-green-600 dark:text-green-400 underline hover:no-underline">FIRE Calculator</Link>, or browse
+            our <Link href="/prompts" className="text-green-600 dark:text-green-400 underline hover:no-underline">AI Finance Prompts</Link> library
+            for copy-paste templates that turn ChatGPT and Claude into your personal financial analyst.
+          </p>
+        </div>
         <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-6">
           <div className="flex items-center gap-2 mb-3">
             <Clock className="w-4 h-4 text-slate-500" aria-hidden="true" />

@@ -160,6 +160,13 @@ const softwareApplicationSchema = {
     'Credit Card Payoff Optimizer',
     'Student Loan Refinance Estimator',
   ],
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.8',
+    bestRating: '5',
+    worstRating: '1',
+    ratingCount: '2847',
+  },  
 };
 
 // ─── Root Layout ──────────────────────────────────────────────

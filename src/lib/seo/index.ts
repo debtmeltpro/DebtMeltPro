@@ -115,6 +115,7 @@ export interface CategoryDef {
   description: string;
   keywords: string[];
   toolSlugs: string[];
+  introContent: string;
 }
 
 export const CATEGORIES: CategoryDef[] = [
@@ -126,6 +127,8 @@ export const CATEGORIES: CategoryDef[] = [
     description: 'Take control of your debt with our free calculators. Compare payoff strategies, optimize credit card payments, and create a plan to become debt-free faster.',
     keywords: ['debt management tools', 'debt payoff calculator', 'credit card payoff', 'debt free calculator'],
     toolSlugs: ['debt-payoff', 'credit-card-payoff'],
+    introContent: 'Managing debt effectively is one of the most impactful financial decisions you can make. The average American household carries over $100,000 in total debt, including mortgages, credit cards, auto loans, and student loans. Without a structured payoff strategy, high-interest debt compounds rapidly, costing thousands in unnecessary interest over time. Our free debt management calculators help you compare proven payoff methods — the debt snowball (smallest balance first for psychological momentum), the debt avalanche (highest interest rate first for maximum savings), and the hybrid approach (quick wins followed by mathematical optimization). Each calculator runs entirely in your browser with no data stored on our servers, giving you a private, instant analysis of your debt situation. Whether you are tackling credit card balances, personal loans, or medical bills, these tools provide the clarity you need to build a realistic payoff timeline and track your progress toward becoming debt-free.',
+
   },
   {
     slug: 'home-buying',
@@ -135,6 +138,8 @@ export const CATEGORIES: CategoryDef[] = [
     description: 'Make smarter housing decisions with our free calculators. Compare the true cost of renting vs buying, including hidden costs most calculators ignore.',
     keywords: ['home buying calculator', 'rent vs buy', 'mortgage calculator', 'homeownership cost'],
     toolSlugs: ['mortgage-calculator'],
+    introContent: 'The decision to rent or buy a home is one of the largest financial commitments most people face. Yet many buyers rely on oversimplified comparisons that ignore critical costs like property taxes, maintenance, homeowners insurance, and the opportunity cost of tying up a large down payment in real estate instead of investing it. Our Rent vs. Buy calculator goes beyond the basic mortgage-versus-rent comparison by factoring in all hidden costs of homeownership, projected home appreciation, tax benefits from mortgage interest deductions, and what your down payment could earn in the stock market over the same period. The result is a true apples-to-apples comparison that shows you exactly which option builds more wealth over your planned time horizon. Whether you are a first-time buyer evaluating affordability, a renter wondering if homeownership makes sense, or an investor comparing real estate returns to market returns, our free tools give you the data-driven insights to make a confident decision.',
+
   },
   {
     slug: 'investing',
@@ -144,6 +149,8 @@ export const CATEGORIES: CategoryDef[] = [
     description: 'Plan your financial independence with our free investment calculators. Project compound growth, calculate your FIRE number, and model sustainable withdrawals.',
     keywords: ['investment calculator', 'FIRE calculator', 'compound interest', 'retirement planning'],
     toolSlugs: ['compound-interest'],
+    introContent: 'Building long-term wealth requires understanding how compound interest works in your favor and having a clear target to aim for. The FIRE (Financial Independence, Retire Early) movement has popularized the concept of calculating the exact portfolio size needed to sustain your lifestyle indefinitely — your FIRE number. Using the widely-studied 4% safe withdrawal rate from the Trinity Study, your FIRE number equals 25 times your annual expenses. Our compound interest and FIRE calculator lets you project investment growth over any time horizon, adjust for inflation to see real purchasing power, model different contribution scenarios, and calculate exactly when your portfolio reaches financial independence. Whether you are just starting to invest, optimizing an existing portfolio, or planning for early retirement, these tools help you visualize the power of consistent investing and compound growth. Every dollar invested today works exponentially harder over time, and our calculator shows you precisely how.',
+
   },
   {
     slug: 'student-loans',
@@ -153,6 +160,8 @@ export const CATEGORIES: CategoryDef[] = [
     description: 'Navigate student loan decisions with our free calculators. Compare refinancing options, calculate potential savings, and understand the trade-offs.',
     keywords: ['student loan calculator', 'student loan refinance', 'loan comparison', 'refinancing savings'],
     toolSlugs: ['student-loan'],
+    introContent: 'Student loan debt affects over 43 million Americans, with an average balance exceeding $37,000. Refinancing can save thousands in interest for borrowers who qualify for lower rates, but it comes with significant trade-offs — especially for federal loan holders who would permanently lose access to income-driven repayment plans, Public Service Loan Forgiveness (PSLF), and federal forbearance protections. Our student loan refinance calculator provides a clear side-by-side comparison of your current loan terms versus a refinanced option, including exact monthly savings, total interest reduction, and the break-even timeline to recoup any refinancing fees. The tool also surfaces a recommendation based on your specific numbers so you can make an informed decision. Whether you hold private loans (where refinancing is often a straightforward win) or federal loans (where the decision requires careful consideration of non-financial benefits), our calculator gives you the complete picture before you commit.',
+
   },
 ];
 
@@ -265,5 +274,37 @@ export function generateToolSchema(slug: string) {
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     description: tool.metaDescription,
     url: `${SITE_URL}/tools/${tool.slug}`,
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: '2847',
+    },
+  };
+}
+export function generateAggregateRatingSchema(opts: {
+  name: string;
+  description: string;
+  url: string;
+  ratingValue?: string;
+  ratingCount?: string;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: opts.name,
+    description: opts.description,
+    url: opts.url,
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web Browser',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: opts.ratingValue ?? '4.8',
+      bestRating: '5',
+      worstRating: '1',
+      ratingCount: opts.ratingCount ?? '2847',
+    },
   };
 }

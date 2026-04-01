@@ -3,11 +3,36 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowRight, TrendingDown, Home, Flame, CreditCard, GraduationCap } from 'lucide-react';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
-import { CATEGORIES, TOOLS, SITE_URL} from '@/lib/seo';
+
+import { CATEGORIES, TOOLS, SITE_URL, generateAggregateRatingSchema } from '@/lib/seo';
+import { BLOG_POSTS } from '@/lib/blog';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 
 const ICON_MAP: Record<string, React.ElementType> = {
   TrendingDown, Home, Flame, CreditCard, GraduationCap,
+};
+const CATEGORY_BLOG_MAP: Record<string, string[]> = {
+  'debt-management': ['snowball-vs-avalanche-debt-payoff', 'minimum-payment-trap-credit-cards'],
+  'home-buying': ['rent-vs-buy-true-cost'],
+  'investing': ['fire-number-explained'],
+  'student-loans': ['should-you-refinance-student-loans'],
+};
+
+const CATEGORY_PROMPT_MAP: Record<string, { label: string; href: string }[]> = {
+  'debt-management': [
+    { label: 'Debt Snowball Action Plan', href: '/prompts/debt-payoff/debt-snowball-action-plan' },
+    { label: 'Debt Negotiation Scripts', href: '/prompts/debt-payoff/debt-negotiation-scripts' },
+  ],
+  'home-buying': [
+    { label: 'Rent vs Buy Decision Analyzer', href: '/prompts/real-estate/rent-vs-buy-decision-framework' },
+  ],
+  'investing': [
+    { label: 'FIRE Roadmap Prompt', href: '/prompts/investing/fire-number-roadmap' },
+    { label: 'Portfolio Risk Analyzer', href: '/prompts/investing/portfolio-risk-analyzer' },
+  ],
+  'student-loans': [
+    { label: 'Debt Payoff Plan Prompt', href: '/prompts/debt-payoff/debt-snowball-action-plan' },
+  ],
 };
 
 interface CategoryPageProps {
@@ -42,9 +67,20 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   const categoryTools = TOOLS.filter(t => category.toolSlugs.includes(t.slug));
   const otherCategories = CATEGORIES.filter(c => c.slug !== params.slug);
+  const relatedBlogSlugs = CATEGORY_BLOG_MAP[category.slug] ?? [];
+  const relatedBlogs = BLOG_POSTS.filter(p => relatedBlogSlugs.includes(p.slug));
+  const relatedPrompts = CATEGORY_PROMPT_MAP[category.slug] ?? [];
 
+  const collectionSchema = generateAggregateRatingSchema({
+    name: category.title,
+    description: category.metaDescription,
+    url: `${SITE_URL}/category/${category.slug}`,
+  });
   return (
     <>
+       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
+
+  
       <Breadcrumb items={[
         { label: 'Categories', href: '/' },
         { label: category.title, href: `/category/${category.slug}` },
@@ -65,7 +101,14 @@ export default function CategoryPage({ params }: CategoryPageProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <AdSlotLeaderboard className="mt-6" />
       </div>
-
+      {/* Intro Content — SEO */}
+      {category.introContent && (
+        <section className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            {category.introContent}
+          </p>
+        </section>
+      )}
       {/* Tools Grid */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-6">
@@ -110,7 +153,45 @@ export default function CategoryPage({ params }: CategoryPageProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         <AdSlotInContent />
       </div>
+      {/* Related Blog Posts — Internal Linking */}
+      {relatedBlogs.length > 0 && (
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white mb-4">
+            Related Articles
+          </h2>
+          <div className="space-y-3">
+            {relatedBlogs.map(post => (
+              <Link key={post.slug} href={`/blog/${post.slug}`}
+                className="group flex items-center justify-between p-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl hover:shadow-sm transition-shadow">
+                <div>
+                  <h3 className="font-medium text-sm text-slate-900 dark:text-white group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">{post.readTime}</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-green-500 shrink-0 ml-3" />
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
+      {/* Related Prompts — Internal Linking */}
+      {relatedPrompts.length > 0 && (
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+          <h2 className="font-display text-xl font-bold text-slate-900 dark:text-white mb-4">
+            AI Prompts for {category.title.replace(' Tools', '')}
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            {relatedPrompts.map(prompt => (
+              <Link key={prompt.href} href={prompt.href}
+                className="text-sm font-medium px-4 py-2 rounded-full bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-100 dark:hover:bg-purple-900/50 transition-colors">
+                {prompt.label} →
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
       {/* Other Categories */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-6">
