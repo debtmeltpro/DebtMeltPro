@@ -12,7 +12,7 @@ import { getViralPrompts, getPromptCount } from '@/lib/prompts';
 import { BLOG_POSTS } from '@/lib/blog';
 
 export const metadata: Metadata = {
-  title: 'Free Financial Calculators — Debt Payoff, Mortgage, FIRE, Credit Cards',
+  title: 'Free Debt Payoff & Financial Calculators | DebtMeltPro',
   description:
     "Use DebtMeltPro's suite of free, expert-grade financial calculators. Compare debt payoff strategies, run a rent vs. buy analysis, calculate your FIRE number, optimize credit card payments, and estimate student loan refinancing savings.",
   keywords: [

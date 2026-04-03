@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ArrowRight, TrendingDown, Home, Flame, CreditCard, GraduationCap } from 'lucide-react';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 
-import { CATEGORIES, TOOLS, SITE_URL, generateAggregateRatingSchema } from '@/lib/seo';
+import { CATEGORIES, TOOLS, SITE_URL, generateWebPageSchema } from '@/lib/seo';
 import { BLOG_POSTS } from '@/lib/blog';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 
@@ -71,8 +71,8 @@ export default function CategoryPage({ params }: CategoryPageProps) {
   const relatedBlogs = BLOG_POSTS.filter(p => relatedBlogSlugs.includes(p.slug));
   const relatedPrompts = CATEGORY_PROMPT_MAP[category.slug] ?? [];
 
-  const collectionSchema = generateAggregateRatingSchema({
-    name: category.title,
+  const collectionSchema = generateWebPageSchema({
+    title: category.title,
     description: category.metaDescription,
     url: `${SITE_URL}/category/${category.slug}`,
   });

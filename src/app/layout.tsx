@@ -41,7 +41,7 @@ const SITE_DESCRIPTION =
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Free Financial Calculators & Debt Payoff Tools`,
+    default: 'Free Debt Payoff & Financial Calculators | DebtMeltPro',
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -118,7 +118,11 @@ const organizationSchema = {
   '@type': 'Organization',
   name: SITE_NAME,
   url: SITE_URL,
-  logo: `${SITE_URL}/logo.png`,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${SITE_URL}/logo.png`,
+  },
+
   sameAs: [],
   contactPoint: {
     '@type': 'ContactPoint',
@@ -133,13 +137,21 @@ const websiteSchema = {
   name: SITE_NAME,
   url: SITE_URL,
   description: SITE_DESCRIPTION,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
   publisher: {
     '@type': 'Organization',
     name: SITE_NAME,
     url: SITE_URL,
   },
 };
-
+/*
 const softwareApplicationSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -168,6 +180,10 @@ const softwareApplicationSchema = {
     ratingCount: '2847',
   },  
 };
+*/
+// NOTE: SoftwareApplication schema with fake aggregateRating removed.
+// Fabricated review data violates Google's structured data guidelines
+// and risks a manual penalty. Re-add only with real, verified reviews.
 
 // ─── Root Layout ──────────────────────────────────────────────
 
@@ -194,10 +210,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
         />
+        {/*
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationSchema) }}
-        />
+        /> */}
       </head>
 {/*      <body className="font-body bg-surface-50 dark:bg-surface-950 text-slate-900 dark:text-slate-100 antialiased">*/}
       <body

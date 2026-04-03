@@ -10,6 +10,8 @@
 //   - API routes
 //   - Static files (_next, favicon, images)
 //   - Health check endpoint
+//   - Search engine and AI crawlers (NEVER block crawlers)
+
 // ============================================================
 
 import { NextResponse } from 'next/server';
@@ -27,8 +29,29 @@ const EXCLUDED_PATHS = [
   '/logo.png',
 ];
 
+// Crawlers that should NEVER be blocked — even during maintenance.
+// Blocking Googlebot during maintenance caused 33 pages to become not-indexed.
+const BYPASS_USER_AGENTS = [
+'googlebot',
+'adsbot-google',
+'apis-google',
+'bingbot',
+'slurp',
+'duckduckbot',
+'yandexbot',
+'baiduspider',
+
+];
+
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+ // ── Always let crawlers through, regardless of maintenance mode ──
+  const ua = request.headers.get('user-agent')?.toLowerCase() ?? '';
+  const isCrawler = BYPASS_USER_AGENTS.some((bot) => ua.includes(bot));
+  if (isCrawler) {
+    return NextResponse.next();
+  }  
 
   // Check if maintenance mode is enabled.
   // Keep legacy fallback for older env files using NEXT_PUBLIC_MAINTENANCE_MODE.

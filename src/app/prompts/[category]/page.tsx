@@ -9,7 +9,7 @@ import {
   generatePromptCategoryMetadata,
 } from '@/lib/prompts';
 
-import { generateFaqSchema, generateAggregateRatingSchema, SITE_URL } from '@/lib/seo';
+import { generateFaqSchema, generateWebPageSchema, SITE_URL } from '@/lib/seo';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
 interface Props {
@@ -37,17 +37,16 @@ export default function PromptCategoryPage({ params }: Props) {
     { q: 'Should I trust AI financial advice?', a: 'Use AI prompts as a starting point for research and planning, not as a substitute for professional advice. Always verify important calculations with our free calculators and consult a licensed financial advisor for major decisions.' },
   ];
   const faqSchema = generateFaqSchema(faqItems);
-  const categoryRatingSchema = generateAggregateRatingSchema({
-    name: category.title,
+  const categoryPageSchema = generateWebPageSchema({
+    title: category.title,
     description: category.metaDescription,
     url: `${SITE_URL}/prompts/${category.slug}`,
-    ratingValue: '4.9',
-    ratingCount: '1320',
+
   });
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryRatingSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryPageSchema) }} />
 
       <Breadcrumb items={[
         { label: 'AI Finance Prompts', href: '/prompts' },

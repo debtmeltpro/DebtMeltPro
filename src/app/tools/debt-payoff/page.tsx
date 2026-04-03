@@ -4,7 +4,7 @@ import { DebtPayoffCalculator } from './DebtPayoffCalculator';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
-import { generateToolMetadata, generateFaqSchema, generateToolSchema } from '@/lib/seo';
+import { generateToolMetadata, generateFaqSchema, generateToolSchema, generateHowToSchema, generateBreadcrumbSchema, SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = generateToolMetadata('debt-payoff');
 
@@ -29,11 +29,47 @@ const FAQ_ITEMS = [
     q: 'How accurate are the debt payoff calculations?',
     a: 'All calculations use standard monthly amortization formulas. Results assume fixed interest rates and consistent payments. Actual results may vary based on lender terms and promotional APR periods.',
   },
+  {
+    q: 'What if I can only afford $50 extra per month?',
+    a: 'Even $50 extra per month makes a significant difference. On $25,000 of debt at mixed rates, adding $50/month can save over $3,000 in interest and cut 18+ months off your payoff timeline. The key is consistency — apply the extra payment every single month without fail.',
+  },
+  {
+    q: 'Should I pay off debt or save for an emergency fund first?',
+    a: 'Build a starter emergency fund of $1,000-$2,000 first, then aggressively attack high-interest debt (above 7-8%), then build a full 3-6 month emergency fund. Without any emergency savings, unexpected expenses force you back into debt.',
+  },
+  {
+    q: 'Is debt consolidation the same as the snowball or avalanche method?',
+    a: 'No. Debt consolidation combines multiple debts into a single new loan, hopefully at a lower rate. The snowball and avalanche methods are payment strategies that do not require a new loan — you keep existing debts and optimize your payment order. Consolidation can complement these methods if the new rate is significantly lower.',
+  },
+  {
+    q: 'How do I stay motivated during a long debt payoff journey?',
+    a: 'Track your progress visually (debt payoff thermometer), celebrate each debt you eliminate, share your goals with an accountability partner, and remember that each payment brings you closer to financial freedom. The snowball method specifically helps motivation by giving you quick wins early.',
+  },
+  {
+    q: 'What debts should I include in this calculator?',
+    a: 'Include all non-mortgage debts: credit cards, personal loans, auto loans, medical bills, student loans, and any other installment debt. Enter each debt separately with its own balance, interest rate, and minimum payment for the most accurate comparison.',
+  },
 ] as const;
 
 export default function DebtPayoffPage() {
   const toolSchema = generateToolSchema('debt-payoff');
   const faqSchema = generateFaqSchema(FAQ_ITEMS.map(f => ({ q: f.q, a: f.a })));
+  const howToSchema = generateHowToSchema({
+    name: 'How to Use the Debt Payoff Calculator',
+    description: 'Compare snowball, avalanche, and hybrid debt payoff strategies to find the fastest and cheapest way to become debt-free.',
+    steps: [
+      { name: 'Add your debts', text: 'Click "Add Debt" and enter each debt\'s name, current balance, annual interest rate (APR), and minimum monthly payment.' },
+      { name: 'Set your extra payment', text: 'Enter any additional monthly amount you can put toward debt beyond your minimums. Even $50 extra per month makes a significant difference.' },
+      { name: 'Compare strategies', text: 'Review the Snowball (smallest balance first), Avalanche (highest rate first), and Hybrid results side by side. The "Best Strategy" banner highlights the most cost-effective option.' },
+      { name: 'Study the timeline', text: 'Use the payoff timeline chart to visualize when each debt disappears under each strategy and identify your exact debt-free date.' },
+      { name: 'Take action', text: 'Use the optimized payment order to start attacking your debts today. Revisit the calculator whenever your situation changes.' },
+    ],
+  });
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Tools', url: `${SITE_URL}/tools/debt-payoff` },
+    { name: 'Debt Payoff Calculator', url: `${SITE_URL}/tools/debt-payoff` },
+  ]);
 
   return (
     <>
@@ -41,6 +77,8 @@ export default function DebtPayoffPage() {
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }} />
       )}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
       <Breadcrumb items={[
         { label: 'Debt Management', href: '/category/debt-management' },
@@ -143,6 +181,85 @@ export default function DebtPayoffPage() {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* What is a Debt Payoff Calculator? */}
+        <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">What Is a Debt Payoff Calculator?</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+          A debt payoff calculator is a free financial planning tool that models how long it will take to
+          become completely debt-free and how much total interest you will pay along the way. Our calculator
+          goes further than most by comparing three proven debt payoff strategies side by side \u2014 the debt
+          snowball, debt avalanche, and a hybrid method \u2014 so you can choose the approach that best fits
+          your financial situation and personality.
+        </p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          The average American household carries over $100,000 in total debt, including mortgages, credit
+          cards, auto loans, and student loans. Without a structured payoff strategy, high-interest consumer
+          debt compounds rapidly, costing thousands in unnecessary interest over time. This calculator helps
+          you see the exact impact of directed extra payments and optimized payment ordering \u2014 turning an
+          overwhelming debt situation into a clear, actionable roadmap.
+        </p>
+
+        {/* Financial Glossary */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mb-6">
+          <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Key Debt Payoff Terms</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-700">
+                  <th className="text-left py-2 pr-4 font-semibold text-slate-900 dark:text-white">Term</th>
+                  <th className="text-left py-2 font-semibold text-slate-900 dark:text-white">Definition</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-600 dark:text-slate-400">
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Debt Snowball</td>
+                  <td className="py-2.5">A payoff strategy that targets the smallest balance first, regardless of interest rate. Builds psychological momentum through quick wins.</td>
+                </tr>
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Debt Avalanche</td>
+                  <td className="py-2.5">A payoff strategy targeting the highest interest rate debt first. Mathematically optimal \u2014 saves the most total interest over the payoff period.</td>
+                </tr>
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Minimum Payment</td>
+                  <td className="py-2.5">The lowest required monthly payment on a debt. Making only minimums maximizes the lender\u2019s interest revenue and extends your payoff by years.</td>
+                </tr>
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Extra Payment</td>
+                  <td className="py-2.5">Any amount paid above the sum of all minimum payments. Directed extra payments are the key accelerator in all three payoff strategies.</td>
+                </tr>
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Debt-Free Date</td>
+                  <td className="py-2.5">The projected month and year when your last debt reaches a $0 balance. Moving this date closer is the primary goal of payoff optimization.</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">APR</td>
+                  <td className="py-2.5">Annual Percentage Rate \u2014 the yearly cost of borrowing, expressed as a percentage. Higher APRs mean more interest charges on your balance each month.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Expert Tips */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mb-6">
+          <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Expert Tips for Faster Debt Payoff</h3>
+          <ol className="space-y-3">
+            {[
+              { title: 'Pick a strategy and commit', tip: 'The best debt payoff method is the one you actually stick with. If quick wins motivate you, use the snowball. If saving money excites you, use the avalanche. Consistency matters more than optimization.' },
+              { title: 'Never reduce your total payment', tip: 'When you pay off one debt, roll that entire freed-up payment into the next target. This is the rollover effect and it is the single most powerful accelerator in any debt payoff plan.' },
+              { title: 'Automate your payments', tip: 'Set up automatic payments for your planned amounts. This removes the monthly decision point and ensures you never miss a payment or accidentally pay less than planned.' },
+              { title: 'Find one extra income source', tip: 'A small side income of $200-$500/month applied directly to debt can cut years off your payoff timeline. Freelancing, selling unused items, or a part-time gig all work.' },
+              { title: 'Review and adjust quarterly', tip: 'Revisit this calculator every 3 months with your updated balances. Seeing the payoff date get closer provides motivation, and you can adjust strategy if your situation changes.' },
+            ].map((item, i) => (
+              <li key={i} className="flex gap-3 text-sm text-slate-600 dark:text-slate-400">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 text-xs font-bold flex items-center justify-center">
+                  {i + 1}
+                </span>
+                <div><strong className="text-slate-700 dark:text-slate-300">{item.title}:</strong> {item.tip}</div>
+              </li>
+            ))}
+          </ol>
         </div>
 
         <h3 className="font-semibold text-slate-900 dark:text-white mb-4">Frequently Asked Questions</h3>

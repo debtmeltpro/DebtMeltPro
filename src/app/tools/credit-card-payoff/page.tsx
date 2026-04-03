@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
-import { generateToolMetadata, generateFaqSchema, generateToolSchema } from '@/lib/seo';
+import { generateToolMetadata, generateFaqSchema, generateToolSchema, generateHowToSchema, generateBreadcrumbSchema, SITE_URL } from '@/lib/seo';
 import { CreditCardCalculator } from './CreditCardCalculator';
 
 export const metadata: Metadata = generateToolMetadata('credit-card-payoff');
@@ -13,16 +13,39 @@ const FAQ_ITEMS = [
   { q: 'Does carrying a balance help my credit score?', a: 'No — this is a common myth. Carrying a credit card balance does NOT help your credit score. High credit utilization (balance divided by credit limit) can actually hurt your score. Pay your balance in full whenever possible.' },
   { q: 'How much interest am I really paying each month?', a: 'Your monthly interest charge equals your balance multiplied by your APR divided by 12. For example, $5,000 at 22% APR costs you about $92 in interest each month. If your minimum payment is $100, only $8 goes toward reducing the actual debt.' },
   { q: 'Should I close credit cards after paying them off?', a: 'Generally no. Closing cards reduces your total available credit, which can increase your credit utilization ratio and lower your score. Keep paid-off cards open but inactive, or use them for a small recurring charge that you pay in full each month.' },
+  { q: 'What is a good credit utilization ratio?', a: 'Financial experts recommend keeping your credit utilization below 30% — ideally under 10% — for the best credit score impact. Utilization is calculated as your total balances divided by your total credit limits across all cards. Paying down balances is the fastest way to improve utilization.' },
+  { q: 'Should I use a balance transfer to pay off credit card debt?', a: 'A 0% APR balance transfer can save significant interest if you commit to paying off the balance within the promotional period (usually 12-21 months). Watch out for balance transfer fees (typically 3-5%) and the post-promotional APR. Never transfer a balance and then make only minimum payments.' },
+  { q: 'How does compound interest work on credit cards?', a: 'Credit cards charge interest on your average daily balance, not your statement balance. If you carry a balance, interest accrues daily and compounds monthly — meaning you pay interest on previously charged interest. This compounding effect is why credit card debt grows so quickly when left unchecked.' },
+  { q: 'Is it better to pay off one card completely or pay a little on each?', a: 'Mathematically, focusing all extra payments on the highest-APR card (the avalanche method) saves the most money. Psychologically, paying off the smallest balance first (the snowball method) creates momentum. Either way, always make minimum payments on all cards to avoid penalties and credit damage.' },
+  { q: 'What happens if I miss a credit card payment?', a: 'Missing a payment triggers a late fee ($25-$40), may increase your APR to the penalty rate (often 29.99%), and gets reported to credit bureaus after 30 days — which can drop your credit score 60-110 points. Set up autopay for at least the minimum to prevent missed payments.' },
 ];
 
 export default function CreditCardPage() {
   const toolSchema = generateToolSchema('credit-card-payoff');
   const faqSchema = generateFaqSchema(FAQ_ITEMS);
+  const howToSchema = generateHowToSchema({
+    name: 'How to Use the Credit Card Payoff Calculator',
+    description: 'Calculate how long it takes to pay off credit card debt and how much interest you save by paying more than the minimum.',
+    steps: [
+      { name: 'Enter your balance', text: 'Input your current credit card balance — the total amount you owe on this card.' },
+      { name: 'Enter your APR', text: 'Enter your card\'s annual percentage rate (APR). You can find this on your statement or by calling your issuer.' },
+      { name: 'Set minimum payment percentage', text: 'Enter your card\'s minimum payment percentage (usually 1-3% of balance). This is shown on your monthly statement.' },
+      { name: 'Set a fixed payment amount', text: 'Enter a fixed monthly payment you can commit to. A higher fixed payment dramatically reduces payoff time.' },
+      { name: 'Compare the results', text: 'Review the minimum-only vs fixed-payment scenarios. See months saved, interest saved, and your new payoff date.' },
+    ],
+  });
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Debt Management', url: `${SITE_URL}/category/debt-management` },
+    { name: 'Credit Card Payoff Calculator', url: `${SITE_URL}/tools/credit-card-payoff` },
+  ]);
 
   return (
     <>
       {toolSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }} />}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
       <Breadcrumb items={[
         { label: 'Debt Management', href: '/category/debt-management' },
@@ -79,6 +102,85 @@ export default function CreditCardPage() {
           decreases, more of each payment goes to principal rather than interest — this acceleration effect
           is why fixed payments are dramatically more effective than declining minimums.
         </p>
+
+        {/* What is a Credit Card Payoff Calculator? */}
+        <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">What Is a Credit Card Payoff Calculator?</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+          A credit card payoff calculator is a free financial tool that shows you exactly how long it will take
+          to pay off your credit card balance and how much total interest you will pay. Unlike generic
+          calculators that only show a single scenario, our tool compares two critical pathways: the declining
+          minimum payment trap — where your payment shrinks every month and keeps you in debt for decades — and
+          the fixed payment approach, where locking in a consistent payment amount dramatically accelerates your
+          debt-free date.
+        </p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+          The average American household carries over $6,500 in credit card debt at an average APR of 20.7%.
+          At minimum payments, that debt takes over 17 years to pay off and costs more than $9,000 in interest
+          alone. Understanding these numbers is the first step toward breaking free. Our calculator runs
+          entirely in your browser — no sign-up required, no data stored, completely private and instant.
+        </p>
+
+        {/* Financial Glossary */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mb-8">
+          <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Key Credit Card Terms Explained</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-700">
+                  <th className="text-left py-2 pr-4 font-semibold text-slate-900 dark:text-white">Term</th>
+                  <th className="text-left py-2 font-semibold text-slate-900 dark:text-white">Definition</th>
+                </tr>
+              </thead>
+              <tbody className="text-slate-600 dark:text-slate-400">
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">APR</td>
+                  <td className="py-2.5">Annual Percentage Rate — the yearly interest rate charged on your balance. Divide by 12 to get the monthly rate.</td>
+                </tr>
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Minimum Payment</td>
+                  <td className="py-2.5">The lowest amount your issuer requires each month, usually 1-3% of the outstanding balance or a flat dollar floor (e.g., $25).</td>
+                </tr>
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Credit Utilization</td>
+                  <td className="py-2.5">The percentage of your total available credit that you are currently using. Keeping this below 30% (ideally under 10%) helps your credit score.</td>
+                </tr>
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Balance Transfer</td>
+                  <td className="py-2.5">Moving debt from one credit card to another, often with a promotional 0% APR period. Usually comes with a 3-5% transfer fee.</td>
+                </tr>
+                <tr className="border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Grace Period</td>
+                  <td className="py-2.5">The window (usually 21-25 days) between your statement date and payment due date during which no interest accrues on new purchases — only if you paid last month in full.</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 pr-4 font-medium text-slate-700 dark:text-slate-300">Penalty APR</td>
+                  <td className="py-2.5">A higher interest rate (often 29.99%) triggered by missing payments or exceeding your credit limit. Can apply to your entire balance indefinitely.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Expert Tips */}
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6 mb-8">
+          <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Expert Tips for Paying Off Credit Cards Faster</h2>
+          <ol className="space-y-3">
+            {[
+              { title: 'Lock in your payment amount', tip: 'When you start paying off a card, note the minimum payment on your first statement and commit to never paying less than that amount — even as the minimum decreases. This one habit can cut your payoff time in half.' },
+              { title: 'Target the highest APR first', tip: 'If you have multiple cards, direct all extra payments to the card with the highest interest rate while making minimums on the rest. This is the avalanche method — it saves the most interest over time.' },
+              { title: 'Negotiate your APR', tip: 'Call your card issuer and ask for a rate reduction. If you have been a reliable customer, many issuers will lower your APR by 2-5 percentage points. A 5-minute phone call could save you hundreds.' },
+              { title: 'Automate more than the minimum', tip: 'Set up automatic payments for a fixed amount that exceeds the minimum. Automating removes the temptation to pay less during tight months and ensures consistent progress.' },
+              { title: 'Use windfalls strategically', tip: 'Apply tax refunds, bonuses, or unexpected income directly to your highest-rate balance. A single $1,000 lump-sum payment can save hundreds in future interest and months of payments.' },
+            ].map((item, i) => (
+              <li key={i} className="flex gap-3 text-sm text-slate-600 dark:text-slate-400">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center justify-center">
+                  {i + 1}
+                </span>
+                <div><strong className="text-slate-700 dark:text-slate-300">{item.title}:</strong> {item.tip}</div>
+              </li>
+            ))}
+          </ol>
+        </div>
 
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-6">Credit Card Payoff FAQ</h2>
         <div className="space-y-3">
