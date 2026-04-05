@@ -24,7 +24,7 @@ import {
 // ─── SEO Metadata ─────────────────────────────────────────────
 
 export const metadata: Metadata = {
-  title: 'Free Debt Payoff Calculator — Snowball vs Avalanche (2026)',
+  title: 'Debt Avalanche vs Snowball Calculator — Free Debt Payoff (2026)',
   description:
     'Pay off debt faster with our free debt payoff calculator. Compare snowball, avalanche & hybrid strategies, add extra payments, and see your exact debt-free date.',
   keywords: [
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: `${SITE_URL}/tools/debt-payoff` },
   openGraph: {
-    title: 'Free Debt Payoff Calculator — Snowball vs Avalanche',
+    title: 'Debt Avalanche vs Snowball Calculator — Free Debt Payoff Tool',
     description:
       'Compare snowball, avalanche & hybrid debt payoff strategies. See your exact debt-free date, total interest saved, and optimal payment order — free, instant, and private.',
     url: `${SITE_URL}/tools/debt-payoff`,
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Debt Payoff Calculator — Snowball vs Avalanche',
+    title: 'Debt Avalanche vs Snowball Calculator — Free Debt Payoff Tool',
     description:
       'Compare three proven debt payoff strategies side by side. Find your fastest, cheapest path to $0.',
   },
@@ -179,13 +179,12 @@ export default function DebtPayoffPage() {
             Tool 1 of 5 · 100% Free
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-3">
-            Debt Payoff Calculator (Snowball vs Avalanche) — Pay Off Debt Faster
+            Debt Avalanche vs Snowball Calculator — Free Debt Payoff Planner
           </h1>
-          <p className="text-xs text-slate-500 mt-2">
-            Popular uses: credit card payoff calculator, loan payoff calculator, debt repayment calculator, payoff calculator with extra payments
-          </p>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Use this free debt payoff calculator to calculate how long it will take to pay off debt, compare snowball vs avalanche strategies, and see how much interest you can save with extra payments. Works for credit cards, personal loans, and multiple debts.
+            Add your debts below and instantly compare the Snowball, Avalanche, and Hybrid payoff
+            strategies. See your exact debt-free date, total interest saved, and the optimal
+            payment order — all calculated in real time with no sign-up required.
           </p>
         </div>
       </section>
@@ -242,9 +241,6 @@ export default function DebtPayoffPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <DebtPayoffCalculator />
       </div>
-      <p className="text-center text-sm text-slate-600 dark:text-slate-400 mt-4">
-        Scroll down to see the best strategy to pay off your debt faster and save thousands in interest.
-      </p>
 
       {/* ── Ad: In-Content ───────────────────────────────────── */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
@@ -262,47 +258,22 @@ export default function DebtPayoffPage() {
           Free Debt Payoff Calculator with Extra Payments
         </h2>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-          This debt payoff calculator works as a credit card payoff calculator, loan payoff calculator, and complete debt repayment planner for multiple debts.
+          Most calculators show one payoff scenario. This one compares three strategies at once —
+          snowball, avalanche, and hybrid. Enter your debts and pick an extra payment amount. The
+          tool shows how much interest each method saves, how many months faster you get debt-free,
+          and which debts to attack first.
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-          Most debt payoff calculators show a single payoff scenario. This calculator does something
-          fundamentally more useful: it compares three proven strategies — snowball, avalanche, and
-          hybrid — side by side, using your actual debts and an extra payment amount you choose.
-          The result is a clear picture of how much interest each method saves, how many months
-          faster you become debt-free, and the exact order in which to attack your accounts.
-        </p>
-        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-          The extra payment slider is where the real power lives. Even a modest $50 per month
-          directed strategically can save thousands of dollars and cut years off your payoff
-          timeline. The calculator models the &ldquo;debt rollover effect&rdquo; — when you pay off one
-          account, its entire freed-up minimum payment rolls into the next target, creating an
-          accelerating snowball of payments. This is the single most powerful accelerator in any
-          debt elimination plan.
+          The extra payment slider is where the real power is. Even $50 a month extra can save
+          thousands and cut years off your timeline. The calculator also models the
+          &ldquo;debt rollover effect.&rdquo; When you pay off one debt, its freed-up payment rolls
+          into the next target. This creates a growing snowball that speeds up every month.
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
           Every calculation runs entirely in your browser. Your balances, rates, and payment details
           are never transmitted to any server. No sign-up, no email gate, no data collection.
         </p>
-        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-          If you're focusing specifically on credit cards, try our{' '}
-          <Link
-            href="/tools/credit-card-payoff"
-              className="text-green-600 dark:text-green-400 underline hover:no-underline"
-          >
-           credit card payoff calculator
-          </Link>{' '}
-             to see how minimum payments can extend your payoff timeline.
-        </p>
-         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-           You can also compare long-term growth using our{' '}
-           <Link
-              href="/tools/compound-interest"
-              className="text-green-600 dark:text-green-400 underline hover:no-underline"
-            >
-              compound interest calculator
-            </Link>{' '}
-            to understand the opportunity cost of paying off debt versus investing.
-          </p>   
+
         {/* ── H2: How to Use This Debt Payoff Calculator ────────── */}
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">
           How to Use This Debt Payoff Calculator
@@ -334,7 +305,7 @@ export default function DebtPayoffPage() {
           The <strong>debt avalanche method</strong> targets the debt with the highest interest rate
           first, regardless of balance size. You make minimum payments on everything else and throw
           every extra dollar at the highest-rate account. Once it is eliminated, you move to the
-          next highest rate. This approach minimizes total interest paid and is mathematically the
+          next highest rate. This approach minimizes total interest costs and is mathematically the
           most efficient debt payoff strategy.
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
@@ -343,6 +314,12 @@ export default function DebtPayoffPage() {
           win, which fuels motivation. Research published in the Harvard Business Review found that
           consumers who focused on small wins were significantly more likely to persist and
           eliminate all their debt.
+        </p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+          Both debt avalanche and debt snowball are proven strategies — the key difference is whether
+          you prioritize reducing interest costs fastest (avalanche) or building momentum through
+          quick wins (snowball). Our calculator runs both simultaneously so you can see the exact
+          dollar difference for your specific debts.
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
           The <strong>hybrid method</strong> starts with snowball for the first 2–3 months to build
@@ -439,7 +416,6 @@ export default function DebtPayoffPage() {
               </li>
             ))}
           </ol>
-        
         </div>
 
         <AdSlotInArticle />
@@ -464,7 +440,7 @@ export default function DebtPayoffPage() {
             href="/tools/credit-card-payoff"
             className="text-green-600 dark:text-green-400 underline hover:no-underline"
           >
-            credit card payoff calculator
+            Credit Card Payoff Calculator
           </Link>
           , which models the minimum payment trap and shows the exact savings of fixing your payment.
         </p>
@@ -509,16 +485,6 @@ export default function DebtPayoffPage() {
           projects compound growth so you can compare the opportunity cost of debt payments against
           potential investment returns. As a general rule, pay off any debt with an interest rate
           above 6–7% before directing extra money to investments.
-        </p>
-        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-          If you are managing multiple credit cards, try our{' '}
-          <Link
-            href="/tools/credit-card-payoff"
-            className="text-green-600 dark:text-green-400 underline hover:no-underline"
-          >
-            credit card payoff calculator
-          </Link>{' '}
-          to optimize individual card payments before combining strategies.
         </p>
 
         {/* ── H2: Real Example: Pay Off $25,000 Debt Faster ──────── */}
@@ -578,23 +544,7 @@ export default function DebtPayoffPage() {
           acceleration effect is dramatic — and the calculator models every month of it
           automatically.
         </p>
-         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">
-           Debt Payoff Calculator vs Debt Consolidation
-         </h2>
 
-         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-           A debt payoff calculator helps you create a structured repayment plan, while debt consolidation combines multiple debts into one loan with a lower interest rate. The best option depends on your interest rates, discipline, and financial goals.
-         </p>
-         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-             Before choosing consolidation, compare results using our{' '}
-            <Link
-              href="/tools/debt-payoff"
-              className="text-green-600 dark:text-green-400 underline hover:no-underline"
-          >
-             debt payoff calculator
-            </Link>{' '}
-              to see if you can save more without taking a new loan.
-          </p>
         {/* ── H2: Common Mistakes to Avoid ───────────────────────── */}
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">
           Common Mistakes to Avoid When Paying Off Debt
@@ -702,35 +652,21 @@ export default function DebtPayoffPage() {
           What Is a Debt Payoff Calculator?
         </h2>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-          A debt payoff calculator is a financial planning tool that models how long it will take to
-          eliminate your debts and how much total interest you will pay along the way. You enter your
-          account balances, interest rates, and minimum payments, and the calculator projects your
-          payoff timeline month by month.
+          A debt payoff calculator helps you figure out how long it will take to pay off everything
+          you owe. You enter each debt — the balance, interest rate, and minimum payment — and the
+          tool shows your payoff timeline month by month. It also shows how much total interest
+          you will pay.
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-            This tool also works as a{' '}
-           
-            <Link
-              href="/tools/credit-card-payoff"
-              className="text-green-600 dark:text-green-400 underline hover:no-underline"
-            >
-              credit card payoff calculator
-            </Link>
-            , helping you manage all types of debt in one place.
+          Most debt payoff calculators only show one scenario. This one is different. It runs three
+          strategies at once — debt avalanche and debt snowball, plus a hybrid — so you can compare
+          interest costs, payoff speed, and total savings side by side with your real numbers.
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-          What makes this calculator different from basic versions is the strategy comparison. Most
-          tools only show a single payoff scenario. This one runs three simultaneous simulations —
-          snowball, avalanche, and hybrid — so you can see exactly how much each approach costs in
-          total interest, how many months each takes, and which one saves the most money for your
-          specific debt mix.
-        </p>
-        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-          The average American household carries over $104,000 in total debt (including mortgages),
-          and the average credit card balance exceeds $6,500 at APRs above 22%. Without a
-          structured payoff strategy, high-interest consumer debt compounds rapidly, costing
-          thousands in unnecessary interest over time. A debt payoff calculator transforms an
-          overwhelming situation into a clear, month-by-month action plan.
+          The average American household owes over $104,000 in total debt. Credit card balances
+          average $6,500 or more at APRs above 22%. Without a plan, high-interest debt grows fast
+          and costs thousands in extra interest. This calculator turns that into a simple,
+          step-by-step action plan.
         </p>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
           This calculator uses standard monthly amortization formulas — the same math banks and
@@ -831,17 +767,6 @@ export default function DebtPayoffPage() {
         </div>
 
         {/* ── FAQ Section ────────────────────────────────────────── */}
-
-        <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-4">
-            Related Debt Payoff Questions
-         </h2>
-
-          <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-2 mb-6">
-            <li>How to pay off $10,000 debt fast?</li>
-            <li>How long to pay off credit card debt?</li>
-            <li>Is snowball better than avalanche?</li>
-            <li>Can I pay off debt in 1 year?</li>
-          </ul>
         <h2 className="font-display text-2xl font-bold text-slate-900 dark:text-white mb-6">
           Debt Payoff Calculator FAQ
         </h2>
