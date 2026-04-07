@@ -9,7 +9,7 @@
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { DebtPayoffCalculator } from './DebtPayoffCalculator';
+import dynamic from 'next/dynamic';
 import { AdSlotLeaderboard, AdSlotInContent, AdSlotInArticle } from '@/components/molecules/AdSlot';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
@@ -20,6 +20,11 @@ import {
   generateBreadcrumbSchema,
   SITE_URL,
 } from '@/lib/seo';
+
+const DebtPayoffCalculator = dynamic(
+  () => import('./DebtPayoffCalculator').then((m) => m.DebtPayoffCalculator),
+  { ssr: false },
+);
 
 // ─── SEO Metadata ─────────────────────────────────────────────
 

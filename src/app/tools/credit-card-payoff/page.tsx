@@ -3,9 +3,14 @@ import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlo
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
 import { generateToolMetadata, generateFaqSchema, generateToolSchema, generateHowToSchema, generateBreadcrumbSchema, SITE_URL } from '@/lib/seo';
-import { CreditCardCalculator } from './CreditCardCalculator';
+import dynamic from 'next/dynamic';
 
 export const metadata: Metadata = generateToolMetadata('credit-card-payoff');
+
+const CreditCardCalculator = dynamic(
+  () => import('./CreditCardCalculator').then((m) => m.CreditCardCalculator),
+  { ssr: false },
+);
 
 const FAQ_ITEMS = [
   { q: 'How does the minimum payment trap work?', a: 'Credit card issuers typically set minimum payments at 1-3% of your balance. As you pay down your balance, the minimum payment also decreases. This is intentional — it maximizes the interest you pay over time. A $5,000 balance at 20% APR with 2% minimum payments can take over 30 years to pay off.' },

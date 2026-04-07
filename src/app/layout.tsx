@@ -195,6 +195,42 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
       <head>
+        <script
+          // Recovery for intermittent chunk-cache mismatches (ChunkLoadError / failed chunk fetches)
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function () {
+                var attemptedKey = 'dmp-chunk-reload-attempted';
+                function shouldReload(msg) {
+                  msg = msg || '';
+                  return /ChunkLoadError|Loading chunk|failed to load chunk|module script failed/i.test(msg);
+                }
+                function reloadOnce() {
+                  try {
+                    if (window.sessionStorage && window.sessionStorage.getItem(attemptedKey) === '1') return;
+                    if (window.sessionStorage) window.sessionStorage.setItem(attemptedKey, '1');
+                  } catch (e) { /* ignore */ }
+                  setTimeout(function () {
+                    try { window.location.reload(); } catch (e) { /* ignore */ }
+                  }, 50);
+                }
+                window.addEventListener('error', function (e) {
+                  var msg = (e && e.message) ? e.message : '';
+                  if (shouldReload(msg)) reloadOnce();
+                });
+                window.addEventListener('unhandledrejection', function (e) {
+                  var r = e && e.reason;
+                  var msg = (r && r.message) ? r.message : String(r || '');
+                  if (shouldReload(msg)) reloadOnce();
+                });
+                setTimeout(function () {
+                  try { window.sessionStorage && window.sessionStorage.removeItem(attemptedKey); } catch (e) { /* ignore */ }
+                }, 30000);
+              })();
+            `,
+          }}
+        />
+
         {/* DNS prefetch for performance */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
         <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />

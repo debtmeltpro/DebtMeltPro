@@ -19,7 +19,10 @@ export function cn(...inputs: ClassValue[]): string {
  * Safe for use as React keys and Zod ID validation.
  */
 export function generateId(): string {
-  return crypto.randomUUID();
+  const uuid = globalThis.crypto?.randomUUID?.();
+  if (uuid && typeof uuid === 'string') return uuid;
+  // Fallback for older browsers / restricted contexts
+  return `id_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
 }
 
 /**

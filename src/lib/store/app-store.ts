@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
+
 // ============================================================
 // DebtMeltPro — Global Zustand Store
 // Persists user preferences, cookie consent, and last-used tool
@@ -7,6 +10,12 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { AppStore } from '@/types';
+
+const noopStorage = {
+  getItem: (_name: string) => null,
+  setItem: (_name: string, _value: string) => {},
+  removeItem: (_name: string) => {},
+} as any;
 
 export const useAppStore = create<AppStore>()(
   persist(
@@ -18,7 +27,9 @@ export const useAppStore = create<AppStore>()(
     }),
     {
       name: 'DebtMeltPro-preferences',
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() =>
+        typeof window === 'undefined' ? noopStorage : window.localStorage,
+      ),
       partialize: (state) => ({
         cookieConsent: state.cookieConsent,
         lastTool: state.lastTool,

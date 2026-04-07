@@ -3,9 +3,14 @@ import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlo
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
 import { generateToolMetadata, generateFaqSchema, generateToolSchema, generateHowToSchema, generateBreadcrumbSchema, SITE_URL } from '@/lib/seo';
-import { StudentLoanCalculator } from './StudentLoanCalculator';
+import dynamic from 'next/dynamic';
 
 export const metadata: Metadata = generateToolMetadata('student-loan');
+
+const StudentLoanCalculator = dynamic(
+  () => import('./StudentLoanCalculator').then((m) => m.StudentLoanCalculator),
+  { ssr: false },
+);
 
 const FAQ_ITEMS = [
   { q: 'When should you refinance student loans?', a: "Refinancing makes sense when you can qualify for a meaningfully lower interest rate (typically 1%+ reduction), you have stable income and good credit (670+), and you don't need federal loan protections like income-driven repayment or Public Service Loan Forgiveness (PSLF)." },

@@ -3,9 +3,14 @@ import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlo
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
 import { generateToolMetadata, generateFaqSchema, generateToolSchema, generateHowToSchema, generateBreadcrumbSchema, SITE_URL } from '@/lib/seo';
-import { MortgageCalculator } from './MortgageCalculator';
+import dynamic from 'next/dynamic';
 
 export const metadata: Metadata = generateToolMetadata('mortgage-calculator');
+
+const MortgageCalculator = dynamic(
+  () => import('./MortgageCalculator').then((m) => m.MortgageCalculator),
+  { ssr: false },
+);
 
 const FAQ_ITEMS = [
   { q: 'What costs does this calculator include?', a: 'This calculator includes mortgage principal and interest, property tax (as % of home value), home maintenance (typically 1-2% of value annually), homeowners insurance, HOA fees, and the opportunity cost of your down payment — what you could have earned by investing it instead.' },
