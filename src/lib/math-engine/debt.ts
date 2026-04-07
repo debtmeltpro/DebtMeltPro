@@ -267,7 +267,6 @@ const simulatePayoff = (
     });
 
     const negativeAmortMonth = totalPaymentThisMonth < monthInterest;
-    const balanceGrowing = currentTotal > previousBalance + BALANCE_EPS;
     if (negativeAmortMonth) {
       growthMonths++;
     } else {
@@ -286,7 +285,7 @@ const simulatePayoff = (
   const isUnpayable = brokeForUnpayable || hitCap;
 
   let projectedPayoffDate = '';
-  let finalTimeline = timeline;
+  const finalTimeline = timeline;
   let finalTotalMonths = month;
   const finalPayoffOrder = [...payoffOrder];
   const finalDebtPayoffMonths = { ...debtPayoffMonths };
@@ -645,10 +644,11 @@ export const getBestStrategy = (
       if (Math.abs(di) >= STRATEGY_EPS) return di;
       return a.data.totalMonths - b.data.totalMonths;
     });
-    return { strategy: payable[0]!.key, isEqualStrategy: false };
+    return { strategy: payable[0]?.key ?? null, isEqualStrategy: false };
   }
 
-  const first = all[0]!.data;
+  const first = all[0]?.data;
+  if (!first) return { strategy: null, isEqualStrategy: false };
   const allEqual = all.every(
     (s) =>
       Math.abs(s.data.totalInterestPaid - first.totalInterestPaid) < STRATEGY_EPS &&
@@ -665,5 +665,5 @@ export const getBestStrategy = (
     if (Math.abs(di) >= STRATEGY_EPS) return di;
     return a.data.totalMonths - b.data.totalMonths;
   });
-  return { strategy: sorted[0]!.key, isEqualStrategy: false };
+  return { strategy: sorted[0]?.key ?? null, isEqualStrategy: false };
 };
