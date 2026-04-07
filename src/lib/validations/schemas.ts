@@ -45,6 +45,9 @@ export const debtAccountSchema = z.object({
   balance: currency('Balance').min(1, 'Balance must be at least $1'),
   interestRate: percentage('Interest rate', 36),
   minimumPayment: currency('Minimum payment', 10_000),
+  interestType: z.enum(['fixed', 'variable']).optional().default('fixed'),
+  annualRateChangePercent: z.number().finite().min(-5, 'Rate change cannot be less than -5%').max(5, 'Rate change cannot exceed 5%').optional().default(0.5),
+
   type: z
     .enum(['credit_card', 'student_loan', 'auto_loan', 'personal_loan', 'medical', 'other'])
     .optional(),
@@ -100,7 +103,7 @@ export const compoundInputSchema = z.object({
 
 export const creditCardInputSchema = z.object({
   balance: currency('Credit card balance', 500_000).min(100, 'Balance must be at least $100'),
-  apr: percentage('APR', 36).min(0.1, 'APR must be at least 0.1%'),
+  apr: percentage('APR', 36).min(0, 'APR cannot be negative'),
   minimumPaymentPercent: percentage('Minimum payment percent', 10).min(0.5).default(2),
   minimumPaymentFloor: currency('Minimum payment floor', 500).default(25),
   fixedExtraPayment: currency('Extra monthly payment', 10_000).default(0),

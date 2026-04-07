@@ -33,6 +33,7 @@ export type {
   DTIResult,
   ConsolidationResult,
   WhatIfResult,
+  GetBestStrategyResult,
 } from './debt';
 
 // ─── Mortgage Calculator ───────────────────────────────────────

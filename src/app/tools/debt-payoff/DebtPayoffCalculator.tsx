@@ -7,7 +7,7 @@ import {
   Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 
-import { Plus, Trash2, TrendingDown, Trophy, Clock, DollarSign, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, TrendingDown, Trophy, Clock, DollarSign, AlertCircle, AlertTriangle } from 'lucide-react';
 
 import { calculateDebtPayoff, getBestStrategy, formatDuration } from '@/lib/math-engine';
 import { debtPayoffInputSchema } from '@/lib/validations/schemas';
@@ -16,19 +16,19 @@ import { useCurrency, createCurrencyFormatters } from '@/hooks/useCurrency';
 import type { DebtAccount, PayoffResult, PayoffStrategy } from '@/types';
 
 const SEED_DEBTS: DebtAccount[] = [
-  { id: generateId(), name: 'Visa Credit Card', balance: 6500,  interestRate: 22.99, minimumPayment: 150, type: 'credit_card'   },
-  { id: generateId(), name: 'Personal Loan',    balance: 12000, interestRate: 14.5,  minimumPayment: 280, type: 'personal_loan' },
-  { id: generateId(), name: 'Car Loan',          balance: 8200,  interestRate: 7.9,   minimumPayment: 195, type: 'auto_loan'    },
+  { id: generateId(), name: 'Medical Bill',    balance: 800,   interestRate: 0,     minimumPayment: 50,  type: 'medical'      },
+  { id: generateId(), name: 'Credit Card',     balance: 5200,  interestRate: 24.99, minimumPayment: 130, type: 'credit_card'  },
+  { id: generateId(), name: 'Car Loan',        balance: 9500,  interestRate: 6.9,   minimumPayment: 220, type: 'auto_loan'    },
 ];
 
 const STRATEGIES: { key: PayoffStrategy; label: string; tagline: string; color: string }[] = [
   { key: 'snowball',  label: '❄️ Snowball',  tagline: 'Smallest balance first',   color: '#3b82f6' },
   { key: 'avalanche', label: '🏔️ Avalanche', tagline: 'Highest rate first',        color: '#22c55e' },
-  { key: 'hybrid',    label: '⚡ Hybrid',    tagline: 'Best of both worlds',       color: '#a855f7' },
+  { key: 'hybrid',    label: '⚡ Hybrid',    tagline: 'Weighted rate + balance',   color: '#a855f7' },
 ];
 
-function MetricCard({ label, value, sub, highlight, icon: Icon }: {
-  label: string; value: string; sub?: string;
+function MetricCard({ label, value, sub, subMuted, highlight, icon: Icon }: {
+  label: string; value: string; sub?: string; subMuted?: boolean;
   highlight?: 'green' | 'red' | 'blue'; icon?: React.ElementType;
 }) {
   return (
@@ -41,7 +41,12 @@ function MetricCard({ label, value, sub, highlight, icon: Icon }: {
       {Icon && <Icon className="w-4 h-4 text-slate-400" aria-hidden="true" />}
       <div className="text-2xl font-bold tabular-nums">{value}</div>
       <div className="text-sm text-slate-500 dark:text-slate-400">{label}</div>
-      {sub && <div className="text-xs text-green-600 dark:text-green-400 font-medium">{sub}</div>}
+      {sub && (
+        <div className={cn(
+          'text-xs font-medium',
+          subMuted ? 'text-slate-500 dark:text-slate-400' : 'text-green-600 dark:text-green-400',
+        )}>{sub}</div>
+      )}
     </div>
   );
 }
@@ -82,6 +87,21 @@ function DebtRow({ debt, onUpdate, onDelete, index, currencySymbol }: {
           value={debt.interestRate || ''}
           onChange={(e) => update('interestRate', e.target.value)}
           className="input-financial text-sm" aria-label={`Debt ${index + 1} interest rate`} />
+        <select
+          value={debt.interestType || 'fixed'}
+          onChange={(e) => onUpdate({
+            ...debt,
+            interestType: e.target.value as 'fixed' | 'variable',
+            annualRateChangePercent: e.target.value === 'variable'
+              ? (debt.annualRateChangePercent || 0.5)
+              : 0,
+          })}
+          className="w-full mt-1 px-1 py-0.5 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-[10px] text-slate-500 focus:outline-none"
+          aria-label={`Debt ${index + 1} rate type`}
+        >
+          <option value="fixed">Fixed</option>
+          <option value="variable">Variable ↕</option>
+        </select>
       </div>
       <div className="col-span-3 sm:col-span-3">
         <label htmlFor={`${uid}-min`} className="text-[10px] text-slate-500 mb-1 block">
@@ -103,9 +123,10 @@ function DebtRow({ debt, onUpdate, onDelete, index, currencySymbol }: {
   );
 }
 
-function StrategyPanel({ result, config, isBest, formatCurrency }: {
+function StrategyPanel({ result, config, isBest, formatCurrency, baselineUnpayable }: {
   result: PayoffResult; config: typeof STRATEGIES[0];
   isBest: boolean; formatCurrency: (n: number) => string;
+  baselineUnpayable?: boolean;
 }) {
   return (
     <div className={cn('bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 relative',
@@ -124,13 +145,17 @@ function StrategyPanel({ result, config, isBest, formatCurrency }: {
       <div className="space-y-3">
         <div className="flex justify-between items-center text-sm">
           <span className="text-slate-500 flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> Payoff Time</span>
-          <span className="font-bold tabular-nums text-slate-900 dark:text-white">{formatDuration(result.totalMonths)}</span>
+          <span className="font-bold tabular-nums text-slate-900 dark:text-white">
+            {result.isUnpayable ? '⚠️ Not payable' : formatDuration(result.totalMonths)}
+          </span>
         </div>
         <div className="flex justify-between items-center text-sm">
           <span className="text-slate-500 flex items-center gap-1.5"><DollarSign className="w-3.5 h-3.5" /> Total Interest</span>
-          <span className="font-bold tabular-nums text-red-600 dark:text-red-400">{formatCurrency(result.totalInterestPaid)}</span>
+          <span className="font-bold tabular-nums text-red-600 dark:text-red-400">
+            {result.isUnpayable ? '—' : formatCurrency(result.totalInterestPaid)}
+          </span>
         </div>
-        {result.interestSaved > 0 && (
+        {result.interestSaved > 0 && !baselineUnpayable && !result.isUnpayable && (
           <div className="flex justify-between items-center text-sm bg-green-50 dark:bg-green-950/30 rounded-lg px-3 py-2">
             <span className="text-green-700 dark:text-green-300 flex items-center gap-1.5"><TrendingDown className="w-3.5 h-3.5" /> Saved</span>
             <span className="font-bold tabular-nums text-green-700 dark:text-green-300">{formatCurrency(result.interestSaved)}</span>
@@ -184,6 +209,12 @@ export function DebtPayoffCalculator() {
     setDebts((prev) => prev.filter((d) => d.id !== id));
   }, []);
 
+  // Clamp extra payment to valid range
+  const handleExtraPaymentChange = useCallback((value: number) => {
+    const clamped = Math.max(0, isFinite(value) ? value : 0);
+    setExtraPayment(clamped);
+  }, []);
+
   const results = useMemo(() => {
     if (debts.length === 0) return null;
     const parsed = debtPayoffInputSchema.safeParse({ debts, extraMonthlyPayment: extraPayment, strategy: activeStrategy });
@@ -192,22 +223,45 @@ export function DebtPayoffCalculator() {
     try { return calculateDebtPayoff(parsed.data); } catch { setValidationError('Calculation error'); return null; }
   }, [debts, extraPayment, activeStrategy]);
 
+  const bestStrategySelection = results
+    ? getBestStrategy(results.snowball, results.avalanche, results.hybrid)
+    : null;
+
+  const rawBestStrategy = bestStrategySelection?.strategy ?? null;
+  const isEqualStrategy = bestStrategySelection?.isEqualStrategy ?? false;
+
+  const allUnpayable =
+    results !== null &&
+    results.snowball.isUnpayable &&
+    results.avalanche.isUnpayable &&
+    results.hybrid.isUnpayable;
+
   const chartData = useMemo(() => {
-    if (!results) return [];
-    const maxMonths = Math.max(results.snowball.totalMonths, results.avalanche.totalMonths, results.hybrid.totalMonths);
-    return Array.from({ length: maxMonths }, (_, i) => ({
+    if (!results || allUnpayable) return [];
+    const maxLen = Math.max(
+      results.snowball.timeline.length,
+      results.avalanche.timeline.length,
+      results.hybrid.timeline.length,
+    );
+    if (maxLen <= 0) return [];
+    const chartLength = Math.min(maxLen, 360);
+    return Array.from({ length: chartLength }, (_, i) => ({
       month: i + 1,
       Snowball:  results.snowball.timeline[i]?.totalBalance  ?? 0,
       Avalanche: results.avalanche.timeline[i]?.totalBalance ?? 0,
       Hybrid:    results.hybrid.timeline[i]?.totalBalance    ?? 0,
     }));
-  }, [results]);
-
-  const bestStrategy = results
-    ? getBestStrategy(results.snowball, results.avalanche, results.hybrid)
-    : 'avalanche';
+  }, [results, allUnpayable]);
 
   const totalDebt = debts.reduce((s, d) => s + (d.balance || 0), 0);
+
+  const bestStrategy: PayoffStrategy = rawBestStrategy ?? 'avalanche';
+
+  // Detect if baseline is unpayable (affects interest saved / time saved display)
+  const baselineUnpayable = results?.baseline.isUnpayable ?? false;
+
+  // Dynamic slider max: at least 2000, or current value if higher
+  const sliderMax = Math.max(2000, extraPayment);
 
   return (
     <div className="space-y-8">
@@ -252,7 +306,7 @@ export function DebtPayoffCalculator() {
         {debts.length === 0 && (
           <div className="text-center py-10 text-slate-400">
             <TrendingDown className="w-10 h-10 mx-auto mb-2 opacity-30" />
-            <p className="text-sm">No debts added. Click "Add Debt" to begin.</p>
+            <p className="text-sm">No debts added. Click &quot;Add Debt&quot; to begin.</p>
           </div>
         )}
 
@@ -264,12 +318,30 @@ export function DebtPayoffCalculator() {
               </label>
               <p className="text-xs text-slate-500">Amount above your minimum payments</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <span className="text-slate-500 font-mono">{currencySymbol}</span>
-              <input id="extra-payment" type="number" min="0" max="100000" step="50"
+              <input id="extra-payment" type="number" min="0" max="100000" step="25"
                 value={extraPayment}
-                onChange={(e) => setExtraPayment(Math.max(0, parseFloat(e.target.value) || 0))}
-                className="input-financial w-32 text-base" />
+                onChange={(e) => handleExtraPaymentChange(parseFloat(e.target.value) || 0)}
+                className="input-financial w-28 text-base" />
+            </div>
+          </div>
+          <div className="mt-3">
+            <input
+              type="range"
+              min={0}
+              max={sliderMax}
+              step={25}
+              value={extraPayment}
+              onChange={(e) => handleExtraPaymentChange(parseFloat(e.target.value) || 0)}
+              className="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-full appearance-none cursor-pointer accent-green-500"
+              aria-label="Extra payment slider"
+            />
+            <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+              <span>{currencySymbol}0</span>
+              <span>{currencySymbol}500</span>
+              <span>{currencySymbol}1,000</span>
+              <span>{currencySymbol}{sliderMax.toLocaleString()}</span>
             </div>
           </div>
         </div>
@@ -285,25 +357,64 @@ export function DebtPayoffCalculator() {
         {results && (
           <motion.div key="results" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }} transition={{ duration: 0.35 }} className="space-y-6">
+
+            {allUnpayable && (
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700">
+                <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-amber-900 dark:text-amber-200 text-sm">
+                    Debt will continue to grow — no payoff possible
+                  </p>
+                  <p className="text-xs text-amber-800 dark:text-amber-300 mt-1">
+                    Your total monthly payments (minimums + extra) are less than the interest accruing. Increase your extra payment or negotiate lower interest rates.
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div>
-              <h2 className="font-semibold text-slate-900 dark:text-white mb-4">Strategy Comparison</h2>
+              <div className="mb-4">
+                <h2 className="font-semibold text-slate-900 dark:text-white">Strategy Comparison</h2>
+                {isEqualStrategy && !allUnpayable && (
+                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    All strategies perform equally
+                  </p>
+                )}
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {STRATEGIES.map((s) => (
                   <StrategyPanel key={s.key} result={results[s.key]} config={s}
-                    isBest={s.key === bestStrategy} formatCurrency={formatCurrency} />
+                    isBest={!allUnpayable && !isEqualStrategy && s.key === bestStrategy} formatCurrency={formatCurrency}
+                    baselineUnpayable={baselineUnpayable} />
                 ))}
               </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <MetricCard icon={Trophy} label="Best Strategy"
-                value={bestStrategy.charAt(0).toUpperCase() + bestStrategy.slice(1)} highlight="green" />
+                value={
+                  allUnpayable
+                    ? 'None'
+                    : isEqualStrategy
+                      ? 'Avalanche'
+                      : bestStrategy.charAt(0).toUpperCase() + bestStrategy.slice(1)
+                }
+                highlight={allUnpayable ? 'red' : 'green'}
+                sub={
+                  allUnpayable
+                    ? 'increase payments'
+                    : isEqualStrategy
+                      ? 'All strategies perform equally — choose based on preference'
+                      : undefined
+                }
+                subMuted={!allUnpayable && isEqualStrategy} />
               <MetricCard icon={DollarSign} label="Interest Saved (vs min)"
-                value={formatCurrency(results[bestStrategy].interestSaved)} highlight="green" />
+                value={allUnpayable ? 'N/A' : formatCurrency(results[bestStrategy].interestSaved)} highlight="green" />
               <MetricCard icon={Clock} label="Time Saved (vs min)"
-                value={formatDuration(results[bestStrategy].monthsSaved)} highlight="blue" />
+                value={allUnpayable ? 'N/A' : formatDuration(results[bestStrategy].monthsSaved)} highlight="blue" />
               <MetricCard icon={TrendingDown} label="Debt-Free In"
-                value={formatDuration(results[bestStrategy].totalMonths)} sub="from today" />
+                value={allUnpayable ? 'Not payable' : formatDuration(results[bestStrategy].totalMonths)}
+                sub={allUnpayable ? 'increase payments' : 'from today'} />
             </div>
 
             <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6">
@@ -322,31 +433,41 @@ export function DebtPayoffCalculator() {
                   ))}
                 </div>
               </div>
-              <div style={{ minHeight: 320 }}>
-                <ResponsiveContainer width="100%" height={320}>
-                  <AreaChart data={chartData} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
-                    <defs>
-                      {[['snowballGrad','#3b82f6'],['avalancheGrad','#22c55e'],['hybridGrad','#a855f7']].map(([id, c]) => (
-                        <linearGradient key={id} id={id} x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%"  stopColor={c} stopOpacity={0.15} />
-                          <stop offset="95%" stopColor={c} stopOpacity={0} />
-                        </linearGradient>
-                      ))}
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
-                    <XAxis dataKey="month" tickFormatter={(v) => `Mo ${v}`}
-                      tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
-                    <YAxis tickFormatter={(v) => `${currencySymbol}${(v/1000).toFixed(0)}k`}
-                      tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false} width={60} />
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    <Tooltip content={(props: any) => <ChartTooltip {...props} formatCurrency={formatCurrency} />} />
-                    <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                    <Area type="monotone" dataKey="Snowball"  stroke="#3b82f6" strokeWidth={2}   fill="url(#snowballGrad)"  dot={false} />
-                    <Area type="monotone" dataKey="Avalanche" stroke="#22c55e" strokeWidth={2.5} fill="url(#avalancheGrad)" dot={false} />
-                    <Area type="monotone" dataKey="Hybrid"    stroke="#a855f7" strokeWidth={2}   fill="url(#hybridGrad)"   dot={false} />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
+
+              {chartData.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 text-center text-sm text-slate-500">
+                  {allUnpayable
+                    ? 'Payoff timeline chart is unavailable when every strategy is unpayable.'
+                    : 'No timeline data for the current inputs.'}
+                </div>
+              ) : (
+                <div className="w-full overflow-hidden" style={{ minHeight: 300 }}>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -5, bottom: 5 }}>
+                      <defs>
+                        {[['snowballGrad','#3b82f6'],['avalancheGrad','#22c55e'],['hybridGrad','#a855f7']].map(([id, c]) => (
+                          <linearGradient key={id} id={id} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%"  stopColor={c} stopOpacity={0.15} />
+                            <stop offset="95%" stopColor={c} stopOpacity={0} />
+                          </linearGradient>
+                        ))}
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
+                      <XAxis dataKey="month" tickFormatter={(v) => `Mo ${v}`}
+                        tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false}
+                        interval="preserveStartEnd" />
+                      <YAxis tickFormatter={(v) => `${currencySymbol}${(v/1000).toFixed(0)}k`}
+                        tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} width={50} />
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <Tooltip content={(props: any) => <ChartTooltip {...props} formatCurrency={formatCurrency} />} />
+                      <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                      <Area type="monotone" dataKey="Snowball"  stroke="#3b82f6" strokeWidth={2}   fill="url(#snowballGrad)"  dot={false} />
+                      <Area type="monotone" dataKey="Avalanche" stroke="#22c55e" strokeWidth={2.5} fill="url(#avalancheGrad)" dot={false} />
+                      <Area type="monotone" dataKey="Hybrid"    stroke="#a855f7" strokeWidth={2}   fill="url(#hybridGrad)"   dot={false} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
             </div>
 
             <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-6">
@@ -366,7 +487,14 @@ export function DebtPayoffCalculator() {
                         {i + 1}
                       </span>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">{debt.name}</p>
+                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200 truncate">
+                          {debt.name}
+                          {debt.interestType === 'variable' && (
+                            <span className="ml-1.5 text-[10px] text-amber-600 dark:text-amber-400 font-normal">
+                              (Variable ±{debt.annualRateChangePercent ?? 0}%/yr)
+                            </span>
+                          )}
+                        </p>
                         <p className="text-xs text-slate-500">{formatCurrency(debt.balance)} at {debt.interestRate}% APR</p>
                       </div>
                       {monthData && (

@@ -2,6 +2,8 @@
 // DebtMeltPro — Debt Payoff Math Engine v2
 // ────────────────────────────────────────
 // NEW in v2:
+//   • Variable interest rate support (annual adjustment)
+//   • Improved hybrid strategy (normalized weighted scoring)
 //   • Debt-to-income ratio (DTI) & affordability analysis
 //   • Consolidation loan comparison
 //   • What-if scenarios (windfall, rate change, extra income)
@@ -23,14 +25,26 @@ import type {
 } from '@/types';
 
 const MAX_MONTHS = 600; // 50-year safety cap
+const MAX_RATE = 36; // Cap variable rates at 36%
+const GROWTH_THRESHOLD = 6; // consecutive months of total balance growth → unpayable
+const BALANCE_EPS = 0.01;
 
 // ─── Internal Helpers ─────────────────────────────────────────
 
 const round2 = (n: number): number => Math.round((n + Number.EPSILON) * 100) / 100;
 
+const safeNum = (n: number): number => (isFinite(n) ? n : 0);
+
+const safeDivide = (a: number, b: number): number => {
+  if (!isFinite(a) || !isFinite(b) || b === 0) return 0;
+  return a / b;
+};
+
 const monthlyInterest = (balance: number, annualRatePercent: number): number => {
-  const monthlyRate = annualRatePercent / 100 / 12;
-  return round2(balance * monthlyRate);
+  const b = safeNum(balance);
+  const r = safeNum(annualRatePercent);
+  const monthlyRate = r / 100 / 12;
+  return round2(b * monthlyRate);
 };
 
 export const calcFixedMonthlyPayment = (
@@ -38,11 +52,14 @@ export const calcFixedMonthlyPayment = (
   annualRatePercent: number,
   termMonths: number,
 ): number => {
-  if (annualRatePercent === 0) return round2(principal / termMonths);
+  const p = Math.max(0, safeNum(principal));
+  const t = Math.max(1, Math.floor(safeNum(termMonths)));
+  if (annualRatePercent === 0) return round2(p / t);
   const r = annualRatePercent / 100 / 12;
+  if (!isFinite(r) || r <= 0) return round2(p / t);
   const payment =
-    principal * (r * Math.pow(1 + r, termMonths)) / (Math.pow(1 + r, termMonths) - 1);
-  return round2(payment);
+    p * (r * Math.pow(1 + r, t)) / (Math.pow(1 + r, t) - 1);
+  return round2(isFinite(payment) ? payment : p / t);
 };
 
 /**
@@ -57,25 +74,60 @@ const totalLoanInterest = (
   return round2(payment * termMonths - principal);
 };
 
+// ─── Variable Rate Adjustment Helper ──────────────────────────
+
+/**
+ * Adjusts interest rates for variable-rate accounts at year boundaries.
+ * Mutates the accounts array (caller must pass a copy).
+ * Caps rates at MAX_RATE to prevent runaway values.
+ */
+const adjustVariableRates = (accounts: DebtAccount[]): void => {
+  for (const account of accounts) {
+    if (
+      account.interestType === 'variable' &&
+      typeof account.annualRateChangePercent === 'number' &&
+      isFinite(account.annualRateChangePercent) &&
+      account.annualRateChangePercent !== 0
+    ) {
+      account.interestRate = Math.max(
+        0,
+        Math.min(MAX_RATE, account.interestRate + account.annualRateChangePercent),
+      );
+    }
+  }
+};
+
 // ─── Priority Sorting ─────────────────────────────────────────
 
 const getSortedPriority = (
   debts: DebtAccount[],
   strategy: PayoffStrategy,
-  month: number,
+  _month: number,
   customOrder?: string[],
 ): DebtAccount[] => {
-  const active = [...debts].filter((d) => d.balance > 0.01);
+  const active = [...debts].filter(
+    (d) => isFinite(d.balance) && isFinite(d.interestRate) && d.balance > BALANCE_EPS,
+  );
+  if (active.length === 0) return [];
 
   switch (strategy) {
     case 'snowball':
       return active.sort((a, b) => a.balance - b.balance);
     case 'avalanche':
       return active.sort((a, b) => b.interestRate - a.interestRate);
-    case 'hybrid':
-      return month <= 3
-        ? active.sort((a, b) => a.balance - b.balance)
-        : active.sort((a, b) => b.interestRate - a.interestRate);
+    case 'hybrid': {
+      // Normalize rate and balance to 0-1 range, then weight
+      // 65% interest rate priority + 35% small-balance priority
+      const maxRate = Math.max(...active.map((d) => d.interestRate), 1);
+      const maxBal = Math.max(...active.map((d) => d.balance), 1);
+      return active.sort((a, b) => {
+        const scoreA =
+          (a.interestRate / maxRate) * 0.65 + (1 - a.balance / maxBal) * 0.35;
+        const scoreB =
+          (b.interestRate / maxRate) * 0.65 + (1 - b.balance / maxBal) * 0.35;
+        return scoreB - scoreA;
+      });
+    }
     case 'custom' as PayoffStrategy:
       if (customOrder?.length) {
         return active.sort(
@@ -88,33 +140,6 @@ const getSortedPriority = (
     default:
       return active;
   }
-};
-
-// ─── Baseline (Minimum Payments Only) ────────────────────────
-
-const calcMinimumOnlyBaseline = (
-  debts: DebtAccount[],
-): { months: number; totalInterest: number; interestByDebt: Record<string, number> } => {
-  const accounts = debts.map((d) => ({ ...d, balance: round2(d.balance) }));
-  let month = 0;
-  let totalInterest = 0;
-  const interestByDebt: Record<string, number> = {};
-  for (const a of accounts) interestByDebt[a.id] = 0;
-
-  while (accounts.some((a) => a.balance > 0.01) && month < MAX_MONTHS) {
-    month++;
-    for (const account of accounts) {
-      if (account.balance <= 0.01) continue;
-      const interest = monthlyInterest(account.balance, account.interestRate);
-      totalInterest = round2(totalInterest + interest);
-      interestByDebt[account.id] = round2((interestByDebt[account.id] ?? 0) + interest);
-      const payment = Math.min(account.minimumPayment, round2(account.balance + interest));
-      account.balance = round2(account.balance + interest - payment);
-      if (account.balance < 0.01) account.balance = 0;
-    }
-  }
-
-  return { months: month, totalInterest: round2(totalInterest), interestByDebt };
 };
 
 // ─── Core Payoff Simulation ───────────────────────────────────
@@ -134,13 +159,19 @@ const simulatePayoff = (
   input: DebtPayoffInput,
   customOrder?: string[],
 ): PayoffResultV2 => {
-  const { strategy, extraMonthlyPayment } = input;
-  const accounts = input.debts.map((d) => ({ ...d, balance: round2(d.balance) }));
+  const { strategy } = input;
+  const accounts = input.debts.map((d) => ({
+    ...d,
+    balance: round2(Math.max(0, safeNum(d.balance))),
+    minimumPayment: round2(Math.max(0, safeNum(d.minimumPayment))),
+    interestRate: Math.min(MAX_RATE, Math.max(0, safeNum(d.interestRate))),
+  }));
 
   const totalBalance = round2(accounts.reduce((s, a) => s + a.balance, 0));
-  const weightedAverageRate = round2(
-    accounts.reduce((s, a) => s + a.interestRate * (a.balance / totalBalance), 0),
-  );
+  const weightedAverageRate =
+    totalBalance > BALANCE_EPS
+      ? round2(accounts.reduce((s, a) => s + a.interestRate * safeDivide(a.balance, totalBalance), 0))
+      : 0;
 
   const timeline: MonthlySnapshot[] = [];
   const payoffOrder: string[] = [];
@@ -151,31 +182,39 @@ const simulatePayoff = (
   let month = 0;
   let totalInterestPaid = 0;
   let totalPaid = 0;
-  let rollingExtra = round2(extraMonthlyPayment);
 
-  while (accounts.some((a) => a.balance > 0.01) && month < MAX_MONTHS) {
+  let previousBalance = totalBalance;
+  let growthMonths = 0;
+  let brokeForUnpayable = false;
+
+  while (accounts.some((a) => a.balance > BALANCE_EPS) && month < MAX_MONTHS) {
     month++;
-    let monthInterest = 0;
 
-    // Step 1: Accrue interest
-    for (const account of accounts) {
-      if (account.balance <= 0.01) continue;
-      const interest = monthlyInterest(account.balance, account.interestRate);
-      account.balance = round2(account.balance + interest);
-      monthInterest = round2(monthInterest + interest);
-      totalInterestPaid = round2(totalInterestPaid + interest);
-      interestByDebt[account.id] = round2((interestByDebt[account.id] ?? 0) + interest);
+    if (month > 1 && month % 12 === 1) {
+      adjustVariableRates(accounts);
     }
 
-    // Step 2: Pay minimums
+    let monthInterest = 0;
+
+    for (const account of accounts) {
+      if (account.balance <= BALANCE_EPS) continue;
+      let interest = monthlyInterest(account.balance, account.interestRate);
+      if (!isFinite(interest)) interest = 0;
+      account.balance = round2(Math.max(0, safeNum(account.balance) + interest));
+      monthInterest = round2(monthInterest + interest);
+      totalInterestPaid = round2(totalInterestPaid + interest);
+      interestByDebt[account.id] = round2(safeNum(interestByDebt[account.id] ?? 0) + interest);
+    }
+
     let minPaid = 0;
     for (const account of accounts) {
-      if (account.balance <= 0.01) continue;
-      const payment = round2(Math.min(account.minimumPayment, account.balance));
-      account.balance = round2(account.balance - payment);
+      if (account.balance <= BALANCE_EPS) continue;
+      let payment = round2(Math.min(account.minimumPayment, account.balance));
+      if (!isFinite(payment)) payment = 0;
+      payment = Math.max(0, Math.min(payment, safeNum(account.balance)));
+      account.balance = round2(Math.max(0, safeNum(account.balance) - payment));
       minPaid = round2(minPaid + payment);
-      if (account.balance < 0.01) {
-        rollingExtra = round2(rollingExtra + account.minimumPayment);
+      if (account.balance < BALANCE_EPS) {
         if (!payoffOrder.includes(account.id)) {
           payoffOrder.push(account.id);
           debtPayoffMonths[account.id] = month;
@@ -184,17 +223,20 @@ const simulatePayoff = (
       }
     }
 
-    // Step 3: Apply extra to priority target
-    const prioritized = getSortedPriority(accounts, strategy, month, customOrder);
-    let remainingExtra = rollingExtra;
+    const extraBudget = round2(Math.max(0, safeNum(input.extraMonthlyPayment)));
+    let remainingExtra = extraBudget;
+    if (!isFinite(remainingExtra)) remainingExtra = 0;
 
+    const prioritized = getSortedPriority(accounts, strategy, month, customOrder);
     for (const target of prioritized) {
-      if (remainingExtra <= 0) break;
-      const payment = round2(Math.min(remainingExtra, target.balance));
-      target.balance = round2(target.balance - payment);
-      remainingExtra = round2(remainingExtra - payment);
-      if (target.balance < 0.01) {
-        rollingExtra = round2(rollingExtra + target.minimumPayment);
+      if (remainingExtra <= BALANCE_EPS) break;
+      let payment = round2(Math.min(remainingExtra, Math.max(0, safeNum(target.balance))));
+      if (!isFinite(payment)) payment = 0;
+      payment = Math.max(0, Math.min(payment, safeNum(target.balance)));
+      target.balance = round2(Math.max(0, safeNum(target.balance) - payment));
+      remainingExtra = round2(Math.max(0, remainingExtra - payment));
+      if (!isFinite(remainingExtra)) remainingExtra = 0;
+      if (target.balance < BALANCE_EPS) {
         if (!payoffOrder.includes(target.id)) {
           payoffOrder.push(target.id);
           debtPayoffMonths[target.id] = month;
@@ -203,53 +245,103 @@ const simulatePayoff = (
       }
     }
 
-    totalPaid = round2(totalPaid + minPaid + Math.min(rollingExtra, rollingExtra));
+    const extraApplied = round2(extraBudget - remainingExtra);
+    totalPaid = round2(totalPaid + minPaid + extraApplied);
 
-    const currentTotal = round2(accounts.reduce((s, a) => s + a.balance, 0));
-    const monthPrincipal = round2(
-      monthInterest > 0 ? minPaid - monthInterest + rollingExtra : minPaid + rollingExtra,
-    );
+    let currentTotal = round2(accounts.reduce((s, a) => s + a.balance, 0));
+    if (!isFinite(currentTotal)) currentTotal = 0;
+    let totalPaymentThisMonth = round2(minPaid + extraApplied);
+    if (!isFinite(totalPaymentThisMonth)) totalPaymentThisMonth = 0;
+    let monthPrincipal = round2(Math.max(0, totalPaymentThisMonth - monthInterest));
+    if (!isFinite(monthPrincipal)) monthPrincipal = 0;
 
     const accountBalances: Record<string, number> = {};
-    for (const a of accounts) accountBalances[a.id] = round2(a.balance);
+    for (const a of accounts) accountBalances[a.id] = round2(Math.max(0, a.balance));
 
     timeline.push({
       month,
-      totalBalance: currentTotal,
+      totalBalance: safeNum(currentTotal),
       interestPaid: round2(monthInterest),
       principalPaid: round2(monthPrincipal),
       accounts: accountBalances,
     });
-  }
 
-  for (const account of accounts) {
-    if (!payoffOrder.includes(account.id)) {
-      payoffOrder.push(account.id);
-      debtPayoffMonths[account.id] = month;
+    const negativeAmortMonth = totalPaymentThisMonth < monthInterest;
+    const balanceGrowing = currentTotal > previousBalance + BALANCE_EPS;
+    if (negativeAmortMonth) {
+      growthMonths++;
+    } else {
+      growthMonths = 0;
+    }
+    previousBalance = currentTotal;
+
+    if (growthMonths >= GROWTH_THRESHOLD) {
+      brokeForUnpayable = true;
+      break;
     }
   }
 
-  // Project calendar payoff date
-  const payoffDate = new Date();
-  payoffDate.setMonth(payoffDate.getMonth() + month);
-  const projectedPayoffDate = payoffDate.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-  });
+  const remainingDebt = accounts.some((a) => a.balance > BALANCE_EPS);
+  const hitCap = month >= MAX_MONTHS && remainingDebt;
+  const isUnpayable = brokeForUnpayable || hitCap;
+
+  let projectedPayoffDate = '';
+  let finalTimeline = timeline;
+  let finalTotalMonths = month;
+  const finalPayoffOrder = [...payoffOrder];
+  const finalDebtPayoffMonths = { ...debtPayoffMonths };
+
+  if (isUnpayable) {
+    finalTotalMonths = 0;
+    projectedPayoffDate = '';
+  } else {
+    const payoffDate = new Date();
+    payoffDate.setMonth(payoffDate.getMonth() + month);
+    projectedPayoffDate = payoffDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+    });
+
+    for (const account of accounts) {
+      if (!finalPayoffOrder.includes(account.id)) {
+        finalPayoffOrder.push(account.id);
+        finalDebtPayoffMonths[account.id] = month;
+      }
+    }
+  }
 
   return {
     strategy,
-    totalMonths: month,
-    totalPaid: round2(totalPaid),
-    totalInterestPaid: round2(totalInterestPaid),
-    timeline,
-    payoffOrder,
+    totalMonths: finalTotalMonths,
+    totalPaid: round2(Math.max(0, totalPaid)),
+    totalInterestPaid: round2(Math.max(0, totalInterestPaid)),
+    timeline: finalTimeline,
+    payoffOrder: finalPayoffOrder,
     interestSaved: 0,
     monthsSaved: 0,
-    debtPayoffMonths,
+    isUnpayable,
+    debtPayoffMonths: finalDebtPayoffMonths,
     interestByDebt,
     projectedPayoffDate,
     weightedAverageRate,
+  };
+};
+
+// ─── Baseline (same simulation, extra = 0) ───────────────────
+
+const calcMinimumOnlyBaseline = (
+  debts: DebtAccount[],
+): { months: number; totalInterest: number; interestByDebt: Record<string, number>; isUnpayable: boolean } => {
+  const result = simulatePayoff({
+    debts: debts.map((d) => ({ ...d })),
+    extraMonthlyPayment: 0,
+    strategy: 'avalanche',
+  });
+  return {
+    months: result.isUnpayable ? 0 : result.totalMonths,
+    totalInterest: round2(Math.max(0, result.totalInterestPaid)),
+    interestByDebt: result.interestByDebt,
+    isUnpayable: result.isUnpayable,
   };
 };
 
@@ -262,23 +354,40 @@ export const calculateDebtPayoff = (
   snowball: PayoffResultV2;
   avalanche: PayoffResultV2;
   hybrid: PayoffResultV2;
-  baseline: { months: number; totalInterest: number; interestByDebt: Record<string, number> };
+  baseline: { months: number; totalInterest: number; interestByDebt: Record<string, number>; isUnpayable: boolean };
 } => {
   const baseline = calcMinimumOnlyBaseline(input.debts);
 
-  const runStrategy = (strategy: PayoffStrategy): PayoffResultV2 => {
-    const result = simulatePayoff({ ...input, strategy }, customOrder);
+  const snowballResult = simulatePayoff({ ...input, strategy: 'snowball' }, customOrder);
+  const avalancheResult = simulatePayoff({ ...input, strategy: 'avalanche' }, customOrder);
+  const hybridResult = simulatePayoff({ ...input, strategy: 'hybrid' }, customOrder);
+
+  const maxInterest = Math.max(
+    safeNum(snowballResult.totalInterestPaid),
+    safeNum(avalancheResult.totalInterestPaid),
+    safeNum(hybridResult.totalInterestPaid),
+  );
+  const maxMonths = Math.max(
+    safeNum(snowballResult.totalMonths),
+    safeNum(avalancheResult.totalMonths),
+    safeNum(hybridResult.totalMonths),
+  );
+
+  const runStrategy = (result: PayoffResultV2): PayoffResultV2 => {
+    const resOk = !result.isUnpayable && result.totalMonths > 0;
     return {
       ...result,
-      interestSaved: round2(baseline.totalInterest - result.totalInterestPaid),
-      monthsSaved: Math.max(0, baseline.months - result.totalMonths),
+      interestSaved: resOk
+        ? round2(Math.max(0, maxInterest - safeNum(result.totalInterestPaid)))
+        : 0,
+      monthsSaved: resOk ? Math.max(0, maxMonths - safeNum(result.totalMonths)) : 0,
     };
   };
 
   return {
-    snowball: runStrategy('snowball'),
-    avalanche: runStrategy('avalanche'),
-    hybrid: runStrategy('hybrid'),
+    snowball: runStrategy(snowballResult),
+    avalanche: runStrategy(avalancheResult),
+    hybrid: runStrategy(hybridResult),
     baseline,
   };
 };
@@ -303,14 +412,16 @@ export const calculateDTI = (
   monthlyHousingCost: number,
   debts: DebtAccount[],
 ): DTIResult => {
-  const totalDebtPayments = debts.reduce((s, d) => s + d.minimumPayment, 0);
-  const totalMonthlyObligations = monthlyHousingCost + totalDebtPayments;
+  const income = Math.max(0, safeNum(monthlyGrossIncome));
+  const totalDebtPayments = debts.reduce((s, d) => s + safeNum(d.minimumPayment), 0);
+  const totalMonthlyObligations = safeNum(monthlyHousingCost) + totalDebtPayments;
 
-  const frontEndDTI = round2((monthlyHousingCost / monthlyGrossIncome) * 100);
-  const backEndDTI = round2((totalMonthlyObligations / monthlyGrossIncome) * 100);
+  const frontEndDTI =
+    income > 0 ? round2((safeNum(monthlyHousingCost) / income) * 100) : 0;
+  const backEndDTI =
+    income > 0 ? round2((totalMonthlyObligations / income) * 100) : 0;
 
-  // Standard lender thresholds (28/36 rule)
-  const maxBackEnd = monthlyGrossIncome * 0.43; // FHA max
+  const maxBackEnd = income * 0.43;
   const additionalCapacity = round2(Math.max(0, maxBackEnd - totalMonthlyObligations));
 
   let rating: DTIResult['rating'];
@@ -365,11 +476,15 @@ export const calculateConsolidation = (
   consolidationTermMonths: number,
   consolidationFeePercent: number = 0,
 ): ConsolidationResult => {
-  const totalBalance = round2(debts.reduce((s, d) => s + d.balance, 0));
+  let totalBalance = round2(debts.reduce((s, d) => s + d.balance, 0));
+  if (!isFinite(totalBalance)) totalBalance = 0;
   const currentMonthlyTotal = round2(debts.reduce((s, d) => s + d.minimumPayment, 0));
-  const currentWeightedRate = round2(
-    debts.reduce((s, d) => s + d.interestRate * (d.balance / totalBalance), 0),
-  );
+  const currentWeightedRate = (() => {
+    const w = round2(
+      debts.reduce((s, d) => s + safeNum(d.interestRate) * safeDivide(d.balance, totalBalance), 0),
+    );
+    return isFinite(w) ? w : 0;
+  })();
 
   // Current path: minimum payments only
   const baseline = calcMinimumOnlyBaseline(debts);
@@ -432,25 +547,33 @@ export const whatIfWindfall = (
   // Apply windfall to highest-rate debt first
   const modifiedDebts = input.debts
     .map((d) => ({ ...d }))
-    .sort((a, b) => b.interestRate - a.interestRate);
+    .sort((a, b) => safeNum(b.interestRate) - safeNum(a.interestRate));
 
-  let remaining = windfallAmount;
+  let remaining = safeNum(windfallAmount);
   for (const debt of modifiedDebts) {
-    const apply = Math.min(remaining, debt.balance);
-    debt.balance = round2(debt.balance - apply);
+    let apply = Math.min(remaining, safeNum(debt.balance));
+    if (!isFinite(apply)) apply = 0;
+    debt.balance = round2(Math.max(0, safeNum(debt.balance) - apply));
     remaining = round2(remaining - apply);
+    if (!isFinite(remaining)) remaining = 0;
     if (remaining <= 0) break;
   }
 
   const baseline = calcMinimumOnlyBaseline(input.debts);
   const result = simulatePayoff({ ...input, debts: modifiedDebts, strategy });
 
+  const baseOk = !baseline.isUnpayable && baseline.months > 0;
+  const resOk = !result.isUnpayable && result.totalMonths > 0;
+
   return {
     label: `$${windfallAmount.toLocaleString()} windfall`,
     totalMonths: result.totalMonths,
     totalInterest: result.totalInterestPaid,
-    interestSaved: round2(baseline.totalInterest - result.totalInterestPaid),
-    monthsSaved: Math.max(0, baseline.months - result.totalMonths),
+    interestSaved:
+      baseOk && resOk
+        ? round2(Math.max(0, baseline.totalInterest - result.totalInterestPaid))
+        : 0,
+    monthsSaved: baseOk && resOk ? Math.max(0, baseline.months - result.totalMonths) : 0,
   };
 };
 
@@ -464,14 +587,18 @@ export const calcMinExtraForTarget = (
   strategy: PayoffStrategy = 'avalanche',
 ): number => {
   let low = 0;
-  let high = debts.reduce((s, d) => s + d.balance, 0);
+  const sumBal = debts.reduce((s, d) => s + safeNum(d.balance), 0);
+  let high = round2(Math.max(sumBal * 2 + 1000, 1000));
 
-  // Binary search for the minimum extra payment
   for (let i = 0; i < 50; i++) {
     const mid = round2((low + high) / 2);
-    const input: DebtPayoffInput = { debts, strategy, extraMonthlyPayment: mid };
+    const input: DebtPayoffInput = {
+      debts: debts.map((d) => ({ ...d })),
+      strategy,
+      extraMonthlyPayment: mid,
+    };
     const result = simulatePayoff(input);
-    if (result.totalMonths <= targetMonths) {
+    if (!result.isUnpayable && result.totalMonths > 0 && result.totalMonths <= targetMonths) {
       high = mid;
     } else {
       low = mid;
@@ -479,7 +606,7 @@ export const calcMinExtraForTarget = (
     if (high - low < 1) break;
   }
 
-  return Math.ceil(high);
+  return Math.ceil(Math.max(0, safeNum(high)));
 };
 
 // ─── Formatters (kept for backward compatibility) ─────────────
@@ -491,17 +618,52 @@ export const formatPayoffDuration = (months: number): string => {
   if (remainingMonths === 0) return `${years} year${years !== 1 ? 's' : ''}`;
   return `${years} yr ${remainingMonths} mo`;
 };
+export interface GetBestStrategyResult {
+  strategy: PayoffStrategy | null;
+  isEqualStrategy: boolean;
+}
+
+const STRATEGY_EPS = 0.01;
 
 export const getBestStrategy = (
   snowball: PayoffResult,
   avalanche: PayoffResult,
   hybrid: PayoffResult,
-): PayoffStrategy => {
-  const interestMap: [PayoffStrategy, number][] = [
-    ['snowball', snowball.totalInterestPaid],
-    ['avalanche', avalanche.totalInterestPaid],
-    ['hybrid', hybrid.totalInterestPaid],
+): GetBestStrategyResult => {
+  const all = [
+    { key: 'snowball' as PayoffStrategy, data: snowball },
+    { key: 'avalanche' as PayoffStrategy, data: avalanche },
+    { key: 'hybrid' as PayoffStrategy, data: hybrid },
   ];
-  interestMap.sort((a, b) => a[1] - b[1]);
-  return interestMap[0]?.[0] ?? 'avalanche';
+
+  const allPayable = all.every((s) => !s.data.isUnpayable);
+  if (!allPayable) {
+    const payable = all.filter((s) => !s.data.isUnpayable);
+    if (payable.length === 0) return { strategy: null, isEqualStrategy: false };
+    payable.sort((a, b) => {
+      const di = a.data.totalInterestPaid - b.data.totalInterestPaid;
+      if (Math.abs(di) >= STRATEGY_EPS) return di;
+      return a.data.totalMonths - b.data.totalMonths;
+    });
+    return { strategy: payable[0]!.key, isEqualStrategy: false };
+  }
+
+  const first = all[0]!.data;
+  const allEqual = all.every(
+    (s) =>
+      Math.abs(s.data.totalInterestPaid - first.totalInterestPaid) < STRATEGY_EPS &&
+      Math.abs(s.data.totalMonths - first.totalMonths) < STRATEGY_EPS,
+  );
+
+  if (allEqual) {
+    return { strategy: 'avalanche', isEqualStrategy: true };
+  }
+
+  const sorted = [...all];
+  sorted.sort((a, b) => {
+    const di = a.data.totalInterestPaid - b.data.totalInterestPaid;
+    if (Math.abs(di) >= STRATEGY_EPS) return di;
+    return a.data.totalMonths - b.data.totalMonths;
+  });
+  return { strategy: sorted[0]!.key, isEqualStrategy: false };
 };

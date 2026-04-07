@@ -17,6 +17,9 @@ import type { CreditCardInput, CreditCardResult, CreditCardSnapshot } from '@/ty
 
 const round2 = (n: number): number => Math.round((n + Number.EPSILON) * 100) / 100;
 const MAX_MONTHS = 600;
+const BALANCE_EPS = 0.01;
+
+const safeNum = (n: number): number => (isFinite(n) ? n : 0);
 
 // ─── Core Helpers ─────────────────────────────────────────────
 
@@ -25,11 +28,19 @@ const calcMinimumPayment = (
   percentOfBalance: number,
   floor: number,
 ): number => {
-  if (balance <= 0) return 0;
-  const calculated = round2(balance * (percentOfBalance / 100));
-  const payment = Math.max(floor, calculated);
-  return round2(Math.min(payment, balance));
+  const b = Math.max(0, safeNum(balance));
+  if (b <= 0) return 0;
+  const calculated = round2(b * (safeNum(percentOfBalance) / 100));
+  const payment = Math.max(safeNum(floor), calculated);
+  return round2(Math.min(payment, b));
 };
+
+interface CreditCardSimResult {
+  schedule: CreditCardSnapshot[];
+  unpayable: boolean;
+  totalPaid: number;
+  totalInterest: number;
+}
 
 const simulatePayoff = (
   balance: number,
@@ -38,36 +49,68 @@ const simulatePayoff = (
   minFloor: number,
   extraPayment: number,
   useFixedPayment: boolean,
-): CreditCardSnapshot[] => {
-  const monthlyRate = apr / 100 / 12;
-  let currentBalance = round2(balance);
+): CreditCardSimResult => {
+  const monthlyRate = safeNum(apr) / 100 / 12;
+  let currentBalance = round2(Math.max(0, safeNum(balance)));
   const schedule: CreditCardSnapshot[] = [];
   const initialMin = calcMinimumPayment(currentBalance, minPercent, minFloor);
-  const fixedPayment = round2(initialMin + extraPayment);
+  const extra = Math.max(0, safeNum(extraPayment));
+  const fixedPayment = round2(initialMin + extra);
   let month = 0;
+  let totalPaidAcc = 0;
+  let totalInterestAcc = 0;
+  let previousBalance = currentBalance;
+  let growthMonths = 0;
 
-  while (currentBalance > 0.01 && month < MAX_MONTHS) {
+  while (currentBalance > BALANCE_EPS && month < MAX_MONTHS) {
     month++;
-    const interestCharge = round2(currentBalance * monthlyRate);
-    const balanceWithInterest = round2(currentBalance + interestCharge);
+    const interestCharge = round2(Math.max(0, currentBalance * monthlyRate));
+    const balanceWithInterest = round2(Math.max(0, currentBalance + interestCharge));
 
     let payment: number;
     if (useFixedPayment) {
       payment = round2(Math.min(fixedPayment, balanceWithInterest));
     } else {
       payment = calcMinimumPayment(balanceWithInterest, minPercent, minFloor);
-      if (month === 1 && extraPayment > 0) {
-        payment = round2(payment + extraPayment);
+      if (extra > 0) {
+        payment = round2(Math.min(payment + extra, balanceWithInterest));
       }
     }
+    if (!isFinite(payment) || payment < 0) payment = 0;
+
+    totalPaidAcc = round2(totalPaidAcc + payment);
+    totalInterestAcc = round2(totalInterestAcc + interestCharge);
 
     const principalPaid = round2(Math.max(0, payment - interestCharge));
     currentBalance = round2(Math.max(0, balanceWithInterest - payment));
 
     schedule.push({ month, balance: currentBalance, payment, interestCharge, principalPaid });
+
+    const negativeAmort = payment < interestCharge;
+    const balanceGrowing = currentBalance > previousBalance + BALANCE_EPS;
+    if (negativeAmort || balanceGrowing) {
+      growthMonths++;
+    } else {
+      growthMonths = 0;
+    }
+    previousBalance = currentBalance;
+
+    if (growthMonths >= 6) {
+      return {
+        schedule: [],
+        unpayable: true,
+        totalPaid: round2(totalPaidAcc),
+        totalInterest: round2(totalInterestAcc),
+      };
+    }
   }
 
-  return schedule;
+  return {
+    schedule,
+    unpayable: false,
+    totalPaid: round2(schedule.reduce((t, m) => t + m.payment, 0)),
+    totalInterest: round2(schedule.reduce((t, m) => t + m.interestCharge, 0)),
+  };
 };
 
 // ─── Core Calculator (v1 compatible) ──────────────────────────
@@ -75,32 +118,38 @@ const simulatePayoff = (
 export const calculateCreditCardPayoff = (input: CreditCardInput): CreditCardResult => {
   const { balance, apr, minimumPaymentPercent, minimumPaymentFloor, fixedExtraPayment } = input;
 
-  const minimumSchedule = simulatePayoff(
+  const minimumRes = simulatePayoff(
     balance, apr, minimumPaymentPercent, minimumPaymentFloor, 0, false,
   );
-  const optimizedSchedule = simulatePayoff(
+  const optimizedRes = simulatePayoff(
     balance, apr, minimumPaymentPercent, minimumPaymentFloor, fixedExtraPayment, true,
   );
 
-  const sumPayments = (s: CreditCardSnapshot[]) => round2(s.reduce((t, m) => t + m.payment, 0));
-  const sumInterest = (s: CreditCardSnapshot[]) =>
-    round2(s.reduce((t, m) => t + m.interestCharge, 0));
+  const minimumOnlyMonths = minimumRes.unpayable ? 0 : minimumRes.schedule.length;
+  const optimizedMonths = optimizedRes.unpayable ? 0 : optimizedRes.schedule.length;
+  const minimumOnlyTotalPaid = minimumRes.totalPaid;
+  const minimumOnlyInterestPaid = minimumRes.totalInterest;
+  const optimizedTotalPaid = optimizedRes.totalPaid;
+  const optimizedInterestPaid = optimizedRes.totalInterest;
 
-  const minimumOnlyTotalPaid = sumPayments(minimumSchedule);
-  const minimumOnlyInterestPaid = sumInterest(minimumSchedule);
-  const optimizedTotalPaid = sumPayments(optimizedSchedule);
-  const optimizedInterestPaid = sumInterest(optimizedSchedule);
+  const minOk = !minimumRes.unpayable;
+  const optOk = !optimizedRes.unpayable;
 
   return {
-    minimumOnlyMonths: minimumSchedule.length,
+    minimumOnlyMonths,
     minimumOnlyTotalPaid,
     minimumOnlyInterestPaid,
-    optimizedMonths: optimizedSchedule.length,
+    optimizedMonths,
     optimizedTotalPaid,
     optimizedInterestPaid,
-    interestSaved: round2(minimumOnlyInterestPaid - optimizedInterestPaid),
-    monthsSaved: minimumSchedule.length - optimizedSchedule.length,
-    monthlySchedule: optimizedSchedule,
+    interestSaved:
+      minOk && optOk
+        ? round2(Math.max(0, minimumOnlyInterestPaid - optimizedInterestPaid))
+        : 0,
+    monthsSaved: minOk && optOk ? Math.max(0, minimumOnlyMonths - optimizedMonths) : 0,
+    monthlySchedule: optimizedRes.unpayable ? [] : optimizedRes.schedule,
+    minimumOnlyUnpayable: minimumRes.unpayable,
+    optimizedUnpayable: optimizedRes.unpayable,
   };
 };
 
@@ -371,16 +420,17 @@ export const calculatePurchaseTrueCost = (
   minimumPaymentPercent: number = 2,
   minimumPaymentFloor: number = 25,
 ): PurchaseCostResult => {
-  const schedule = simulatePayoff(purchasePrice, apr, minimumPaymentPercent, minimumPaymentFloor, 0, false);
-  const totalCost = round2(schedule.reduce((s, m) => s + m.payment, 0));
-  const interestCost = round2(totalCost - purchasePrice);
+  const sim = simulatePayoff(purchasePrice, apr, minimumPaymentPercent, minimumPaymentFloor, 0, false);
+  const totalCost = sim.unpayable ? sim.totalPaid : round2(sim.schedule.reduce((s, m) => s + m.payment, 0));
+  const interestCost = sim.unpayable ? sim.totalInterest : round2(totalCost - purchasePrice);
 
   return {
     purchasePrice,
     totalCost,
     interestCost,
-    monthsToPayOff: schedule.length,
-    markupPercent: round2((interestCost / purchasePrice) * 100),
+    monthsToPayOff: sim.unpayable ? 0 : sim.schedule.length,
+    markupPercent:
+      purchasePrice > 0 ? round2((interestCost / purchasePrice) * 100) : 0,
   };
 };
 

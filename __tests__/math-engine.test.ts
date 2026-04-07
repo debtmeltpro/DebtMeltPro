@@ -81,8 +81,19 @@ describe('Debt Payoff Calculator', () => {
       extraMonthlyPayment: 200,
     });
 
-    expect(result.avalanche.interestSaved).toBeGreaterThan(0);
-    expect(result.snowball.interestSaved).toBeGreaterThan(0);
+    const maxI = Math.max(
+      result.snowball.totalInterestPaid,
+      result.avalanche.totalInterestPaid,
+      result.hybrid.totalInterestPaid,
+    );
+    expect(result.snowball.interestSaved).toBeCloseTo(
+      Math.max(0, maxI - result.snowball.totalInterestPaid),
+      1,
+    );
+    expect(result.avalanche.interestSaved).toBeCloseTo(
+      Math.max(0, maxI - result.avalanche.totalInterestPaid),
+      1,
+    );
   });
 });
 
@@ -120,6 +131,7 @@ describe('getBestStrategy', () => {
       payoffOrder: [],
       interestSaved: 0,
       monthsSaved: 0,
+      isUnpayable: false,
     });
 
     const best = getBestStrategy(
@@ -127,7 +139,46 @@ describe('getBestStrategy', () => {
       mockResult(1200),
       mockResult(1350),
     );
-    expect(best).toBe('avalanche');
+    expect(best.strategy).toBe('avalanche');
+    expect(best.isEqualStrategy).toBe(false);
+  });
+
+  it('should default to avalanche with isEqualStrategy when all outcomes match', () => {
+    const mockResult = (interest: number, months: number) => ({
+      strategy: 'avalanche' as const,
+      totalMonths: months,
+      totalPaid: 10000,
+      totalInterestPaid: interest,
+      timeline: [],
+      payoffOrder: [],
+      interestSaved: 0,
+      monthsSaved: 0,
+      isUnpayable: false,
+    });
+    const r = mockResult(500, 24);
+    const best = getBestStrategy(r, r, r);
+    expect(best.strategy).toBe('avalanche');
+    expect(best.isEqualStrategy).toBe(true);
+  });
+
+  it('should pick faster payoff when interest ties within tolerance', () => {
+    const base = {
+      strategy: 'avalanche' as const,
+      totalPaid: 10000,
+      totalInterestPaid: 1000,
+      timeline: [],
+      payoffOrder: [],
+      interestSaved: 0,
+      monthsSaved: 0,
+      isUnpayable: false,
+    };
+    const best = getBestStrategy(
+      { ...base, strategy: 'snowball' as const, totalMonths: 30 },
+      { ...base, strategy: 'avalanche' as const, totalMonths: 18 },
+      { ...base, strategy: 'hybrid' as const, totalMonths: 24 },
+    );
+    expect(best.strategy).toBe('avalanche');
+    expect(best.isEqualStrategy).toBe(false);
   });
 });
 

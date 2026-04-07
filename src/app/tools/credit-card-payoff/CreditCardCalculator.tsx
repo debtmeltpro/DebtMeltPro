@@ -35,18 +35,23 @@ export function CreditCardCalculator() {
     try { return calculateCreditCardPayoff(parsed.data); } catch { return null; }
   }, [inputs]);
 
-  const chartData = results ? [
-    {
-      name: 'Minimum Only',
-      'Interest Paid': results.minimumOnlyInterestPaid,
-      'Total Paid':    results.minimumOnlyTotalPaid,
-    },
-    {
-      name: 'Optimized',
-      'Interest Paid': results.optimizedInterestPaid,
-      'Total Paid':    results.optimizedTotalPaid,
-    },
-  ] : [];
+  const chartData =
+    results &&
+    !results.minimumOnlyUnpayable &&
+    !results.optimizedUnpayable
+      ? [
+          {
+            name: 'Minimum Only',
+            'Interest Paid': results.minimumOnlyInterestPaid,
+            'Total Paid': results.minimumOnlyTotalPaid,
+          },
+          {
+            name: 'Optimized',
+            'Interest Paid': results.optimizedInterestPaid,
+            'Total Paid': results.optimizedTotalPaid,
+          },
+        ]
+      : [];
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -87,7 +92,7 @@ export function CreditCardCalculator() {
           </label>
           <div className="flex items-center gap-1.5">
             <input id="cc-apr" type="number" value={inputs.apr}
-              min={0.1} max={36} step={0.1}
+              min={0} max={36} step={0.1}
               onChange={(e) => update('apr', parseFloat(e.target.value) || 0)}
               className="input-financial flex-1 text-sm" />
             <span className="text-slate-500 text-sm">%</span>
@@ -144,9 +149,24 @@ export function CreditCardCalculator() {
           <motion.div key="r" className="xl:col-span-2 space-y-5"
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
 
+            {(results.minimumOnlyUnpayable || results.optimizedUnpayable) && (
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700">
+                <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-amber-900 dark:text-amber-200 text-sm">
+                    Debt will continue to grow — no payoff possible
+                  </p>
+                  <p className="text-xs text-amber-800 dark:text-amber-300 mt-1">
+                    Payments are not enough to offset interest (or the balance grows month over month).
+                    Increase your payment or lower the APR to see a real payoff path.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Shock Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 border-l-4 border-l-red-500">
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 border-l-4 border-l-red-500">
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
                   <div>
@@ -154,10 +174,12 @@ export function CreditCardCalculator() {
                       Minimum Only (The Trap)
                     </p>
                     <p className="text-2xl font-bold tabular-nums text-slate-900 dark:text-white">
-                      {formatCurrency(results.minimumOnlyInterestPaid)}
+                      {results.minimumOnlyUnpayable ? '—' : formatCurrency(results.minimumOnlyInterestPaid)}
                     </p>
                     <p className="text-sm text-slate-500">
-                      interest paid over {formatDuration(results.minimumOnlyMonths)}
+                      {results.minimumOnlyUnpayable
+                        ? 'Not payable at this payment level'
+                        : `interest paid over ${formatDuration(results.minimumOnlyMonths)}`}
                     </p>
                     <p className="text-xs text-red-600 dark:text-red-400 mt-1 font-medium">
                       Total Paid: {formatCurrency(results.minimumOnlyTotalPaid)}
@@ -174,10 +196,12 @@ export function CreditCardCalculator() {
                       Fixed Payment (Optimized)
                     </p>
                     <p className="text-2xl font-bold tabular-nums text-slate-900 dark:text-white">
-                      {formatCurrency(results.optimizedInterestPaid)}
+                      {results.optimizedUnpayable ? '—' : formatCurrency(results.optimizedInterestPaid)}
                     </p>
                     <p className="text-sm text-slate-500">
-                      interest paid over {formatDuration(results.optimizedMonths)}
+                      {results.optimizedUnpayable
+                        ? 'Not payable at this payment level'
+                        : `interest paid over ${formatDuration(results.optimizedMonths)}`}
                     </p>
                     <p className="text-xs text-green-600 dark:text-green-400 mt-1 font-medium">
                       Total Paid: {formatCurrency(results.optimizedTotalPaid)}
@@ -190,10 +214,14 @@ export function CreditCardCalculator() {
             {/* Savings Banner */}
             <div className="rounded-xl p-5 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 text-center">
               <p className="text-3xl font-bold tabular-nums text-green-700 dark:text-green-300">
-                {formatCurrency(results.interestSaved)}
+                {results.minimumOnlyUnpayable || results.optimizedUnpayable
+                  ? '—'
+                  : formatCurrency(results.interestSaved)}
               </p>
               <p className="text-slate-600 dark:text-slate-400 text-sm">
-                interest saved · {formatDuration(results.monthsSaved)} faster payoff
+                {results.minimumOnlyUnpayable || results.optimizedUnpayable
+                  ? 'Savings not available until payments exceed interest'
+                  : `interest saved · ${formatDuration(results.monthsSaved)} faster payoff`}
               </p>
             </div>
 
@@ -202,25 +230,32 @@ export function CreditCardCalculator() {
               <h3 className="font-semibold text-slate-900 dark:text-white mb-4">
                 Side-by-Side Comparison
               </h3>
-              <div style={{ minHeight: 260 }}>
-                <ResponsiveContainer width="100%" height={260}>
-                  <BarChart data={chartData} margin={{ top: 5, right: 5, left: 0, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
-                    <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#94a3b8' }}
-                      axisLine={false} tickLine={false} />
-                    <YAxis tickFormatter={(v) => `${currencySymbol}${(v / 1000).toFixed(0)}k`}
-                      tick={{ fontSize: 11, fill: '#94a3b8' }}
-                      axisLine={false} tickLine={false} width={60} />
-                    <Tooltip
-                      formatter={(v: number, name: string) => [formatCurrency(v), name]}
-                      contentStyle={{ borderRadius: 10, border: '1px solid #e2e8f0' }}
-                    />
-                    <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
-                    <Bar dataKey="Interest Paid" fill="#f43f5e" radius={[4, 4, 0, 0]} />
-                    <Bar dataKey="Total Paid"    fill="#22c55e" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+              {chartData.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center text-sm text-slate-500">
+                  <AlertTriangle className="w-10 h-10 text-amber-400 mb-3" />
+                  <p>Chart hidden when a scenario is unpayable (debt keeps growing).</p>
+                </div>
+              ) : (
+                <div className="w-full overflow-hidden" style={{ minHeight: 260 }}>
+                  <ResponsiveContainer width="100%" height={260}>
+                    <BarChart data={chartData} margin={{ top: 5, right: 5, left: -5, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" />
+                      <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#94a3b8' }}
+                        axisLine={false} tickLine={false} />
+                      <YAxis tickFormatter={(v) => `${currencySymbol}${(v / 1000).toFixed(0)}k`}
+                        tick={{ fontSize: 10, fill: '#94a3b8' }}
+                        axisLine={false} tickLine={false} width={50} />
+                      <Tooltip
+                        formatter={(v: number, name: string) => [formatCurrency(v), name]}
+                        contentStyle={{ borderRadius: 10, border: '1px solid #e2e8f0' }}
+                      />
+                      <Legend wrapperStyle={{ fontSize: 12, paddingTop: 12 }} />
+                      <Bar dataKey="Interest Paid" fill="#f43f5e" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="Total Paid"    fill="#22c55e" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
             </div>
 
             {/* Schedule Table */}
@@ -230,31 +265,35 @@ export function CreditCardCalculator() {
                   Optimized Payoff Schedule (First 12 Months)
                 </h3>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead className="bg-slate-50 dark:bg-slate-800/50">
-                    <tr>
-                      {['Month', 'Payment', 'Interest', 'Principal', 'Balance'].map((h) => (
-                        <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
-                          {h}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                    {results.monthlySchedule.slice(0, 12).map((row) => (
-                      <tr key={row.month}
-                        className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td className="px-4 py-2.5 tabular-nums text-slate-600 dark:text-slate-400">{row.month}</td>
-                        <td className="px-4 py-2.5 tabular-nums font-medium">{formatCurrency(row.payment)}</td>
-                        <td className="px-4 py-2.5 tabular-nums text-red-600 dark:text-red-400">{formatCurrency(row.interestCharge)}</td>
-                        <td className="px-4 py-2.5 tabular-nums text-green-600 dark:text-green-400">{formatCurrency(row.principalPaid)}</td>
-                        <td className="px-4 py-2.5 tabular-nums font-semibold">{formatCurrency(row.balance)}</td>
+              {results.optimizedUnpayable || results.monthlySchedule.length === 0 ? (
+                <p className="p-6 text-sm text-slate-500 text-center">No schedule — scenario is unpayable.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead className="bg-slate-50 dark:bg-slate-800/50">
+                      <tr>
+                        {['Month', 'Payment', 'Interest', 'Principal', 'Balance'].map((h) => (
+                          <th key={h} className="px-4 py-2.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                            {h}
+                          </th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                      {results.monthlySchedule.slice(0, 12).map((row) => (
+                        <tr key={row.month}
+                          className="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                          <td className="px-4 py-2.5 tabular-nums text-slate-600 dark:text-slate-400">{row.month}</td>
+                          <td className="px-4 py-2.5 tabular-nums font-medium">{formatCurrency(row.payment)}</td>
+                          <td className="px-4 py-2.5 tabular-nums text-red-600 dark:text-red-400">{formatCurrency(row.interestCharge)}</td>
+                          <td className="px-4 py-2.5 tabular-nums text-green-600 dark:text-green-400">{formatCurrency(row.principalPaid)}</td>
+                          <td className="px-4 py-2.5 tabular-nums font-semibold">{formatCurrency(row.balance)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

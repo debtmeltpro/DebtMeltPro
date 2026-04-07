@@ -27,6 +27,10 @@ export interface DebtAccount {
   interestRate: number;
   /** Minimum required monthly payment */
   minimumPayment: number;
+  /** Fixed or variable rate */
+  interestType?: 'fixed' | 'variable';
+  /** Annual rate adjustment for variable rates (e.g. 0.5 means +0.5%/yr) */
+  annualRateChangePercent?: number;
   /** Optional: account type for display hints */
   type?: 'credit_card' | 'student_loan' | 'auto_loan' | 'personal_loan' | 'medical' | 'other';
 }
@@ -59,6 +63,8 @@ export interface PayoffResult {
   interestSaved: number;
   /** Months saved vs minimum payments only */
   monthsSaved: number;
+  /** True when simulation hit MAX_MONTHS without full payoff (negative amortization) */
+  isUnpayable: boolean;
 }
 
 export interface DebtPayoffInput {
@@ -157,6 +163,8 @@ export interface CreditCardResult {
   interestSaved: number;
   monthsSaved: number;
   monthlySchedule: CreditCardSnapshot[];
+  minimumOnlyUnpayable?: boolean;
+  optimizedUnpayable?: boolean;
 }
 
 export interface CreditCardSnapshot {
