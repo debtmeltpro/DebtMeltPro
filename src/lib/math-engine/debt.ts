@@ -183,7 +183,6 @@ const simulatePayoff = (
   let totalInterestPaid = 0;
   let totalPaid = 0;
 
-  let previousBalance = totalBalance;
   let growthMonths = 0;
   let brokeForUnpayable = false;
 
@@ -272,8 +271,6 @@ const simulatePayoff = (
     } else {
       growthMonths = 0;
     }
-    previousBalance = currentTotal;
-
     if (growthMonths >= GROWTH_THRESHOLD) {
       brokeForUnpayable = true;
       break;
