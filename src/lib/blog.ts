@@ -23,12 +23,13 @@ export const BLOG_POSTS = [
   },
   {
     slug: 'minimum-payment-trap-credit-cards',
-    title: 'Minimum Payment Trap: How Credit Cards Keep You in Debt',
-    excerpt: 'Discover why paying only the minimum on your credit card costs you thousands in interest and learn the simple fix that cuts your payoff time in half.',
+    title: 'Credit Card Minimum Payment Trap: Why You Stay in Debt Forever',
+    excerpt: 'The minimum amount due on your credit card is a carefully designed trap. See the real ₹ math, the CIBIL impact, and how to escape in months instead of decades.',
+
     date: '2026-04-02',
     category: 'Debt Management',
     categorySlug: 'debt-management',
-    readTime: '6 min read',
+    readTime: '9 min read',
     keywords: ['minimum payment trap', 'credit card interest', 'credit card debt help'],
   },
   {
