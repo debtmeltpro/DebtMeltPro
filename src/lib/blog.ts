@@ -11,6 +11,16 @@
 // ============================================================
 
 export const BLOG_POSTS = [
+    {
+    slug: 'credit-card-debt-india',
+    title: 'Credit Card Debt in India: How to Pay It Off Fast (2026 Guide)',
+    excerpt: 'Drowning in credit card debt in India? Real ₹-based plan to clear it fast — avalanche vs snowball, a free calculator, and a step-by-step escape route.',
+    date: '2026-04-17',
+    category: 'Debt Management',
+    categorySlug: 'debt-management',
+    readTime: '11 min read',
+    keywords: ['credit card debt india', 'how to pay off credit card debt', 'how to clear credit card debt', 'best way to pay off credit card debt'],
+  },
   {
     slug: 'snowball-vs-avalanche-debt-payoff',
     title: 'Snowball vs Avalanche: Best Debt Payoff Method Compared',
