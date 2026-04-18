@@ -202,14 +202,14 @@ export function AdSlot({
   if (process.env.NODE_ENV === 'development' || !resolvedSlot) {
     return (
       <div ref={containerRef} className={cn('w-full flex flex-col items-center gap-2', className)}>
-        {resolvedShowLabel && (
+        {/* {resolvedShowLabel && (
           <p className="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-wide font-medium">
             Advertisement
           </p>
-        )}
-        <div className={boxClass} style={boxStyle}>
+        )} */}
+        {/* <div className={boxClass} style={boxStyle}>
           <AdPlaceholder size={size} />
-        </div>
+        </div> */}
       </div>
     );
   }
@@ -225,12 +225,12 @@ export function AdSlot({
         className,
       )}
     >
-      {resolvedShowLabel && (
+      {/* {resolvedShowLabel && (
         <p className="text-[10px] text-slate-400 dark:text-slate-600 uppercase tracking-wide font-medium">
           Advertisement
         </p>
-      )}
-      <div className={boxClass} style={boxStyle}>
+      )} */}
+      {/* <div className={boxClass} style={boxStyle}>
         {cookieConsent === true && isVisible && (
           <ins
             ref={adRef}
@@ -251,7 +251,7 @@ export function AdSlot({
             )}
           </div>
         ) : null}
-      </div>
+      </div> */}
     </div>
   );
 }
