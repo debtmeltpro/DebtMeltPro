@@ -45,7 +45,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
 export default function PromptsPage() {
   const viralPrompts = getViralPrompts(6);
   const faqSchema = generateFaqSchema(FAQ_DATA);
-
+/*
   const collectionSchema = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -62,7 +62,27 @@ export default function PromptsPage() {
       ratingCount: '1584',
     },
   };
-
+*/
+// CollectionPage schema. NOTE: aggregateRating intentionally removed —
+// it was fabricated and is NOT a valid property on CollectionPage for
+// Google's rich results (caused GSC "Invalid object type for field
+// '<parent_node>'" error). Do not re-add unless you have real,
+// verified reviews on an eligible type (Product, Service, etc.).
+const collectionSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Free AI Finance Prompts',
+  description: `${getPromptCount()} free finance prompts for ChatGPT, Claude, and Gemini.`,
+  url: `${SITE_URL}/prompts`,
+  publisher: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
+  numberOfItems: getPromptCount(),
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'DebtMeltPro',
+    url: SITE_URL,
+  },
+  inLanguage: 'en-US',
+};
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />

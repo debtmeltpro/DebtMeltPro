@@ -26,23 +26,31 @@ export function BlogArticle({
   intro, relatedToolSlug, faqs, children,
 }: BlogArticleProps) {
   const faqSchema = generateFaqSchema(faqs);
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: title,
-    datePublished: `${date}T00:00:00Z`,
-    dateModified: `${date}T00:00:00Z`,
-    author: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
-    publisher: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
-    mainEntityOfPage: `${SITE_URL}/blog/${slug}`,
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.7',
-      bestRating: '5',
-      worstRating: '1',
-      ratingCount: '1243',
+// Article schema. NOTE: aggregateRating removed — same reason as the
+// fake ratings already removed from layout.tsx and /prompts. Re-add
+// only with real, verified user reviews on an eligible schema type.
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  datePublished: `${date}T00:00:00Z`,
+  dateModified: `${date}T00:00:00Z`,
+  author: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
+  publisher: {
+    '@type': 'Organization',
+    name: 'DebtMeltPro',
+    url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/logo.png`,
     },
-  };
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `${SITE_URL}/blog/${slug}`,
+  },
+  inLanguage: 'en-US',
+};
 
   const relatedBlogPosts = BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 3);
   

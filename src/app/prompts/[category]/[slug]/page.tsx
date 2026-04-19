@@ -30,7 +30,7 @@ export default function PromptPage({ params }: Props) {
 
   const related = getRelatedPrompts(prompt.slug, 4);
   const howToSchema = generatePromptSchema(prompt);
-
+/*
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -50,7 +50,33 @@ export default function PromptPage({ params }: Props) {
     },
 
   };
-
+*/
+// Article schema. NOTE: aggregateRating removed — fabricated ratings on
+// an Article parent violate Google's structured data policy AND trigger
+// the "Invalid object type for field '<parent_node>'" GSC error.
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: prompt.title,
+  description: prompt.description,
+  datePublished: `${prompt.dateAdded}T00:00:00Z`,
+  dateModified: `${prompt.dateUpdated}T00:00:00Z`,
+  author: { '@type': 'Organization', name: 'DebtMeltPro', url: SITE_URL },
+  publisher: {
+    '@type': 'Organization',
+    name: 'DebtMeltPro',
+    url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: `${SITE_URL}/logo.png`,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': `${SITE_URL}/prompts/${params.category}/${params.slug}`,
+  },
+  inLanguage: 'en-US',
+};
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />

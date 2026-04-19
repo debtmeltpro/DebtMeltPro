@@ -232,8 +232,10 @@ export default function RootLayout({
         />
 
         {/* DNS prefetch for performance */}
+        {/* DNS prefetch for performance */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" />
+        {/* Ads temporarily disabled until AdSense approval — restore this line when re-enabling: */}
+        {/* <link rel="dns-prefetch" href="//pagead2.googlesyndication.com" /> */}
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
