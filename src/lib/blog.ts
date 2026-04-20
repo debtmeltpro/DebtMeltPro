@@ -11,7 +11,26 @@
 // ============================================================
 
 export const BLOG_POSTS = [
-    {
+  {
+    slug: 'debt-explained-india-guide',
+    title: 'Debt Explained: CIBIL Myths, Debt Funds & India vs US Debt (2026 Guide)',
+    excerpt:
+      'Debt explained in plain English for Indian borrowers — good debt vs bad debt, debt funds, debt vs equity, CIBIL score myths, and why Indian debt costs more than US debt.',
+    date: '2026-04-20',
+    category: 'Debt Management',
+    categorySlug: 'debt-management',
+    readTime: '13 min read',
+    keywords: [
+      'debt explained',
+      'what is debt',
+      'debt fund',
+      'debt vs equity',
+      'debt mutual funds',
+      'cibil score myths',
+      'debt equity ratio',
+    ],
+  },
+  {
     slug: 'credit-card-debt-india',
     title: 'Credit Card Debt in India: How to Pay It Off Fast (2026 Guide)',
     excerpt: 'Drowning in credit card debt in India? Real ₹-based plan to clear it fast — avalanche vs snowball, a free calculator, and a step-by-step escape route.',
@@ -35,7 +54,6 @@ export const BLOG_POSTS = [
     slug: 'minimum-payment-trap-credit-cards',
     title: 'Credit Card Minimum Payment Trap: Why You Stay in Debt Forever',
     excerpt: 'The minimum amount due on your credit card is a carefully designed trap. See the real ₹ math, the CIBIL impact, and how to escape in months instead of decades.',
-
     date: '2026-04-02',
     category: 'Debt Management',
     categorySlug: 'debt-management',
