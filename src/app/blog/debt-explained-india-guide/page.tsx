@@ -5,7 +5,7 @@ import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
 import { generateFaqSchema, SITE_URL } from '@/lib/seo';
 import { AdSlotLeaderboard, AdSlotInContent, AdSlotInArticle } from '@/components/molecules/AdSlot';
-import { Calendar, Clock, ArrowRight, CheckCircle2, XCircle, ExternalLink } from 'lucide-react';
+import { Calendar, Clock, CheckCircle2, XCircle, ExternalLink } from 'lucide-react';
 
 const SLUG = 'debt-explained-india-guide';
 
