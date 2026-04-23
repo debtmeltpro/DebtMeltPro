@@ -117,18 +117,38 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: SITE_NAME,
+  alternateName: 'DebtMelt Pro',
   url: SITE_URL,
   logo: {
     '@type': 'ImageObject',
     url: `${SITE_URL}/logo.png`,
+    width: 512,
+    height: 512,
   },
-
-  sameAs: [],
+  description: SITE_DESCRIPTION,
+  foundingDate: '2024',
+  sameAs: [
+    // Fill these in as you create the profiles. Even 2-3 working URLs
+    // is enough for Google to validate your brand entity.
+    //'https://twitter.com/debtmeltpro',
+   // 'https://www.linkedin.com/company/debtmeltpro',
+    'https://www.youtube.com/@debtmeltpro',
+    //'https://www.facebook.com/debtmeltpro',
+  ],
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer service',
     email: 'support@debtmeltpro.com',
+    availableLanguage: ['English'],
   },
+  knowsAbout: [
+    'Debt Management',
+    'Credit Card Debt',
+    'Student Loans',
+    'Mortgage Calculation',
+    'Financial Independence',
+    'FIRE Movement',
+  ],
 };
 
 const websiteSchema = {

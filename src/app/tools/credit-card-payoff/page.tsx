@@ -27,6 +27,38 @@ const FAQ_ITEMS = [
 
 export default function CreditCardPage() {
   const toolSchema = generateToolSchema('credit-card-payoff');
+  // Enhanced schema specifically for this high-value page
+  const enhancedToolSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Credit Card Payoff Calculator',
+    applicationCategory: 'FinanceApplication',
+    applicationSubCategory: 'Debt Calculator',
+    operatingSystem: 'All',
+    browserRequirements: 'Requires JavaScript',
+    url: `${SITE_URL}/tools/credit-card-payoff`,
+    description: 'Free credit card payoff calculator showing exact months to debt-free, total interest paid, and savings from higher payments.',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock',
+    },
+    featureList: [
+      'Calculate months to pay off credit card debt',
+      'Compare minimum payment vs fixed payment scenarios',
+      'See total interest paid under each strategy',
+      'Month-by-month amortization schedule',
+      'Support for any currency (USD, INR, EUR, GBP)',
+      'No signup or registration required',
+      'Data never leaves your browser',
+    ],
+    author: {
+      '@type': 'Organization',
+      name: 'DebtMeltPro',
+      url: SITE_URL,
+    },
+  };
   const faqSchema = generateFaqSchema(FAQ_ITEMS);
   const howToSchema = generateHowToSchema({
     name: 'How to Use the Credit Card Payoff Calculator',
@@ -48,6 +80,7 @@ export default function CreditCardPage() {
   return (
     <>
       {toolSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }} />}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(enhancedToolSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
@@ -61,12 +94,10 @@ export default function CreditCardPage() {
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 text-sm font-medium mb-4">Tool 4 of 5</div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-3">
-            Credit Card Payoff Calculator — Escape the Minimum Payment Trap
+            Free Credit Card Payoff Calculator — See Your Debt-Free Date
           </h1>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Minimum payments are designed to maximize interest revenue for the bank, not to help you
-            get out of debt. See exactly how much you are losing and find the fastest path to a $0
-            balance with this free credit card payoff calculator.
+            Enter your credit card balance, APR, and monthly payment to instantly see how many months until you&apos;re debt-free, total interest you&apos;ll pay, and how much you save by paying more than the minimum. Free, no signup, works with any currency.
           </p>
         </div>
       </section>

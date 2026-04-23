@@ -12,6 +12,22 @@
 
 export const BLOG_POSTS = [
   {
+    slug: 'credit-card-payoff-calculator-guide',
+    title: 'Credit Card Payoff Calculator: Complete Guide + Free Tool (2026)',
+    excerpt:
+      'Complete guide to using credit card payoff calculators — how they work, the 4 numbers you need, real examples, and the free tool that runs in your browser.',
+    date: '2026-04-24',
+    category: 'Debt Management',
+    categorySlug: 'debt-management',
+    readTime: '10 min read',
+    keywords: [
+      'credit card payoff calculator',
+      'credit card payment calculator',
+      'credit card repayment calculator',
+      'credit card interest calculator',
+    ],
+  },
+  {
     slug: 'debt-explained-india-guide',
     title: 'Debt Explained: CIBIL Myths, Debt Funds & India vs US Debt (2026 Guide)',
     excerpt:
