@@ -12,7 +12,14 @@ const ICON_MAP: Record<string, React.ElementType> = {
   TrendingDown, Home, Flame, CreditCard, GraduationCap,
 };
 const CATEGORY_BLOG_MAP: Record<string, string[]> = {
-  'debt-management': ['credit-card-payoff-calculator-guide' ,'debt-explained-india-guide','credit-card-debt-india', 'snowball-vs-avalanche-debt-payoff', 'minimum-payment-trap-credit-cards'],
+  'debt-management': [    'multiple-credit-card-payoff-calculator',
+                          'debt-avalanche-calculator-explained',
+                          'how-to-pay-off-10000-credit-card-debt',
+                          'credit-card-payoff-calculator-guide' ,
+                          'debt-explained-india-guide',
+                          'credit-card-debt-india', 
+                          'snowball-vs-avalanche-debt-payoff', 
+                          'minimum-payment-trap-credit-cards'],
   'home-buying': ['rent-vs-buy-true-cost'],
   'investing': ['fire-number-explained'],
   'student-loans': ['should-you-refinance-student-loans'],

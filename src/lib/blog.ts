@@ -12,6 +12,57 @@
 
 export const BLOG_POSTS = [
   {
+  slug: 'multiple-credit-card-payoff-calculator',
+  title: 'Multiple Credit Card Payoff Calculator — Free Tool + Strategy (2026)',
+  excerpt:
+    'Juggling 2, 3, or 5 credit cards? Free calculator compares avalanche vs snowball vs hybrid, shows your exact debt-free date, and saves thousands in interest. No signup.',
+  date: '2026-04-24',
+  category: 'Debt Management',
+  categorySlug: 'debt-management',
+  readTime: '10 min',
+  keywords: [
+    'multiple credit card payoff calculator',
+    'pay off multiple credit cards',
+    'multi credit card payoff calculator',
+    'best way to pay off multiple credit cards',
+    'how to pay off 3 credit cards',
+  ],
+},
+{
+  slug: 'debt-avalanche-calculator-explained',
+  title: 'Debt Avalanche Calculator: How It Works + Free Tool (2026)',
+  excerpt:
+    'The debt avalanche is the mathematically cheapest payoff strategy — but only if you run it right. Step-by-step guide with a real $22k example and a free calculator.',
+  date: '2026-04-24',
+  category: 'Debt Management',
+  categorySlug: 'debt-management',
+  readTime: '9 min',
+  keywords: [
+    'debt avalanche calculator',
+    'avalanche method calculator',
+    'debt avalanche method',
+    'debt avalanche vs snowball',
+    'avalanche debt payoff calculator',
+  ],
+},
+{
+  slug: 'how-to-pay-off-10000-credit-card-debt',
+  title: 'How to Pay Off $10,000 in Credit Card Debt Fast (2026 Plan)',
+  excerpt:
+    'Real 12-month, 24-month, and 36-month plans to clear $10,000 in credit card debt. Monthly payment targets, interest savings, and the exact strategy that works.',
+  date: '2026-04-24',
+  category: 'Debt Management',
+  categorySlug: 'debt-management',
+  readTime: '11 min',
+  keywords: [
+    'how to pay off 10000 credit card debt',
+    'how to pay off 10k credit card debt',
+    'pay off 10000 debt in 1 year',
+    'best way to pay off 10000 credit card debt',
+    '10000 credit card debt payoff plan',
+  ],
+},
+  {
     slug: 'credit-card-payoff-calculator-guide',
     title: 'Credit Card Payoff Calculator: Complete Guide + Free Tool (2026)',
     excerpt:
