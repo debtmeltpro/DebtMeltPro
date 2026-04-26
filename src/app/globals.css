@@ -51,10 +51,11 @@
 
   /* Base typography */
   body {
-    @apply text-base leading-relaxed;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    body {
+         @apply text-base leading-relaxed;
+         -webkit-font-smoothing: antialiased;
+         -moz-osx-font-smoothing: grayscale;
+}
   }
 
   /* Focus visible for keyboard navigation */
