@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { RelatedTools } from '@/components/seo/RelatedTools';
 import { generateFaqSchema, SITE_URL } from '@/lib/seo';
-import { AdSlotLeaderboard, AdSlotInContent, AdSlotInArticle } from '@/components/molecules/AdSlot';
+import { AdSlotLeaderboard, AdSlotInArticle } from '@/components/molecules/AdSlot';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
 
 const SLUG = 'ai-finance-agents-complete-guide';
