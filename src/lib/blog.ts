@@ -12,6 +12,23 @@
 
 export const BLOG_POSTS = [
   {
+    slug: 'ai-finance-agents-complete-guide',
+    title: 'AI Finance Agents: The Complete Enterprise Guide to Autonomous Financial Automation (2026)',
+    excerpt:
+      'AI finance agents are reshaping how enterprises handle accounting, forecasting, fraud detection, and financial analysis. Real-world deployment, validation infrastructure, and what separates hype from working systems.',
+    date: '2026-05-18',
+    category: 'Investing',
+    categorySlug: 'investing',
+    readTime: '25 min read',
+    keywords: [
+      'AI Finance Agents',
+      'AI finance agent',
+      'autonomous financial automation',
+      'enterprise AI finance',
+      'AI accounting automation',
+    ],
+  },
+  {
   slug: 'multiple-credit-card-payoff-calculator',
   title: 'Multiple Credit Card Payoff Calculator — Free Tool + Strategy (2026)',
   excerpt:
