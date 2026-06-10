@@ -15,10 +15,11 @@ import { cn } from '@/lib/utils';
 
 const NAV_LINKS = [
   { href: '/tools/debt-payoff', label: 'Debt Payoff', shortLabel: 'Debt' },
-  { href: '/tools/mortgage-calculator', label: 'Rent vs Buy', shortLabel: 'Mortgage' },
-  { href: '/tools/compound-interest', label: 'FIRE Calculator', shortLabel: 'FIRE' },
+  { href: '/tools/emi-calculator', label: 'EMI Calculator', shortLabel: 'EMI' },
+  { href: '/tools/sip-calculator', label: 'SIP Calculator', shortLabel: 'SIP' },
+  { href: '/tools/compound-interest', label: 'Compound Interest', shortLabel: 'FIRE' },
   { href: '/tools/credit-card-payoff', label: 'Credit Cards', shortLabel: 'CC' },
-  { href: '/tools/student-loan', label: 'Student Loans', shortLabel: 'Loans' },
+  { href: '/tools/mortgage-calculator', label: 'Rent vs Buy', shortLabel: 'Mortgage' },
 ] as const;
 
 const SECONDARY_LINKS = [

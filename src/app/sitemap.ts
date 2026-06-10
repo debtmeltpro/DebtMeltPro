@@ -20,13 +20,21 @@ const SITE_URL = process.env['NEXT_PUBLIC_SITE_URL'] || 'https://debtmeltpro.com
 // Update this when you make meaningful content changes.
 const LAST_UPDATED = '2026-04-04';
 
+/** Latest blog post date so /blog lastModified tracks new posts (helps crawlers + GSC). */
+function getBlogHubLastModified(): string {
+  if (BLOG_POSTS.length === 0) return LAST_UPDATED;
+  return BLOG_POSTS.reduce((max, p) => (p.date >= max ? p.date : max), BLOG_POSTS[0]!.date);
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
+  const blogHubLastModified = getBlogHubLastModified();
+
   // Core pages — only include URLs with actual page.tsx files
   const corePages: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: LAST_UPDATED, changeFrequency: 'weekly', priority: 1.0 },
     { url: `${SITE_URL}/about`, lastModified: LAST_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${SITE_URL}/contact`, lastModified: LAST_UPDATED, changeFrequency: 'yearly', priority: 0.5 },
-    { url: `${SITE_URL}/blog`, lastModified: LAST_UPDATED, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${SITE_URL}/blog`, lastModified: blogHubLastModified, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${SITE_URL}/prompts`, lastModified: LAST_UPDATED, changeFrequency: 'weekly', priority: 0.9 },
   ];
   // NOTE: /tools is NOT included — it redirects to / (302) and would cause sitemap errors.

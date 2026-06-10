@@ -5,7 +5,10 @@
 // ============================================================
 
 import Link from 'next/link';
-import { ArrowRight, TrendingDown, Home, Flame, CreditCard, GraduationCap } from 'lucide-react';
+import {
+  ArrowRight, TrendingDown, Home, Flame, CreditCard, GraduationCap,
+  PiggyBank, Calculator, Landmark, Percent,
+} from 'lucide-react';
 import { getRelatedTools } from '@/lib/seo';
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -14,6 +17,10 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Flame,
   CreditCard,
   GraduationCap,
+  PiggyBank,
+  Calculator,
+  Landmark,
+  Percent,
 };
 
 interface RelatedToolsProps {

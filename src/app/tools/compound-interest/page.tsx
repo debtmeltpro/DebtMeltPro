@@ -55,7 +55,7 @@ export default function CompoundPage() {
       <section className="bg-gradient-to-b from-orange-50 to-white dark:from-slate-900 dark:to-slate-950 border-b border-slate-100 dark:border-slate-800 py-10 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 text-sm font-medium mb-4">
-            Tool 3 of 5
+            Tool 3 of 9
           </div>
           <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-3">
             Compound Interest & FIRE Calculator
@@ -198,7 +198,7 @@ export default function CompoundPage() {
         </p>
       </section>
 
-      <RelatedTools currentSlug="compound-interest" />
+      <RelatedTools currentSlug="compound-interest" heading="Related Calculators" />
     </>
   );
 }

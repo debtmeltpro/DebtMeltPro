@@ -7,19 +7,18 @@
 
 import Link from 'next/link';
 import { TrendingDown, ExternalLink } from 'lucide-react';
+import { TOOLS } from '@/lib/seo';
 
-const TOOL_LINKS = [
-  { href: '/tools/debt-payoff', label: 'Debt Payoff Calculator' },
-  { href: '/tools/mortgage-calculator', label: 'Rent vs. Buy Calculator' },
-  { href: '/tools/compound-interest', label: 'FIRE Calculator' },
-  { href: '/tools/credit-card-payoff', label: 'Credit Card Optimizer' },
-  { href: '/tools/student-loan', label: 'Student Loan Refinance' },
-] as const;
+const TOOL_LINKS = TOOLS.map(t => ({
+  href: `/tools/${t.slug}`,
+  label: t.title,
+}));
 
 const CATEGORY_LINKS = [
   { href: '/category/debt-management', label: 'Debt Management' },
   { href: '/category/home-buying', label: 'Home Buying' },
   { href: '/category/investing', label: 'Investing & FIRE' },
+  { href: '/category/loans', label: 'Loans & EMI' },
   { href: '/category/student-loans', label: 'Student Loans' },
 ] as const;
 

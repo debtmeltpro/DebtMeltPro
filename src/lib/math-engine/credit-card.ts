@@ -13,7 +13,13 @@
 // Backward-compatible: all v1 exports remain unchanged.
 // ============================================================
 
-import type { CreditCardInput, CreditCardResult, CreditCardSnapshot } from '@/types';
+import type {
+  CreditCardInput,
+  CreditCardInterestInput,
+  CreditCardInterestResult,
+  CreditCardResult,
+  CreditCardSnapshot,
+} from '@/types';
 
 const round2 = (n: number): number => Math.round((n + Number.EPSILON) * 100) / 100;
 const MAX_MONTHS = 600;
@@ -484,5 +490,67 @@ export const calculateAPRChangeImpact = (
     currentPayoffMonths: current.months,
     newPayoffMonths: newResult.months,
     monthsDifference: newResult.months - current.months,
+  };
+};
+
+// ─── Credit Card Interest Calculator ──────────────────────────
+
+export const calculateCreditCardInterest = (
+  input: CreditCardInterestInput,
+): CreditCardInterestResult => {
+  const { balance, apr, monthlyPayment } = input;
+  const monthlyRate = apr / 100 / 12;
+  const dailyRate = apr / 100 / 365;
+
+  const dailyInterest = round2(balance * dailyRate);
+  const monthlyInterest = round2(balance * monthlyRate);
+  const annualInterest = round2(balance * (apr / 100));
+
+  let currentBalance = round2(balance);
+  const schedule: CreditCardSnapshot[] = [];
+  let month = 0;
+  let totalInterestPaid = 0;
+  let growthMonths = 0;
+  let previousBalance = currentBalance;
+
+  while (currentBalance > BALANCE_EPS && month < MAX_MONTHS) {
+    month++;
+    const interestCharge = round2(currentBalance * monthlyRate);
+    const payment = round2(Math.min(monthlyPayment, currentBalance + interestCharge));
+    const principalPaid = round2(Math.max(0, payment - interestCharge));
+    currentBalance = round2(Math.max(0, currentBalance + interestCharge - payment));
+    totalInterestPaid = round2(totalInterestPaid + interestCharge);
+
+    schedule.push({ month, balance: currentBalance, payment, interestCharge, principalPaid });
+
+    const negativeAmort = payment <= interestCharge;
+    const balanceGrowing = currentBalance > previousBalance + BALANCE_EPS;
+    if (negativeAmort || balanceGrowing) growthMonths++;
+    else growthMonths = 0;
+    previousBalance = currentBalance;
+
+    if (growthMonths >= 6) {
+      return {
+        dailyInterest,
+        monthlyInterest,
+        annualInterest,
+        monthsToPayoff: 0,
+        totalInterestPaid: round2(totalInterestPaid),
+        totalPaid: round2(schedule.reduce((t, m) => t + m.payment, 0)),
+        schedule: [],
+        isUnpayable: true,
+      };
+    }
+  }
+
+  return {
+    dailyInterest,
+    monthlyInterest,
+    annualInterest,
+    monthsToPayoff: month,
+    totalInterestPaid,
+    totalPaid: round2(schedule.reduce((t, m) => t + m.payment, 0)),
+    schedule,
+    isUnpayable: false,
   };
 };

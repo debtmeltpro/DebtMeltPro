@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   TrendingDown, Home, Flame, CreditCard, GraduationCap,
+  PiggyBank, Calculator, Landmark, Percent,
   Shield, Zap, BarChart3, CheckCircle2, ArrowRight,
   BookOpen, FolderOpen, Sparkles,
 } from 'lucide-react';
@@ -35,6 +36,7 @@ const FAQ_DATA = [
 
 const ICON_MAP: Record<string, React.ElementType> = {
   TrendingDown, Home, Flame, CreditCard, GraduationCap,
+  PiggyBank, Calculator, Landmark, Percent,
 };
 
 const TRUST_ITEMS = [

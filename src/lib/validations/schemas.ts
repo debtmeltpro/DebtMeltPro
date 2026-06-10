@@ -130,6 +130,35 @@ export const studentLoanInputSchema = z
     { message: 'New rate should be lower than current rate to benefit from refinancing', path: ['newRatePercent'] }
   );
 
+// ─── SIP Schema ───────────────────────────────────────────────
+
+export const sipInputSchema = z.object({
+  monthlyInvestment: currency('Monthly SIP amount', 1_000_000).min(100, 'SIP must be at least 100'),
+  annualReturnPercent: percentage('Expected return', 30).min(1, 'Return must be at least 1%'),
+  years: z.number().int().min(1, 'At least 1 year').max(40, 'Maximum 40 years'),
+  stepUpPercent: percentage('Annual step-up', 50).default(0),
+});
+
+// ─── EMI / Loan Schema ────────────────────────────────────────
+
+export const loanEmiInputSchema = z.object({
+  loanAmount: currency('Loan amount', 50_000_000).min(1_000, 'Loan amount must be at least 1,000'),
+  annualInterestRatePercent: percentage('Interest rate', 30).min(0, 'Rate cannot be negative'),
+  tenureMonths: months('Loan tenure', 480),
+  extraMonthlyPayment: currency('Extra payment', 100_000).default(0),
+});
+
+// ─── Credit Card Interest Schema ──────────────────────────────
+
+export const creditCardInterestInputSchema = z.object({
+  balance: currency('Balance', 500_000).min(1, 'Balance must be at least 1'),
+  apr: percentage('APR', 36).min(0),
+  monthlyPayment: currency('Monthly payment', 50_000).min(1, 'Payment must be at least 1'),
+}).refine(
+  (data) => data.monthlyPayment > data.balance * (data.apr / 100 / 12),
+  { message: 'Payment must exceed monthly interest to pay off the balance', path: ['monthlyPayment'] },
+);
+
 // ─── Type Inference ───────────────────────────────────────────
 
 export type DebtAccountInput = z.infer<typeof debtAccountSchema>;
@@ -138,3 +167,6 @@ export type MortgageFormInput = z.infer<typeof mortgageInputSchema>;
 export type CompoundFormInput = z.infer<typeof compoundInputSchema>;
 export type CreditCardFormInput = z.infer<typeof creditCardInputSchema>;
 export type StudentLoanFormInput = z.infer<typeof studentLoanInputSchema>;
+export type SIPFormInput = z.infer<typeof sipInputSchema>;
+export type LoanEmiFormInput = z.infer<typeof loanEmiInputSchema>;
+export type CreditCardInterestFormInput = z.infer<typeof creditCardInterestInputSchema>;

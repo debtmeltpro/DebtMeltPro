@@ -208,6 +208,80 @@ export interface LoanComparisonSnapshot {
   cumulativeNewPaid: number;
 }
 
+// ─── SIP Calculator ─────────────────────────────────────────
+
+export interface SIPInput {
+  monthlyInvestment: number;
+  annualReturnPercent: number;
+  years: number;
+  stepUpPercent?: number;
+}
+
+export interface SIPYearlySnapshot {
+  year: number;
+  invested: number;
+  returns: number;
+  corpus: number;
+  monthlySIP: number;
+}
+
+export interface SIPResult {
+  totalInvested: number;
+  totalReturns: number;
+  maturityAmount: number;
+  yearlyData: SIPYearlySnapshot[];
+  effectiveAnnualReturn: number;
+}
+
+// ─── EMI / Loan Calculator ────────────────────────────────────
+
+export interface LoanEMIInput {
+  loanAmount: number;
+  annualInterestRatePercent: number;
+  tenureMonths: number;
+  extraMonthlyPayment?: number;
+}
+
+export interface LoanAmortizationRow {
+  month: number;
+  payment: number;
+  principal: number;
+  interest: number;
+  extraPayment: number;
+  balance: number;
+  cumulativeInterest: number;
+  cumulativePrincipal: number;
+}
+
+export interface LoanEMIResult {
+  emi: number;
+  loanAmount: number;
+  tenureMonths: number;
+  actualTenureMonths: number;
+  totalInterest: number;
+  totalPaid: number;
+  schedule: LoanAmortizationRow[];
+  interestSaved: number;
+  monthsSaved: number;
+}
+
+export interface CreditCardInterestInput {
+  balance: number;
+  apr: number;
+  monthlyPayment: number;
+}
+
+export interface CreditCardInterestResult {
+  dailyInterest: number;
+  monthlyInterest: number;
+  annualInterest: number;
+  monthsToPayoff: number;
+  totalInterestPaid: number;
+  totalPaid: number;
+  schedule: CreditCardSnapshot[];
+  isUnpayable: boolean;
+}
+
 // ─── UI / Store ───────────────────────────────────────────────
 
 export interface ToolMetadata {

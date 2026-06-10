@@ -10,14 +10,21 @@ DebtMeltPro is a free, privacy-first suite of financial calculators and AI finan
 - FIRE Calculator: https://debtmeltpro.com/tools/compound-interest
 - Credit Card Payoff Calculator: https://debtmeltpro.com/tools/credit-card-payoff
 - Student Loan Refinance Calculator: https://debtmeltpro.com/tools/student-loan
+- SIP Calculator: https://debtmeltpro.com/tools/sip-calculator
+- EMI Calculator: https://debtmeltpro.com/tools/emi-calculator
+- Loan Calculator: https://debtmeltpro.com/tools/loan-calculator
+- Credit Card Interest Calculator: https://debtmeltpro.com/tools/credit-card-interest
 - AI Finance Prompts: https://debtmeltpro.com/prompts
 - Blog: https://debtmeltpro.com/blog
+- AI Finance Agents guide: https://debtmeltpro.com/blog/ai-finance-agents-complete-guide
+- XML Sitemap: https://debtmeltpro.com/sitemap.xml
 - Contact: https://debtmeltpro.com/contact
 
 ## Categories
 - Debt Management: https://debtmeltpro.com/category/debt-management
 - Home Buying: https://debtmeltpro.com/category/home-buying
 - Investing & FIRE: https://debtmeltpro.com/category/investing
+- Loans & EMI: https://debtmeltpro.com/category/loans
 - Student Loans: https://debtmeltpro.com/category/student-loans
 
 ## Prompt Categories

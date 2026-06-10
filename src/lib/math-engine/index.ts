@@ -93,6 +93,7 @@ export {
   optimizeMultipleCards,
   calculatePurchaseTrueCost,
   calculateAPRChangeImpact,
+  calculateCreditCardInterest,
 } from './credit-card';
 
 export type {
@@ -102,6 +103,19 @@ export type {
   PurchaseCostResult,
   APRChangeImpact,
 } from './credit-card';
+
+// ─── SIP Calculator ─────────────────────────────────────────────
+export {
+  calculateSIP,
+  calculateLumpSumFV,
+} from './sip';
+
+// ─── EMI / Loan Calculator ─────────────────────────────────────
+export {
+  calculateEMI,
+  calculateLoanEMI,
+  calculateMonthlyInterestCharge,
+} from './loan-emi';
 
 // ─── Student Loan Calculator ───────────────────────────────────
 export {

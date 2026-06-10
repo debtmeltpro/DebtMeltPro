@@ -85,6 +85,9 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
+        {/* Sitemap discovery (robots.txt also lists this; submit same URL in Google Search Console) */}
+        <link rel="sitemap" type="application/xml" title="Sitemap" href={`${SITE_URL}/sitemap.xml`} />
+
         {/* JSON-LD */}
         <script
           type="application/ld+json"
