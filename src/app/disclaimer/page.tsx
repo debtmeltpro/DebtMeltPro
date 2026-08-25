@@ -21,7 +21,7 @@ export default function DisclaimerPage() {
           Disclaimer
         </h1>
         <p className="text-slate-500 dark:text-slate-400 mb-8">
-          Last Updated: <time dateTime="2024-01-15">January 15, 2024</time>
+          Last Updated: <time dateTime="2026-08-23">August 23, 2026</time>
         </p>
 
         <div className="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/30 p-6 mb-8">

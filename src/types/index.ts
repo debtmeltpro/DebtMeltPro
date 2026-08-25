@@ -293,8 +293,6 @@ export interface ToolMetadata {
 }
 
 export interface AppStore {
-  cookieConsent: boolean | null;
-  setCookieConsent: (value: boolean) => void;
   lastTool: string | null;
   setLastTool: (tool: string) => void;
 }

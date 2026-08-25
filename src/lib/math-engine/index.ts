@@ -122,6 +122,7 @@ export {
   // v1 exports
   calculateStudentLoanRefinance,
   // v2 exports
+  calcHhsPovertyGuideline,
   analyzeMultipleLoans,
   compareIDRPlans,
   calculatePSLF,
@@ -142,32 +143,61 @@ export type {
 
 // ─── Shared Formatting Utilities ──────────────────────────────
 
-const USD_FORMATTER = new Intl.NumberFormat('en-US', {
-  style: 'currency', currency: 'USD',
-  minimumFractionDigits: 0, maximumFractionDigits: 0,
-});
-
-const USD_FORMATTER_CENTS = new Intl.NumberFormat('en-US', {
-  style: 'currency', currency: 'USD',
-  minimumFractionDigits: 2, maximumFractionDigits: 2,
-});
-
-const PCT_FORMATTER = new Intl.NumberFormat('en-US', {
-  style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 2,
-});
-
-export const formatCurrency = (amount: number): string => {
-  if (!isFinite(amount) || isNaN(amount)) return '$0';
-  return USD_FORMATTER.format(amount);
+export const formatCurrency = (amount: number, locale = 'en-US', currency = 'USD'): string => {
+  if (!isFinite(amount) || isNaN(amount)) {
+    try {
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(0);
+    } catch {
+      return '$0';
+    }
+  }
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `$${Math.round(amount).toLocaleString()}`;
+  }
 };
 
-export const formatCurrencyExact = (amount: number): string => {
-  if (!isFinite(amount) || isNaN(amount)) return '$0.00';
-  return USD_FORMATTER_CENTS.format(amount);
+export const formatCurrencyExact = (amount: number, locale = 'en-US', currency = 'USD'): string => {
+  if (!isFinite(amount) || isNaN(amount)) {
+    try {
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(0);
+    } catch {
+      return '$0.00';
+    }
+  }
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+  } catch {
+    return `$${amount.toFixed(2)}`;
+  }
 };
 
 export const formatPercent = (decimal: number): string => {
   if (!isFinite(decimal) || isNaN(decimal)) return '0.0%';
+  const PCT_FORMATTER = new Intl.NumberFormat('en-US', {
+    style: 'percent', minimumFractionDigits: 1, maximumFractionDigits: 2,
+  });
   return PCT_FORMATTER.format(decimal);
 };
 
@@ -184,13 +214,13 @@ export const formatDuration = (months: number): string => {
   return `${years} yr ${remainingMonths} mo`;
 };
 
-export const formatCurrencyShort = (amount: number): string => {
-  if (isNaN(amount) || !isFinite(amount)) return '$0';
+export const formatCurrencyShort = (amount: number, symbol = '$', locale = 'en-US', currency = 'USD'): string => {
+  if (isNaN(amount) || !isFinite(amount)) return `${symbol}0`;
   const abs = Math.abs(amount);
   const sign = amount < 0 ? '-' : '';
-  if (abs >= 1_000_000) return `${sign}$${(abs / 1_000_000).toFixed(1)}M`;
-  if (abs >= 1_000) return `${sign}$${(abs / 1_000).toFixed(0)}K`;
-  return `${sign}$${abs.toFixed(0)}`;
+  if (abs >= 1_000_000) return `${sign}${symbol}${(abs / 1_000_000).toFixed(1)}M`;
+  if (abs >= 1_000) return `${sign}${symbol}${(abs / 1_000).toFixed(0)}K`;
+  return `${sign}${formatCurrency(abs, locale, currency)}`;
 };
 
 export const clamp = (value: number, min: number, max: number): number =>

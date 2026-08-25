@@ -85,9 +85,9 @@ export default function AboutPage() {
               hidden behind paywalls, or designed to collect your data and sell you products.
             </p>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-              We built a suite of five core calculators — covering debt payoff strategies, rent vs.
-              buy analysis, compound interest and FIRE planning, credit card optimization, and student
-              loan refinancing — using the same mathematical formulas that banks and certified
+              We built a suite of nine core calculators — covering debt payoff strategies, rent vs.
+              buy analysis, compound interest and FIRE planning, credit card optimization, student
+              loan refinancing, SIP returns, loan EMI, loan amortization, and credit card interest — using the same mathematical formulas that banks and certified
               financial planners rely on.
             </p>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">

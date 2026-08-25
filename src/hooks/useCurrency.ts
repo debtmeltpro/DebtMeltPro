@@ -2,10 +2,16 @@
 
 // ============================================================
 // DebtMeltPro — useCurrency Hook
-// Detects user's currency from:
-//   1. IP geolocation API (most accurate)
-//   2. Browser navigator.language fallback
-//   3. USD default
+// Privacy-First Local Currency Detection
+//
+// 1. Detects currency locally from browser `navigator.language`
+// 2. Maps region code to ISO 4217 currency via lookup table
+// 3. Fallbacks deterministically to USD ($)
+//
+// PRIVACY GUARANTEE:
+// - 100% client-side execution.
+// - Zero external network calls. Zero IP geolocation.
+// - No user tracking or cookies.
 // ============================================================
 
 import { useState, useEffect } from 'react';
@@ -18,9 +24,9 @@ export interface CurrencyInfo {
   loading: boolean;
 }
 
-// Country code → currency mapping (covers 95%+ of users)
+// Country code → currency mapping (covers 95%+ of global users)
 const COUNTRY_TO_CURRENCY: Record<string, { code: string; locale: string; name: string }> = {
-  // Asia
+  // Asia & Pacific
   IN: { code: 'INR', locale: 'en-IN', name: 'Indian Rupee' },
   CN: { code: 'CNY', locale: 'zh-CN', name: 'Chinese Yuan' },
   JP: { code: 'JPY', locale: 'ja-JP', name: 'Japanese Yen' },
@@ -77,17 +83,21 @@ const COUNTRY_TO_CURRENCY: Record<string, { code: string; locale: string; name: 
   EG: { code: 'EGP', locale: 'ar-EG', name: 'Egyptian Pound' },
 };
 
-// Euro zone countries
+// Eurozone countries
 const EURO_COUNTRIES = [
-  'DE','FR','IT','ES','NL','BE','AT','PT','FI','IE','GR',
-  'SK','SI','EE','LV','LT','LU','MT','CY','HR',
+  'DE', 'FR', 'IT', 'ES', 'NL', 'BE', 'AT', 'PT', 'FI', 'IE', 'GR',
+  'SK', 'SI', 'EE', 'LV', 'LT', 'LU', 'MT', 'CY', 'HR',
 ];
 
 const DEFAULT_CURRENCY: CurrencyInfo = {
-  code: 'USD', symbol: '$', locale: 'en-US', name: 'US Dollar', loading: true,
+  code: 'USD',
+  symbol: '$',
+  locale: 'en-US',
+  name: 'US Dollar',
+  loading: false,
 };
 
-// Get currency symbol from Intl API
+// Get currency symbol from browser Intl API
 function getCurrencySymbol(code: string, locale: string): string {
   try {
     const formatted = new Intl.NumberFormat(locale, {
@@ -96,15 +106,18 @@ function getCurrencySymbol(code: string, locale: string): string {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(0);
-    // Extract symbol by removing digits, commas, spaces
     return formatted.replace(/[\d,.\s]/g, '').trim() || code;
   } catch {
     return code;
   }
 }
 
-// Derive currency from browser navigator.language
+// Derive currency synchronously from browser navigator.language
 function getCurrencyFromBrowser(): Omit<CurrencyInfo, 'loading'> {
+  if (typeof window === 'undefined') {
+    return DEFAULT_CURRENCY;
+  }
+
   try {
     const lang = navigator.language || 'en-US';
     const region = lang.split('-')[1]?.toUpperCase();
@@ -119,64 +132,19 @@ function getCurrencyFromBrowser(): Omit<CurrencyInfo, 'loading'> {
         return { ...match, symbol: getCurrencySymbol(match.code, match.locale) };
       }
     }
-  } catch { /* fallback below */ }
+  } catch {
+    /* fallback below */
+  }
 
-  return { code: 'USD', locale: 'en-US', symbol: '$', name: 'US Dollar' };
+  return DEFAULT_CURRENCY;
 }
-
-// Session cache so we don't refetch on every render
-let cachedCurrency: Omit<CurrencyInfo, 'loading'> | null = null;
 
 export function useCurrency(): CurrencyInfo {
   const [currency, setCurrency] = useState<CurrencyInfo>(DEFAULT_CURRENCY);
 
   useEffect(() => {
-    // Use cache if available
-    if (cachedCurrency) {
-      setCurrency({ ...cachedCurrency, loading: false });
-      return;
-    }
-
-    // Try IP geolocation first (fast, free, no key needed)
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000); // 3s timeout
-
-    fetch('https://ipapi.co/json/', { signal: controller.signal })
-      .then((res) => res.json())
-      .then((data: { country_code?: string; currency?: string; languages?: string }) => {
-        clearTimeout(timeout);
-        const countryCode = data.country_code?.toUpperCase() ?? '';
-        let resolved: Omit<CurrencyInfo, 'loading'>;
-
-        if (EURO_COUNTRIES.includes(countryCode)) {
-          const lang = data.languages?.split(',')[0] ?? 'de';
-          const locale = `${lang}-${countryCode}`;
-          resolved = { code: 'EUR', locale, symbol: '€', name: 'Euro' };
-        } else {
-          const match = COUNTRY_TO_CURRENCY[countryCode];
-          if (match) {
-            resolved = { ...match, symbol: getCurrencySymbol(match.code, match.locale) };
-          } else {
-            // Fall back to browser locale
-            resolved = getCurrencyFromBrowser();
-          }
-        }
-
-        cachedCurrency = resolved;
-        setCurrency({ ...resolved, loading: false });
-      })
-      .catch(() => {
-        clearTimeout(timeout);
-        // Geolocation failed → use browser locale
-        const fallback = getCurrencyFromBrowser();
-        cachedCurrency = fallback;
-        setCurrency({ ...fallback, loading: false });
-      });
-
-    return () => {
-      clearTimeout(timeout);
-      controller.abort();
-    };
+    const detected = getCurrencyFromBrowser();
+    setCurrency({ ...detected, loading: false });
   }, []);
 
   return currency;

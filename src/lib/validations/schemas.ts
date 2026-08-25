@@ -42,7 +42,7 @@ export const debtAccountSchema = z.object({
     .max(50, 'Account name must be under 50 characters')
     // ReDoS prevention: no complex patterns, just alphanumeric + common chars
     .regex(/^[\w\s\-'&.,()]+$/, 'Account name contains invalid characters'),
-  balance: currency('Balance').min(1, 'Balance must be at least $1'),
+  balance: currency('Balance').min(1, 'Balance must be at least 1'),
   interestRate: percentage('Interest rate', 36),
   minimumPayment: currency('Minimum payment', 10_000),
   interestType: z.enum(['fixed', 'variable']).optional().default('fixed'),
@@ -71,7 +71,7 @@ export const debtPayoffInputSchema = z
 // ─── Mortgage Schema ──────────────────────────────────────────
 
 export const mortgageInputSchema = z.object({
-  homePrice: currency('Home price', 50_000_000).min(50_000, 'Home price must be at least $50,000'),
+  homePrice: currency('Home price', 50_000_000).min(50_000, 'Home price must be at least 50,000'),
   downPaymentPercent: percentage('Down payment', 99).min(3, 'Minimum down payment is 3%'),
   mortgageRatePercent: percentage('Mortgage rate', 25).min(0.1, 'Rate must be at least 0.1%'),
   loanTermYears: z.enum(['15', '20', '30']).transform(Number),
@@ -80,7 +80,7 @@ export const mortgageInputSchema = z.object({
   homeInsuranceMonthly: currency('Home insurance', 5000),
   hoaMonthly: currency('HOA fees', 5000),
   homeAppreciationPercent: percentage('Home appreciation', 20),
-  monthlyRent: currency('Monthly rent', 50_000).min(100, 'Rent must be at least $100'),
+  monthlyRent: currency('Monthly rent', 50_000).min(100, 'Rent must be at least 100'),
   rentIncreasePercent: percentage('Rent increase', 20),
   investmentReturnPercent: percentage('Investment return', 30),
   marginalTaxRatePercent: percentage('Tax rate', 60),
@@ -102,7 +102,7 @@ export const compoundInputSchema = z.object({
 // ─── Credit Card Schema ───────────────────────────────────────
 
 export const creditCardInputSchema = z.object({
-  balance: currency('Credit card balance', 500_000).min(100, 'Balance must be at least $100'),
+  balance: currency('Credit card balance', 500_000).min(100, 'Balance must be at least 100'),
   apr: percentage('APR', 36).min(0, 'APR cannot be negative'),
   minimumPaymentPercent: percentage('Minimum payment percent', 10).min(0.5).default(2),
   minimumPaymentFloor: currency('Minimum payment floor', 500).default(25),
@@ -113,7 +113,7 @@ export const creditCardInputSchema = z.object({
 
 export const studentLoanInputSchema = z
   .object({
-    loanBalance: currency('Loan balance', 1_000_000).min(1000, 'Loan balance must be at least $1,000'),
+    loanBalance: currency('Loan balance', 1_000_000).min(1000, 'Loan balance must be at least 1,000'),
     currentRatePercent: percentage('Current interest rate', 25).min(0.1),
     currentTermMonths: months('Loan term'),
     currentMonthsRemaining: months('Months remaining'),

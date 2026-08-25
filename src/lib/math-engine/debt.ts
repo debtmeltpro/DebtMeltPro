@@ -539,6 +539,9 @@ export const whatIfWindfall = (
   input: DebtPayoffInput,
   windfallAmount: number,
   strategy: PayoffStrategy = 'avalanche',
+  currencySymbol = '$',
+  locale = 'en-US',
+  currency = 'USD',
 ): WhatIfResult => {
   // Apply windfall to highest-rate debt first
   const modifiedDebts = input.debts
@@ -561,8 +564,21 @@ export const whatIfWindfall = (
   const baseOk = !baseline.isUnpayable && baseline.months > 0;
   const resOk = !result.isUnpayable && result.totalMonths > 0;
 
+  const formattedWindfall = (() => {
+    try {
+      return new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(windfallAmount);
+    } catch {
+      return `${currencySymbol}${windfallAmount.toLocaleString()}`;
+    }
+  })();
+
   return {
-    label: `$${windfallAmount.toLocaleString()} windfall`,
+    label: `${formattedWindfall} windfall`,
     totalMonths: result.totalMonths,
     totalInterest: result.totalInterestPaid,
     interestSaved:

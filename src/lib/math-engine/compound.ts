@@ -277,6 +277,7 @@ export const calculateMilestones = (
   monthlyContribution: number,
   annualReturnPercent: number,
   customMilestones?: number[],
+  currencySymbol = '$',
 ): Milestone[] => {
   const defaults = [10_000, 25_000, 50_000, 100_000, 250_000, 500_000, 1_000_000, 2_000_000, 5_000_000];
   const targets = (customMilestones ?? defaults).filter((t) => t > initialAmount);
@@ -291,8 +292,6 @@ export const calculateMilestones = (
   for (let month = 1; month <= MAX_MONTHS && targetIdx < sortedTargets.length; month++) {
     balance = round2(balance * (1 + monthlyRate) + monthlyContribution);
 
-    //while (targetIdx < sortedTargets.length && balance >= sortedTargets[targetIdx]!) {
-     // const target = sortedTargets[targetIdx]!;
     while (targetIdx < sortedTargets.length) {
       const target = sortedTargets[targetIdx];
       if (target === undefined || balance < target) break;
@@ -302,8 +301,8 @@ export const calculateMilestones = (
 
       results.push({
         label: target >= 1_000_000
-          ? `$${(target / 1_000_000).toFixed(target % 1_000_000 === 0 ? 0 : 1)}M`
-          : `$${(target / 1_000).toFixed(0)}K`,
+          ? `${currencySymbol}${(target / 1_000_000).toFixed(target % 1_000_000 === 0 ? 0 : 1)}M`
+          : `${currencySymbol}${(target / 1_000).toFixed(0)}K`,
         amount: target,
         monthsToReach: month,
         yearsToReach: round2(month / 12),
@@ -315,13 +314,12 @@ export const calculateMilestones = (
 
   // Add unreachable milestones
   for (let i = targetIdx; i < sortedTargets.length; i++) {
-   // const target = sortedTargets[i]!;
     const target = sortedTargets[i];
     if (target === undefined) continue;   
     results.push({
       label: target >= 1_000_000
-        ? `$${(target / 1_000_000).toFixed(target % 1_000_000 === 0 ? 0 : 1)}M`
-        : `$${(target / 1_000).toFixed(0)}K`,
+        ? `${currencySymbol}${(target / 1_000_000).toFixed(target % 1_000_000 === 0 ? 0 : 1)}M`
+        : `${currencySymbol}${(target / 1_000).toFixed(0)}K`,
       amount: target,
       monthsToReach: null,
       yearsToReach: null,
@@ -372,7 +370,7 @@ export const monteCarloSimulation = (
 
   // Seeded pseudo-random for reproducibility (Box-Muller transform)
   const normalRandom = (): number => {
-    const u1 = Math.random();
+    const u1 = Math.max(Number.EPSILON, Math.random());
     const u2 = Math.random();
     return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
   };

@@ -91,7 +91,7 @@ export function StudentLoanCalculator() {
             </span>
             <span>
               Showing in <strong>{currencyInfo.name}</strong> ({currencyInfo.code})
-              · based on your location
+              · based on your device language
             </span>
           </div>
         )}
@@ -272,6 +272,29 @@ export function StudentLoanCalculator() {
                       stroke="#22c55e" strokeWidth={2} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
+              </div>
+            </div>
+
+            {/* Federal Student Loan Status & Regulatory Notice */}
+            <div className="rounded-xl border border-blue-200 dark:border-blue-800/60 bg-blue-50/50 dark:bg-blue-950/20 p-5 space-y-2.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <h4 className="font-semibold text-slate-900 dark:text-white text-sm">
+                  Federal Repayment Programs & Current Regulatory Status
+                </h4>
+                <a
+                  href="https://studentaid.gov/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-violet-600 dark:text-violet-400 hover:underline inline-flex items-center gap-1 text-xs font-medium"
+                >
+                  Verify current federal rules on StudentAid.gov ↗
+                </a>
+              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                <strong>IDR Plan Status Notice:</strong> The <strong>SAVE Plan</strong> is subject to federal court injunctions and transition orders and is not an active unrestricted repayment option. <strong>PAYE — Legacy / Sunsetting</strong> and <strong>ICR — Restricted / Legacy</strong> are closed to new loan disbursements and undergoing phase-out (with ICR remaining primarily relevant for consolidated Parent PLUS loans). <strong>IBR (Income-Based Repayment)</strong> terms shown reflect post-2014 new borrowers (10% discretionary income / 20-year forgiveness); older borrower cohorts (pre-2014) use 15% and 25-year forgiveness.
+              </p>
+              <div className="p-2.5 rounded-lg bg-white/80 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                <strong>Educational Disclaimer:</strong> Federal student-loan repayment programs and eligibility rules can change. This calculator is an educational estimate. Verify your current eligibility, payment plan availability, and legal/tax treatment with Federal Student Aid and a qualified professional. Refinancing federal loans permanently eliminates access to income-driven repayment and forgiveness programs.
               </div>
             </div>
           </motion.div>

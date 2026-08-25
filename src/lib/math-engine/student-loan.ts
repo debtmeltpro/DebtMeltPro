@@ -18,6 +18,16 @@ import type { StudentLoanInput, StudentLoanResult, LoanComparisonSnapshot } from
 const round2 = (n: number): number => Math.round((n + Number.EPSILON) * 100) / 100;
 const MAX_MONTHS = 600;
 
+/**
+ * 2026 HHS Federal Poverty Guidelines (48 contiguous states and District of Columbia).
+ * Source: U.S. Department of Health and Human Services, 2026 HHS Poverty Guidelines.
+ * Baseline (Family size 1): $15,960; Each additional person: $5,680.
+ */
+export const calcHhsPovertyGuideline = (familySize: number = 1): number => {
+  const normalizedSize = Math.max(1, Math.floor(familySize));
+  return 15960 + 5680 * (normalizedSize - 1);
+};
+
 // ─── Core Helpers ─────────────────────────────────────────────
 
 const calcMonthlyPayment = (
@@ -241,8 +251,9 @@ export const compareIDRPlans = (
   isGradLoans: boolean = false,
   marginalTaxRate: number = 22,
 ): IDRComparisonResult => {
-  // 2024 federal poverty line (continental US)
-  const povertyLine = 15060 + 5380 * (familySize - 1);
+  // 2026 HHS Federal Poverty Guidelines (48 contiguous states and District of Columbia)
+  // Source: U.S. Department of Health and Human Services, 2026 HHS Poverty Guidelines.
+  const povertyLine = calcHhsPovertyGuideline(familySize);
   const povertyThreshold225 = povertyLine * 2.25;
 
   const standardPayment = calcMonthlyPayment(totalFederalBalance, weightedRate, 120); // 10yr standard
@@ -262,10 +273,10 @@ export const compareIDRPlans = (
     let totalInterest = 0;
 
     const planNames: Record<IDRPlanType, string> = {
-      SAVE: 'Saving on a Valuable Education',
-      PAYE: 'Pay As You Earn',
-      IBR: 'Income-Based Repayment',
-      ICR: 'Income-Contingent Repayment',
+      SAVE: 'SAVE (Court Enjoined / Inactive)',
+      PAYE: 'PAYE — Legacy / Sunsetting',
+      IBR: 'IBR — Income-Based Repayment',
+      ICR: 'ICR — Restricted / Legacy',
     };
 
     let firstPayment = 0;
@@ -386,7 +397,9 @@ export const calculatePSLF = (
   incomeGrowthPercent: number = 3,
 ): PSLFResult => {
   const remainingQualifyingMonths = Math.max(0, 120 - qualifyingPaymentsMade);
-  const povertyLine = 15060 + 5380 * (familySize - 1);
+  // 2026 HHS Federal Poverty Guidelines (48 contiguous states and District of Columbia)
+  // Source: U.S. Department of Health and Human Services, 2026 HHS Poverty Guidelines.
+  const povertyLine = calcHhsPovertyGuideline(familySize);
   const povertyThreshold225 = povertyLine * 2.25;
 
   const monthlyRate = weightedRate / 100 / 12;

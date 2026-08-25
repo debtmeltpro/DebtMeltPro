@@ -3,8 +3,12 @@
 
 // ============================================================
 // DebtMeltPro — Global Zustand Store
-// Persists user preferences, cookie consent, and last-used tool
+// Persists strictly functional user UI preferences (last-used tool)
 // across navigation without server round-trips.
+//
+// PRIVACY:
+// - Stores only local functional UI state (lastTool).
+// - Zero tracking, analytics, or profiling data.
 // ============================================================
 
 import { create } from 'zustand';
@@ -20,8 +24,6 @@ const noopStorage = {
 export const useAppStore = create<AppStore>()(
   persist(
     (set) => ({
-      cookieConsent: null,
-      setCookieConsent: (value: boolean) => set({ cookieConsent: value }),
       lastTool: null,
       setLastTool: (tool: string) => set({ lastTool: tool }),
     }),
@@ -31,7 +33,6 @@ export const useAppStore = create<AppStore>()(
         typeof window === 'undefined' ? noopStorage : window.localStorage,
       ),
       partialize: (state) => ({
-        cookieConsent: state.cookieConsent,
         lastTool: state.lastTool,
       }),
     }

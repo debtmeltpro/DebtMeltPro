@@ -16,11 +16,16 @@ export const metadata: Metadata = {
 const CONTACT_METHODS = [
   {
     icon: Mail,
-    title: 'General Inquiries',
-    description: 'Questions about our tools, partnership opportunities, or feedback.',
+    title: 'General Inquiries & Support',
+    description: 'Questions about our tools, calculation models, bug reports, or feedback.',
     email: 'support@debtmeltpro.com',
   },
-  
+  {
+    icon: HelpCircle,
+    title: 'Data Privacy & Grievance Redressal',
+    description: 'Inquiries regarding privacy rights, data practices, or DPDP grievance redressal. Grievance Officer: OWNER INPUT REQUIRED.',
+    email: 'support@debtmeltpro.com',
+  },
 ] as const;
 
 export default function ContactPage() {

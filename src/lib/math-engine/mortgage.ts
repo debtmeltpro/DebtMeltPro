@@ -90,9 +90,11 @@ export const calculateMortgage = (input: MortgageInput): MortgageResult => {
       renterPortfolio = round2(renterPortfolio * (1 + monthlyInvestmentRate));
       cumulativeRentCost = round2(cumulativeRentCost + currentRent);
       const monthlyCostDiff = totalMonthlyBuyingCost - currentRent;
-      if (monthlyCostDiff > 0) {
-        renterPortfolio = round2(renterPortfolio + monthlyCostDiff);
-      }
+      // Symmetric opportunity-cost cash-flow model:
+      // - If buying costs more than renting (monthlyCostDiff > 0), renter saves the difference and invests it.
+      // - If renting costs more than buying (monthlyCostDiff < 0), renter funds the excess rent out of
+      //   their investment portfolio (floored at 0 since physical brokerage balances cannot become negative).
+      renterPortfolio = round2(Math.max(0, renterPortfolio + monthlyCostDiff));
     }
 
     currentRent = round2(currentRent * (1 + rentIncreasePercent / 100));
@@ -413,6 +415,9 @@ export const compareExtraPayments = (
   annualRatePercent: number,
   termYears: number,
   scenarios?: number[],
+  currencySymbol = '$',
+  locale = 'en-US',
+  currency = 'USD',
 ): ExtraPaymentScenario[] => {
   const defaults = [0, 100, 200, 300, 500, 1000];
   const amounts = scenarios ?? defaults;
@@ -430,9 +435,23 @@ export const compareExtraPayments = (
     const result = generateAmortizationSchedule(
       loanAmount, annualRatePercent, termYears, extra,
     );
+
+    const formattedExtra = (() => {
+      try {
+        return new Intl.NumberFormat(locale, {
+          style: 'currency',
+          currency,
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }).format(extra);
+      } catch {
+        return `${currencySymbol}${round2(extra)}`;
+      }
+    })();
+
     const label = extra === biweeklyExtra
-      ? `Biweekly ($${round2(extra)}/mo equiv)`
-      : extra === 0 ? 'Standard payment' : `+$${extra}/month`;
+      ? `Biweekly (${formattedExtra}/mo equiv)`
+      : extra === 0 ? 'Standard payment' : `+${formattedExtra}/month`;
 
     return {
       label,

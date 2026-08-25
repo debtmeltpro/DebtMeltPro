@@ -3,13 +3,10 @@
 // ============================================================
 
 import type { Metadata, Viewport } from 'next';
-import { Suspense } from 'react';
 import { Inter, Playfair_Display } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { CookieConsent } from '@/components/layout/CookieConsent';
-import { GoogleAnalytics } from '@/components/seo/GoogleAnalytics';
 import './globals.css';
 
 // ─── Fonts ─────────────────────────────────────────
@@ -82,7 +79,6 @@ export default function RootLayout({
       <head>
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="//www.googletagmanager.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
         {/* Sitemap discovery (robots.txt also lists this; submit same URL in Google Search Console) */}
@@ -120,16 +116,10 @@ export default function RootLayout({
           </main>
 
           <Footer />
-          <CookieConsent />
-
-          {/* Analytics */}
-          <Suspense fallback={null}>
-            <GoogleAnalytics />
-          </Suspense>
 
         </ThemeProvider>
 
-        {/* ✅ Chunk Recovery Script (moved from head → body end) */}
+        {/* ✅ Chunk Recovery Script */}
         <script
           dangerouslySetInnerHTML={{
             __html: `

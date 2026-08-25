@@ -2,125 +2,125 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'DebtMeltPro Privacy Policy — GDPR and CCPA compliant. We explain what data we collect, how it\'s used, and your rights.',
+  description:
+    'DebtMeltPro Privacy Policy. Understand our client-side architecture, local calculations, data practices, and privacy rights.',
   robots: { index: true, follow: false },
 };
 
 const SECTIONS = [
   {
-    title: '1. Information We Collect',
-    content: `**Information You Do Not Provide:** DebtMeltPro calculators operate entirely within your browser. No financial data you enter (balances, rates, income, debt amounts) is ever transmitted to our servers, stored in databases, or shared with any third party. All calculations occur locally on your device.
+    title: '1. Core Architectural Principle',
+    content: `Financial calculator inputs are processed locally in the browser and are not transmitted to DebtMeltPro servers.
 
-**Automatically Collected Information:** When you visit DebtMeltPro, we automatically collect:
-- Browser type and version, operating system
-- Pages viewed, time spent, referring URLs
-- IP address (anonymized where legally required)
-- Device type (mobile, desktop, tablet)
-
-This information is collected through cookies and web analytics tools (Google Analytics) to understand how users interact with our site.`,
+When you use our calculators (entering debt balances, interest rates, income, home prices, or contribution amounts), all mathematical models and amortization simulations run entirely within your device's browser engine using client-side JavaScript. DebtMeltPro does not operate user accounts, databases, or backend APIs that collect or store your financial figures.`,
   },
   {
-    title: '2. Cookies and Tracking Technologies',
-    content: `We use the following types of cookies:
-
-**Essential Cookies:** Required for the site to function. Includes your cookie consent preference stored in localStorage. Cannot be disabled without affecting site functionality.
-
-**Analytics Cookies:** Google Analytics (GA4) cookies that help us understand traffic patterns and improve the site. These cookies are only set after you provide explicit consent via our cookie banner.
-
-**Advertising Cookies:** Google AdSense cookies that serve relevant advertisements. These are third-party cookies set by Google and governed by Google's Privacy Policy. Only activated with your consent.
-
-**Your Choices:** You can manage cookie preferences through our cookie consent banner. You can also control cookies through your browser settings. Note that disabling cookies may affect site functionality.`,
+    title: '2. Information We Do Not Collect',
+    content: `Because our application is designed for client-side execution, we do not collect:
+- Personal financial inputs (debts, loans, credit card balances, salary, mortgage terms)
+- User account credentials, passwords, or profile information
+- Personal contact lists or payment card details
+- Biometric identifiers or sensitive personal categories`,
   },
   {
-    title: '3. How We Use Your Information',
-    content: `We use automatically collected data to:
-- Analyze site traffic and user behavior to improve our tools
-- Serve contextually relevant advertisements
-- Monitor site performance and security
-- Comply with legal obligations
+    title: '3. Local Storage and Functional Preferences',
+    content: `We do not use advertising or third-party tracking cookies. We utilize standard browser storage mechanisms solely for functional, client-side UI convenience:
 
-We do NOT use your data to:
-- Sell to third parties for marketing purposes
-- Build individual user profiles for targeting
-- Make automated decisions about your financial situation`,
+**Functional Local Storage (localStorage):**
+- **Theme Preference:** Stores your dark mode or light mode visual preference via standard client-side state.
+- **Last Used Tool:** Stores the identifier of the most recently visited calculator so you can quickly resume where you left off.
+
+**Functional Session Storage (sessionStorage):**
+- **Error Recovery Guard:** Stores a temporary technical flag to prevent reload loops if a network disruption occurs during script loading.
+
+These items remain strictly on your device and are never transmitted to our servers or third parties. You can clear them at any time through your browser settings.`,
   },
   {
-    title: '4. Third-Party Services',
-    content: `**Google Analytics:** We use GA4 to analyze site usage. Data is processed in accordance with Google's data processing terms. You can opt out at tools.google.com/dlpage/gaoptout.
+    title: '4. Third-Party Services & Analytics',
+    content: `**No Analytics Services:** DebtMeltPro does not use Google Analytics, tracking pixels, session replay tools, or behavioral analytics software.
 
-**Google AdSense:** We display advertisements served by Google AdSense. Google uses cookies to serve ads based on prior visits. You can opt out at myaccount.google.com/data-and-privacy.
+**No External IP Geolocation:** We do not transmit your IP address to third-party geolocation services. Currency symbols and number formats are derived directly on your device from your browser's language setting (navigator.language).
 
-**Google Fonts:** Fonts are loaded from Google's CDN. Google may receive your IP address when fonts are loaded.
-
-These services have their own privacy policies independent of ours.`,
+**Typography:** Fonts (Inter, Playfair Display) are self-hosted and bundled at build time through Next.js. Your browser does not make runtime network requests to Google Fonts servers.`,
   },
   {
-    title: '5. Your Rights (GDPR / CCPA)',
-    content: `Depending on your location, you have the following rights:
+    title: '5. Hosting Infrastructure & Data Transmission',
+    content: `**Application-Level Services:** There are zero application-level third-party analytics, tracking, or marketing integrations running on this site.
 
-**GDPR (EU/EEA Residents):**
-- Right to access personal data we hold about you
-- Right to rectification of inaccurate data
-- Right to erasure ("right to be forgotten")
-- Right to restrict processing
-- Right to data portability
-- Right to object to processing
-- Rights related to automated decision-making
+**Hosting & Network Infrastructure:** When you load web pages, standard HTTP/HTTPS request metadata (such as your IP address, requested URL, and user-agent) is transmitted to our hosting provider, Vercel, to deliver web assets.
 
-**CCPA (California Residents):**
+*Hosting/infrastructure processing details require verification.* Technical server logs generated by edge infrastructure are managed according to the hosting platform's standard operational security and routing procedures.`,
+  },
+  {
+    title: '6. Privacy Rights & Legal Frameworks',
+    content: `Depending on your jurisdiction, you may have specific statutory rights regarding any personal data processed in connection with your web requests:
+
+**General Data Protection Regulation (GDPR - EEA / UK):**
+- Right to access information regarding data processing
+- Right to request erasure of personal data
+- Right to restriction of processing or objection
+- Right to lodge a complaint with a supervisory authority
+
+**California Consumer Privacy Act (CCPA / CPRA - California):**
 - Right to know what personal information is collected
-- Right to know whether personal information is sold or disclosed
-- Right to opt-out of the sale of personal information
-- Right to equal service and price (non-discrimination)
+- Right to request deletion of personal information
+- Right to non-discrimination for exercising privacy rights
+- We do not sell or share personal information for cross-context behavioral advertising.
 
-To exercise any of these rights, contact us at support@debtmeltpro.com. We respond within 30 days.
+**Digital Personal Data Protection Act, 2023 (DPDP Act - India):**
+- Right to access information regarding processing
+- Right to correction, completion, and erasure of personal data
+- Right of grievance redressal through our designated Grievance Officer
+- Right to nominate an individual to exercise rights in the event of death or incapacity
 
-**Note:** Because our calculators do not collect or store any financial data you enter, we have minimal personal data to provide or delete in most cases.`,
+To submit an inquiry or exercise applicable rights, please contact our support team at support@debtmeltpro.com.`,
   },
   {
-    title: '6. Data Security',
-    content: `We implement industry-standard security measures including:
-- HTTPS encryption for all data in transit
-- Content Security Policy (CSP) headers to prevent XSS attacks
-- HTTP Strict Transport Security (HSTS) with preloading
-- No storage of sensitive financial inputs on our servers
-- Regular security audits and dependency updates`,
+    title: '7. Children\'s Privacy',
+    content: `DebtMeltPro is designed as a general-audience educational financial calculator suite. In alignment with DPDP Act provisions regarding minors, our services are not intended for individuals under 18 years of age without parental guidance. We do not knowingly solicit or collect personal information from individuals under 18. If you believe such data has been transmitted to our infrastructure, please notify us at support@debtmeltpro.com.`,
   },
   {
-    title: '7. Data Retention',
-    content: `Analytics data is retained for 14 months in Google Analytics, after which it is automatically deleted. Cookie consent preferences are stored in your browser's localStorage and are retained until you clear your browser data or withdraw consent.`,
+    title: '8. Security Safeguards',
+    content: `We implement technical controls to safeguard application delivery:
+- Strict HTTPS enforcement with HTTP Strict Transport Security (HSTS)
+- Hardened Content Security Policy (CSP) restricting script execution and network connections
+- Modern X-Frame-Options (DENY) and X-Content-Type-Options (nosniff) headers
+- Client-side data isolation ensuring financial calculations remain on your device`,
   },
   {
-    title: '8. Children\'s Privacy',
-    content: `DebtMeltPro is not directed at children under 13. We do not knowingly collect personal information from children under 13. If you believe we have inadvertently collected data from a child, contact us immediately at support@debtmeltpro.com.`,
-  },
-  {
-    title: '9. Changes to This Policy',
-    content: `We may update this Privacy Policy periodically. We will notify you of material changes by updating the "Last Updated" date below and, where appropriate, posting a notice on our site. Continued use of DebtMeltPro after changes constitutes acceptance of the updated policy.`,
-  },
-  {
-    title: '10. Contact Us',
-    content: `For privacy inquiries, data requests, or to exercise your rights:
+    title: '9. Grievance Officer & Contact Information',
+    content: `In accordance with applicable data protection requirements (including DPDP Act Section 13):
 
-Email: support@debtmeltpro.com
-Response time: Within 30 days of receiving your request.`,
+**Grievance Officer:** OWNER INPUT REQUIRED
+**Contact Email:** support@debtmeltpro.com
+**Response Time:** Within 30 days of receiving a verifiable request
+
+For questions, feedback, or data privacy inquiries, you may contact us at support@debtmeltpro.com.`,
+  },
+  {
+    title: '10. Changes to This Notice',
+    content: `We may revise this Privacy Policy periodically to reflect architectural updates or regulatory changes. Any modifications will be posted on this page with an updated effective date. Continued use of DebtMeltPro constitutes acknowledgment of the updated policy.`,
   },
 ];
 
 export default function PrivacyPolicyPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Privacy Policy</h1>
+      <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">
+        Privacy Policy
+      </h1>
       <p className="text-slate-500 dark:text-slate-400 mb-8">
-        Last Updated: <time dateTime="2024-01-15">January 15, 2024</time> · Effective Date: January 15, 2024
+        Last Updated: <time dateTime="2026-08-23">August 23, 2026</time> · Effective Date: August 23, 2026
       </p>
 
       <div className="card p-6 mb-8 border-l-4 border-l-brand-500">
-        <h2 className="font-semibold text-slate-900 dark:text-white mb-2">Our Core Privacy Commitment</h2>
+        <h2 className="font-semibold text-slate-900 dark:text-white mb-2">
+          Technical Privacy Commitment
+        </h2>
         <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-          DebtMeltPro is a privacy-first financial tool. The numbers you enter into our calculators
-          — your debts, income, balances, and personal financial data — <strong>never leave your
-          browser</strong>. No financial data is stored on our servers. This is by design, not policy.
+          Financial calculator inputs are processed locally in the browser and are not transmitted to
+          DebtMeltPro servers. Your financial figures (debts, balances, income, interest rates) never leave
+          your device.
         </p>
       </div>
 
@@ -130,11 +130,17 @@ export default function PrivacyPolicyPage() {
             <h2 className="font-semibold text-lg text-slate-900 dark:text-white mb-3">{title}</h2>
             <div className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed space-y-3">
               {content.split('\n\n').map((para, i) => (
-                <p key={i} dangerouslySetInnerHTML={{
-                  __html: para
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-800 dark:text-slate-200">$1</strong>')
-                    .replace(/\n/g, '<br />')
-                }} />
+                <p
+                  key={i}
+                  dangerouslySetInnerHTML={{
+                    __html: para
+                      .replace(
+                        /\*\*(.*?)\*\*/g,
+                        '<strong class="text-slate-800 dark:text-slate-200">$1</strong>'
+                      )
+                      .replace(/\n/g, '<br />'),
+                  }}
+                />
               ))}
             </div>
           </section>

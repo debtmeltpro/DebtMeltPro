@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { calculateCompound, ruleOf72, realReturn } from '@/lib/math-engine';
 import { compoundInputSchema } from '@/lib/validations/schemas';
-import { Flame, TrendingUp } from 'lucide-react';
+import { Flame, TrendingUp, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCurrency, createCurrencyFormatters } from '@/hooks/useCurrency';
 
@@ -191,34 +191,59 @@ export function CompoundCalculator() {
                 : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'
             )}>
               <div className="flex items-center gap-3 mb-1">
-                <Flame className="w-5 h-5 text-orange-500" />
+                <Flame className="w-5 h-5 text-orange-500 shrink-0" />
                 <h3 className="font-bold text-slate-900 dark:text-white">
                   {results.yearsToFire !== null
-                    ? `🔥 FIRE achieved in ${results.yearsToFire} years!`
-                    : `FIRE Number: ${formatCurrency(results.fireNumber)}`}
+                    ? `🔥 Estimated FIRE target reached in ${results.yearsToFire} years!`
+                    : `FIRE Target Estimate: ${formatCurrency(results.fireNumber)}`}
                 </h3>
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 ml-8">
+              <p className="text-sm text-slate-600 dark:text-slate-400 ml-8 mb-2">
                 {results.yearsToFire !== null
-                  ? `Portfolio hits ${formatCurrency(results.fireNumber)} (${inputs.withdrawalRatePercent}% SWR on ${formatCurrency(inputs.monthlyContribution * 12)}/yr expenses).`
-                  : `Keep investing ${formatCurrency(inputs.monthlyContribution)}/mo to reach financial independence.`}
+                  ? `Projected portfolio reaches ${formatCurrency(results.fireNumber)} (based on ${inputs.withdrawalRatePercent}% SWR with annual savings of ${formatCurrency(inputs.monthlyContribution * 12)}/yr used as spending proxy).`
+                  : `At ${inputs.withdrawalRatePercent}% SWR on ${formatCurrency(inputs.monthlyContribution * 12)}/yr savings proxy, keep investing to reach financial independence.`}
               </p>
+              <div className="ml-8 mt-2 p-2.5 rounded-lg bg-orange-100/60 dark:bg-orange-900/30 border border-orange-200/80 dark:border-orange-800/50 text-xs text-orange-900 dark:text-orange-200 leading-relaxed">
+                <strong>Educational Note:</strong> This FIRE estimate uses your annual savings ({formatCurrency(inputs.monthlyContribution * 12)}/yr) as an educational proxy for retirement spending. Your actual FIRE target is based on your expected annual living expenses (typically 25–33× annual spending).
+              </div>
             </div>
 
             {/* Key Metrics */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {[
-                { value: formatCurrency(results.finalBalance),                 label: `Final Balance (${inputs.years} yr)`,      accent: 'border-l-4 border-l-orange-500' },
-                { value: inputs.adjustForInflation ? formatCurrency(results.finalBalanceReal) : null, label: "Real Value (Today's $)", accent: '' },
-                { value: formatCurrency(results.sustainableMonthlyWithdrawal), label: 'Safe Monthly Income',                      accent: '' },
-                { value: formatCurrency(results.totalContributions),           label: 'Total Contributed',                        accent: '' },
-                { value: formatCurrency(results.totalInterestEarned),          label: 'Compound Growth Earned',                   accent: 'border-l-4 border-l-green-500' },
-                { value: formatCurrency(results.fireNumber),                   label: 'Your FIRE Number',                         accent: '' },
-              ].filter((m) => m.value !== null).map(({ value, label, accent }) => (
+                { value: formatCurrency(results.finalBalance),                 label: `Final Balance (${inputs.years} yr)`,      accent: 'border-l-4 border-l-orange-500', isFire: false },
+                { value: inputs.adjustForInflation ? formatCurrency(results.finalBalanceReal) : null, label: "Real Value (Today's $)", accent: '', isFire: false },
+                { value: formatCurrency(results.sustainableMonthlyWithdrawal), label: 'Safe Monthly Income',                      accent: '', isFire: false },
+                { value: formatCurrency(results.totalContributions),           label: 'Total Contributed',                        accent: '', isFire: false },
+                { value: formatCurrency(results.totalInterestEarned),          label: 'Compound Growth Earned',                   accent: 'border-l-4 border-l-green-500', isFire: false },
+                { value: formatCurrency(results.fireNumber),                   label: 'Your FIRE Number',                         accent: '', isFire: true },
+              ].filter((m) => m.value !== null).map(({ value, label, accent, isFire }) => (
                 <div key={label}
-                  className={cn('bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5', accent)}>
+                  className={cn('bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 relative', accent)}>
                   <div className="text-xl font-bold tabular-nums text-slate-900 dark:text-white">{value}</div>
-                  <div className="text-sm text-slate-500 dark:text-slate-400 mt-1">{label}</div>
+                  <div className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1.5">
+                    <span>{label}</span>
+                    {isFire && (
+                      <div className="group relative inline-block">
+                        <button
+                          type="button"
+                          className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus:outline-none focus-visible:ring-1 focus-visible:ring-orange-500 rounded-full p-0.5"
+                          aria-label="FIRE number calculation details"
+                          aria-describedby="fire-calc-tooltip"
+                        >
+                          <Info className="w-3.5 h-3.5" aria-hidden="true" />
+                        </button>
+                        <div
+                          id="fire-calc-tooltip"
+                          role="tooltip"
+                          className="invisible group-hover:visible group-focus-within:visible opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-all duration-150 absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 rounded-lg bg-slate-900 text-white dark:bg-slate-700 text-xs font-normal leading-relaxed shadow-xl z-50 pointer-events-none"
+                        >
+                          This educational calculation uses annual contributions ({formatCurrency(inputs.monthlyContribution * 12)}/yr) as an expense proxy. A standard FIRE target is based on 25× your actual expected annual living expenses.
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900 dark:border-t-slate-700" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

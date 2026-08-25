@@ -6,11 +6,11 @@ import { PromptCard } from '@/components/prompts/PromptCard';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 import {
   PROMPT_CATEGORIES, getPromptsByCategory, getCategory,
-  generatePromptCategoryMetadata,
+  generatePromptCategoryMetadata, AI_EDUCATIONAL_DISCLAIMER,
 } from '@/lib/prompts';
 
 import { generateFaqSchema, generateWebPageSchema, SITE_URL } from '@/lib/seo';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, ShieldAlert } from 'lucide-react';
 
 interface Props {
   params: { category: string };
@@ -71,8 +71,19 @@ export default function PromptCategoryPage({ params }: Props) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6"><AdSlotLeaderboard className="mt-6" /></div>
 
+      {/* AI Educational Disclaimer Banner */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="rounded-xl border border-purple-200 dark:border-purple-800/50 bg-purple-50/60 dark:bg-purple-950/20 p-4 text-xs text-purple-900 dark:text-purple-200 flex items-start gap-3">
+          <ShieldAlert className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5" />
+          <p>
+            <strong>AI Educational Disclaimer: </strong>
+            {AI_EDUCATIONAL_DISCLAIMER}
+          </p>
+        </div>
+      </div>
+
       {/* Prompts Grid */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {prompts.map(prompt => (
             <PromptCard key={prompt.slug} prompt={prompt} />

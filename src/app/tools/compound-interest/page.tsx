@@ -30,7 +30,7 @@ export default function CompoundPage() {
       { name: 'Enter your current portfolio', text: 'Input your current total invested assets — 401(k), IRA, brokerage accounts, etc.' },
       { name: 'Set monthly contributions', text: 'Enter how much you invest each month. Include employer matching if applicable.' },
       { name: 'Set expected return and inflation', text: 'Enter your expected annual return (historically 7-10% for stocks) and inflation rate (typically 2-3%).' },
-      { name: 'Enter annual expenses', text: 'Input your annual living expenses to calculate your FIRE number (25× annual expenses using the 4% rule).' },
+      { name: 'Set safe withdrawal rate', text: 'Choose your desired safe withdrawal rate (typically 3.5%–4%) to calculate your educational FIRE target and projected milestone.' },
       { name: 'Review your FIRE timeline', text: 'See when your projected portfolio crosses your FIRE number — that is your financial independence date.' },
     ],
   });

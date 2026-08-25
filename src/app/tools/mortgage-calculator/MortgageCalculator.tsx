@@ -99,7 +99,7 @@ export function MortgageCalculator() {
             </span>
             <span>
               Showing in <strong>{currencyInfo.name}</strong> ({currencyInfo.code})
-              · based on your location
+              · based on your device language
             </span>
           </div>
         )}

@@ -103,6 +103,14 @@ export const PROMPT_CATEGORIES: PromptCategoryDef[] = [
   },
 ];
 
+// ─── AI Safety & Educational Disclaimers ─────────────────────
+
+export const AI_EDUCATIONAL_DISCLAIMER =
+  'AI-generated responses are for educational and brainstorming purposes only. They are not certified financial, tax, accounting, or legal advice. Verify important information with a qualified professional.';
+
+export const AI_PII_WARNING =
+  'Never paste passwords, bank account numbers, card numbers, PAN, SSN, Aadhaar numbers, or other highly sensitive personal information into third-party AI tools.';
+
 // ─── Individual Prompt Registry ──────────────────────────────
 
 export interface PromptDef {
@@ -119,6 +127,7 @@ export interface PromptDef {
   tips: string[];            // pro tips for better results
   relatedToolSlug?: string;  // links to DebtMeltPro calculator
   difficulty: 'beginner' | 'intermediate' | 'advanced';
+  region?: 'US-focused' | 'General' | 'Global'; // Regional assumption indicator
   aiModels: string[];        // which AI models work best
   isViral: boolean;          // featured/trending flag
   dateAdded: string;
@@ -171,6 +180,7 @@ Format as a clean table I can reference daily.`,
     ],
     relatedToolSlug: 'debt-payoff',
     difficulty: 'beginner',
+    region: 'General',
     aiModels: ['ChatGPT', 'Claude', 'Gemini', 'Copilot'],
     isViral: true,
     dateAdded: '2024-06-01',
@@ -216,6 +226,7 @@ Be specific with dollar amounts, not percentages.`,
       'Ask follow-up: "What if I lose my job in 2 months?"',
     ],
     difficulty: 'beginner',
+    region: 'General',
     aiModels: ['ChatGPT', 'Claude', 'Gemini'],
     isViral: true,
     dateAdded: '2024-06-05',
@@ -267,6 +278,7 @@ Format as an actionable timeline I can tape to my fridge.`,
     ],
     relatedToolSlug: 'debt-payoff',
     difficulty: 'beginner',
+    region: 'General',
     aiModels: ['ChatGPT', 'Claude', 'Gemini', 'Copilot'],
     isViral: true,
     dateAdded: '2024-06-01',
@@ -327,6 +339,7 @@ Include: what to say, what NOT to say, and red flags to watch for.`,
     ],
     relatedToolSlug: 'credit-card-payoff',
     difficulty: 'intermediate',
+    region: 'General',
     aiModels: ['ChatGPT', 'Claude'],
     isViral: true,
     dateAdded: '2024-06-10',
@@ -382,6 +395,7 @@ Present as a clear roadmap with specific ages and dollar amounts.`,
     ],
     relatedToolSlug: 'compound-interest',
     difficulty: 'intermediate',
+    region: 'General',
     aiModels: ['ChatGPT', 'Claude', 'Gemini'],
     isViral: true,
     dateAdded: '2024-06-01',
@@ -433,6 +447,7 @@ Be specific with fund suggestions (use index funds when possible).`,
     ],
     relatedToolSlug: 'compound-interest',
     difficulty: 'advanced',
+    region: 'US-focused',
     aiModels: ['ChatGPT', 'Claude'],
     isViral: false,
     dateAdded: '2024-06-08',
@@ -498,6 +513,7 @@ Include specific target score improvement estimate.`,
     ],
     relatedToolSlug: 'credit-card-payoff',
     difficulty: 'intermediate',
+    region: 'US-focused',
     aiModels: ['ChatGPT', 'Claude', 'Gemini'],
     isViral: true,
     dateAdded: '2024-06-03',
@@ -565,6 +581,7 @@ Be brutally honest — don't default to "buying is always better."`,
     ],
     relatedToolSlug: 'mortgage-calculator',
     difficulty: 'intermediate',
+    region: 'General',
     aiModels: ['ChatGPT', 'Claude'],
     isViral: true,
     dateAdded: '2024-06-05',
@@ -621,6 +638,7 @@ Flag any deduction worth $500+ that I might be missing.`,
       'Update the prompt each year with new tax law changes',
     ],
     difficulty: 'advanced',
+    region: 'US-focused',
     aiModels: ['ChatGPT', 'Claude'],
     isViral: true,
     dateAdded: '2024-06-12',

@@ -4,14 +4,14 @@ import { Breadcrumb } from '@/components/seo/Breadcrumb';
 import { PromptCard } from '@/components/prompts/PromptCard';
 import { AdSlotLeaderboard, AdSlotInContent } from '@/components/molecules/AdSlot';
 import {
+  Zap, ArrowRight, Sparkles, Wallet, TrendingDown, TrendingUp,
+  CreditCard, Home, Receipt, Search, ShieldAlert,
+} from 'lucide-react';
+import {
   PROMPT_CATEGORIES, getViralPrompts, getPromptCount,
-  getPromptsByCategory,
+  getPromptsByCategory, AI_EDUCATIONAL_DISCLAIMER,
 } from '@/lib/prompts';
 import { SITE_URL, generateFaqSchema } from '@/lib/seo';
-import {
-  Zap, ArrowRight, Sparkles, Wallet, TrendingDown, TrendingUp,
-  CreditCard, Home, Receipt, Search,
-} from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Free AI Finance Prompts — ChatGPT & Claude Prompts for Money Management',
@@ -125,8 +125,19 @@ const collectionSchema = {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6"><AdSlotLeaderboard className="mt-8" /></div>
 
+      {/* AI Educational Disclaimer Banner */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="rounded-xl border border-purple-200 dark:border-purple-800/50 bg-purple-50/60 dark:bg-purple-950/20 p-4 text-xs text-purple-900 dark:text-purple-200 flex items-start gap-3">
+          <ShieldAlert className="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0 mt-0.5" />
+          <p>
+            <strong>AI Educational Disclaimer: </strong>
+            {AI_EDUCATIONAL_DISCLAIMER}
+          </p>
+        </div>
+      </div>
+
       {/* Viral / Trending Prompts */}
-      <section id="viral" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section id="viral" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex items-center gap-2 mb-2">
           <Zap className="w-5 h-5 text-orange-500" aria-hidden="true" />
           <h2 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">

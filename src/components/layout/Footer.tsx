@@ -1,7 +1,7 @@
 // ============================================================
 // DebtMeltPro — Site Footer
 // Comprehensive internal linking for SEO.
-// Legal disclaimer (required for AdSense finance category).
+// Legal disclaimer (educational / informational purposes).
 // Links to all pages including about, contact, disclaimer.
 // ============================================================
 
@@ -148,7 +148,6 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer nofollow"
               className="text-xs text-slate-500 hover:text-slate-300 transition-colors inline-flex items-center gap-1"
-
             >
               RBI Financial Awareness
               <ExternalLink className="w-3 h-3" aria-hidden="true" />

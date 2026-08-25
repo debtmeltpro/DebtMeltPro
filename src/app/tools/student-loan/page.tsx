@@ -206,7 +206,9 @@ export default function StudentLoanPage() {
             </details>
           ))}
         </div>
-        <p className="mt-8 text-xs text-slate-400 leading-relaxed"><strong>Disclaimer:</strong> Results are estimates for educational purposes only. Refinancing federal loans removes important borrower protections. Consult a student loan specialist before refinancing.</p>
+        <p className="mt-8 text-xs text-slate-400 leading-relaxed">
+          <strong>Disclaimer:</strong> Federal student-loan repayment programs and eligibility rules can change. This calculator is an educational estimate. Verify your current eligibility, payment plan availability, and legal/tax treatment with <a href="https://studentaid.gov/" target="_blank" rel="noopener noreferrer" className="underline hover:text-slate-600 dark:hover:text-slate-300">Federal Student Aid</a> and a qualified professional. Refinancing federal loans permanently eliminates important borrower protections.
+        </p>
       </section>
 
       <RelatedTools currentSlug="student-loan" />

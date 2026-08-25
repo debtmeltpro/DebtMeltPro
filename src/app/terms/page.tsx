@@ -10,7 +10,7 @@ export default function TermsPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white mb-2">Terms of Service</h1>
-      <p className="text-slate-500 mb-8">Last Updated: <time dateTime="2024-01-15">January 15, 2024</time></p>
+      <p className="text-slate-500 mb-8">Last Updated: <time dateTime="2026-08-23">August 23, 2026</time></p>
 
       <div className="space-y-8 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
         <section>
@@ -20,7 +20,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="font-semibold text-lg text-slate-900 dark:text-white mb-3">2. Description of Service</h2>
-          <p>DebtMeltPro provides free, web-based financial calculators for educational and informational purposes. The Service includes debt payoff calculators, mortgage analysis tools, investment projection calculators, credit card optimization tools, and student loan comparison tools.</p>
+          <p>DebtMeltPro provides free, web-based financial calculators for educational and informational purposes. The Service includes debt payoff calculators, mortgage analysis tools, investment projection calculators, credit card optimization tools, loan calculators, and student loan comparison tools. All calculations execute locally on your device.</p>
         </section>
 
         <section>
@@ -50,8 +50,8 @@ export default function TermsPage() {
         </section>
 
         <section>
-          <h2 className="font-semibold text-lg text-slate-900 dark:text-white mb-3">7. Third-Party Advertising</h2>
-          <p>The Service displays advertisements served by Google AdSense. We do not control the content of these advertisements and they do not constitute endorsements of any product or service. We receive compensation when you click on ads, which helps us maintain the free Service.</p>
+          <h2 className="font-semibold text-lg text-slate-900 dark:text-white mb-3">7. Third-Party Links & Disclaimers</h2>
+          <p>The Service may contain informational links to external regulatory or educational resources (e.g., FTC, RBI). We do not control or endorse the content of external websites and are not responsible for their availability or policies.</p>
         </section>
 
         <section>
@@ -61,7 +61,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="font-semibold text-lg text-slate-900 dark:text-white mb-3">9. Governing Law</h2>
-          <p>These Terms are governed by the laws of the State of Delaware, United States, without regard to conflict of law principles. Any disputes shall be resolved through binding arbitration in accordance with JAMS arbitration rules.</p>
+          <p>These Terms are governed by applicable laws without regard to conflict of law principles. Any dispute arising out of or relating to these Terms shall be resolved in a court of competent jurisdiction.</p>
         </section>
 
         <section>
@@ -71,7 +71,7 @@ export default function TermsPage() {
 
         <section>
           <h2 className="font-semibold text-lg text-slate-900 dark:text-white mb-3">11. Contact</h2>
-          <p>For questions about these Terms: legal@debtmeltpro.com</p>
+          <p>For inquiries regarding these Terms: support@debtmeltpro.com</p>
         </section>
       </div>
     </div>
